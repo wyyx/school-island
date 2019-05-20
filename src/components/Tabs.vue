@@ -10,7 +10,7 @@
       <v-icon>laptop</v-icon>
     </v-btn>
 
-    <v-btn color="teal" flat value="search" to="/search">
+    <v-btn color="teal" flat value="explore" to="/explore">
       <span>发现</span>
       <v-icon>search</v-icon>
     </v-btn>
