@@ -14,10 +14,21 @@ export default new Router({
       component: Home
     },
     {
-      path: '/about',
-      name: 'about',
+      path: '/workbench',
+      name: 'workbench',
       component: () =>
-        import(/* webpackChunkName: "about" */ '../views/About.vue')
+        import(/* webpackChunkName: "workbench" */ '../views/Workbench.vue')
+    },
+    {
+      path: '/explore',
+      name: 'explore',
+      component: () =>
+        import(/* webpackChunkName: "explore" */ '../views/Explore.vue')
+    },
+    {
+      path: '/my',
+      name: 'my',
+      component: () => import(/* webpackChunkName: "my" */ '../views/My.vue')
     }
   ]
 })
