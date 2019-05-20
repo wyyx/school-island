@@ -2,7 +2,7 @@
   <div class="container">
     <div class="nav-wrapper">
       <v-layout>
-        <v-flex xs8>
+        <v-flex grow>
           <v-tabs fixed-tabs slider-color="cyan">
             <v-tab> 推荐 </v-tab>
             <v-tab> 学校 </v-tab>
@@ -11,12 +11,14 @@
           </v-tabs>
         </v-flex>
         <v-spacer></v-spacer>
-        <v-flex>
+        <v-flex shrink class="pr-2">
+          <!-- <v-icon>notifications_none</v-icon>
+          <v-icon>add_circle_outline</v-icon> -->
           <v-layout :align-center="true" fill-height>
-            <v-flex>
+            <v-flex class="px-2">
               <v-icon>notifications_none</v-icon>
             </v-flex>
-            <v-flex>
+            <v-flex class="px-2">
               <v-icon>add_circle_outline</v-icon>
             </v-flex>
           </v-layout>
@@ -31,7 +33,7 @@
       ></v-carousel-item>
     </v-carousel>
 
-    <div class="sub-nav py-2 px-1">
+    <div class="sub-nav py-2">
       <v-layout row wrap justify-center>
         <v-flex xs9>
           <v-tabs fixed-tabs slider-color="cyan">
@@ -49,14 +51,7 @@
       </v-layout>
       <div class="article-list">
         <v-layout row wrap>
-          <v-flex
-            v-for="item in articles"
-            :key="item.id"
-            xs12
-            sm6
-            md4
-            class="pa-1"
-          >
+          <v-flex v-for="item in articles" :key="item.id" xs12 sm6 md4 class="">
             <AppArticle class="article"></AppArticle>
           </v-flex>
         </v-layout>
@@ -94,6 +89,7 @@ export default Vue.extend({
   padding: 0px;
   background-color: white;
 }
+
 .v-tabs__div {
   min-width: unset;
 }

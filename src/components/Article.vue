@@ -2,7 +2,7 @@
   <div class="article">
     <v-layout>
       <v-flex>
-        <v-card class="pa-2">
+        <v-card class="pa-3">
           <v-card-actions class="header pa-0">
             <v-card-title primary-title class="pa-0">
               <h3 class="subheading mb-0">2017级8班 李小龙的妈妈</h3>
@@ -73,10 +73,5 @@ export default Vue.extend({
 .header,
 .footer {
   height: 36px;
-}
-
-.btn-comment {
-  position: relative;
-  left: 15px;
 }
 </style>
