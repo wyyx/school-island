@@ -34,5 +34,6 @@ export default {
   width: 100%;
   position: fixed;
   bottom: 0px;
+  z-index: 999;
 }
 </style>

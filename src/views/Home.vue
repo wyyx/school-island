@@ -14,7 +14,7 @@
         <v-flex>
           <v-layout :align-center="true" fill-height>
             <v-flex>
-              <v-icon>message</v-icon>
+              <v-icon>notifications_none</v-icon>
             </v-flex>
             <v-flex>
               <v-icon>add_circle_outline</v-icon>
@@ -31,7 +31,7 @@
       ></v-carousel-item>
     </v-carousel>
 
-    <div class="sub-nav">
+    <div class="sub-nav py-2 px-1">
       <v-layout row wrap justify-center>
         <v-flex xs9>
           <v-tabs fixed-tabs slider-color="cyan">
@@ -48,11 +48,18 @@
         </v-flex>
       </v-layout>
       <div class="article-list">
-        <AppArticle
-          class="article"
-          v-for="item in articles"
-          :key="item.id"
-        ></AppArticle>
+        <v-layout row wrap>
+          <v-flex
+            v-for="item in articles"
+            :key="item.id"
+            xs12
+            sm6
+            md4
+            class="pa-1"
+          >
+            <AppArticle class="article"></AppArticle>
+          </v-flex>
+        </v-layout>
       </div>
     </div>
   </div>
@@ -61,7 +68,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { getRandomInt } from '@/utils/math.util'
-import AppArticle from '../components/Article'
+import AppArticle from '../components/Article.vue'
 
 export default Vue.extend({
   data: function() {
@@ -89,10 +96,6 @@ export default Vue.extend({
 }
 .v-tabs__div {
   min-width: unset;
-}
-
-.sub-nav {
-  padding: 10px;
 }
 
 .article {
