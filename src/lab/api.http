@@ -15,15 +15,9 @@ POST http://192.168.1.11:8888/w/article/add HTTP/1.1
 content-type: application/json
 
 {
-  "schoolId" : 3463456,
-  "schoolName": "成都xxx小学",
-  "classId": 1,
-  "className": "五班",
   "type": 20,
   "title": "这是文章标题",
   "subTitle": "这是文章的副标题",
-  "authorid": 5,
-  "authorName": "张三",
   "cover": "https://www.thelocal.se/userdata/images/article/f399c757d392dd0d8bdfc817a9993176f527de128bb7d1928a85c9ce0c0aabd5.jpg",
   "description": "这是文章描述",
   "context": "aaa"

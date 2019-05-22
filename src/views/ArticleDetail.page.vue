@@ -1,6 +1,7 @@
 <template>
   <div class="container pa-0">
-    <v-card color="primary pa-2" class="mb-2">
+    <Header :showBack="true" :showTitle="false" @back="onBack"></Header>
+    <v-card color="primary pa-2" class="">
       <v-layout class="" row wrap>
         <v-flex xs6 class="pr-1">
           <v-layout row wrap align-center justify-end fill-height>
@@ -31,13 +32,49 @@
       </v-layout>
     </v-card>
 
-    <v-card>
+    <v-card class="pa-4 mb-2">
       <h3>{{ article.title }}</h3>
-      <div class="meta-header">
-        <span class="author">作者：xxx</span>
+      <div class="meta-header text-center pa-2">
+        <span class="author mr-3">作者：xxx</span>
         <span class="date">2019/5/22</span>
       </div>
       <div class="conent" v-html="article.context"></div>
+
+      <div class="text-center">
+        <div>
+          <v-btn fab="" depressed large color="transparent">
+            <v-icon color="grey">thumb_up</v-icon>
+          </v-btn>
+        </div>
+        <div>
+          <v-avatar
+            v-for="avatar in avatars"
+            :tile="false"
+            :size="24"
+            color="grey lighten-4"
+            :key="avatar.url"
+            class="mr-1"
+          >
+            <img :src="avatar.url" alt="avatar" />
+          </v-avatar>
+          <div class="px-4">
+            <v-btn color="transparent" class="mt-3 px-5">
+              产看全部
+            </v-btn>
+          </div>
+        </div>
+      </div>
+    </v-card>
+
+    <v-card class="pa-4 mb-5">
+      <div class="comment-list">
+        <Comment
+          class="mb-2"
+          v-for="comment in comments"
+          :comment="comment"
+          :key="comment.id"
+        ></Comment>
+      </div>
     </v-card>
   </div>
 </template>
@@ -45,10 +82,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { articles } from '../services/article.service'
+import Header from '../components/Header.component.vue'
+import Comment from '../components/Comment.component.vue'
+import { comments } from '../services/comment.service'
 
 export default Vue.extend({
   name: 'my',
-  components: {},
+  components: { Header, Comment },
   props: {
     id: {
       type: Number
@@ -56,12 +96,36 @@ export default Vue.extend({
   },
   data: function() {
     return {
-      article: null
+      article: null,
+      avatars: [
+        { url: 'https://randomuser.me/api/portraits/men/32.jpg' },
+        { url: 'https://randomuser.me/api/portraits/women/26.jpg' },
+        { url: 'https://randomuser.me/api/portraits/women/68.jpg' },
+        { url: 'https://randomuser.me/api/portraits/women/17.jpg' },
+        {
+          url:
+            'https://pbs.twimg.com/profile_images/1111650888215494657/jNu7XFNX.jpg'
+        }
+      ],
+      comments: comments
     }
   },
   created() {
+    console.log('comments', this.comments)
     console.log('id', this.id)
-    this.article = articles.filter(e => e.id === this.id)[0] as any
+    this.article = articles.filter(
+      e => e.id === parseInt(this.id as any)
+    )[0] as any
+  },
+  beforeRouteEnter(to, from, next) {
+    next()
+  },
+  methods: {
+    onBack() {
+      this.$router.push({
+        name: 'home'
+      })
+    }
   }
 })
 </script>

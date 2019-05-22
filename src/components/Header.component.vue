@@ -4,7 +4,7 @@
       <v-btn v-if="showBack" depressed fab color="transparent" @click="onBack">
         <v-icon>arrow_back</v-icon>
       </v-btn>
-      <span>{{ title }}</span>
+      <span v-if="showTitle">{{ title }}</span>
     </v-toolbar-title>
     <v-spacer></v-spacer>
   </v-toolbar>
@@ -20,11 +20,14 @@ export default Vue.extend({
     showBack: {
       type: Boolean,
       default: false
+    },
+    showTitle: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
     onBack() {
-      console.log('back')
       this.$emit('back')
     }
   }
