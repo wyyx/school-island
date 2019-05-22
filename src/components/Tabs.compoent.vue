@@ -6,7 +6,7 @@
     </v-btn>
 
     <v-btn color="teal" flat value="workbench" to="/workbench">
-      <span>工作台</span>
+      <span>数据中心</span>
       <v-icon>laptop</v-icon>
     </v-btn>
 

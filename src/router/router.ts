@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '../views/Home.vue'
+import HomePage from '../views/Home.page.vue'
 
 Vue.use(Router)
 
@@ -11,24 +11,63 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: HomePage
     },
     {
       path: '/workbench',
       name: 'workbench',
       component: () =>
-        import(/* webpackChunkName: "workbench" */ '../views/Workbench.vue')
+        import(
+          /* webpackChunkName: "workbench" */ '../views/Workbench.page.vue'
+        )
     },
     {
       path: '/explore',
       name: 'explore',
       component: () =>
-        import(/* webpackChunkName: "explore" */ '../views/Explore.vue')
+        import(/* webpackChunkName: "explore" */ '../views/Explore.page.vue')
     },
     {
       path: '/my',
       name: 'my',
-      component: () => import(/* webpackChunkName: "my" */ '../views/My.vue')
+      component: () =>
+        import(/* webpackChunkName: "my" */ '../views/My.page.vue')
+    },
+    {
+      path: '/article/:id',
+      name: 'article-detail',
+      component: () =>
+        import(
+          /* webpackChunkName: "article-detail" */ '../views/ArticleDetail.page.vue'
+        ),
+      props: true
+    },
+    {
+      path: '/create-article',
+      name: 'create-article',
+      component: () =>
+        import(
+          /* webpackChunkName: "createA-article" */ '../views/CreateArticle.page.vue'
+        ),
+      props: true
+    },
+    {
+      path: '/convert-article-guide',
+      name: 'convert-article-guide',
+      component: () =>
+        import(
+          /* webpackChunkName: "convert-article-guide" */ '../views/ConvertArticleGuide.page.vue'
+        ),
+      props: true
+    },
+    {
+      path: '/convert-article',
+      name: 'convert-article',
+      component: () =>
+        import(
+          /* webpackChunkName: "convert-article" */ '../views/ConvertArticle.page.vue'
+        ),
+      props: true
     }
   ]
 })

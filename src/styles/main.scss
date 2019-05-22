@@ -1,4 +1,12 @@
 @import './override-vuetify.scss';
+@import './typo.scss';
 
 // $material-design-icons-font-path: '~material-design-icons-iconfont/dist/fonts/';
 // @import '~material-design-icons-iconfont/src/material-design-icons';
+
+html,
+body {
+  width: 100%;
+  margin: 0px;
+  box-sizing: border-box;
+}

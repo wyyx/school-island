@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <!-- <v-toolbar app height="48">
       <v-toolbar-title class="title text-uppercase">
         <span>成都市xxx学校</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-    </v-toolbar>
+    </v-toolbar> -->
     <v-content>
       <router-view></router-view>
       <AppTabs class="tabs"></AppTabs>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import AppTabs from './components/Tabs'
+import AppTabs from './components/Tabs.compoent.vue'
 
 export default {
   name: 'App',
@@ -22,9 +22,7 @@ export default {
     AppTabs
   },
   data() {
-    return {
-      //
-    }
+    return {}
   }
 }
 </script>
