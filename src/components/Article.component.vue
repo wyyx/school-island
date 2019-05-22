@@ -24,7 +24,7 @@
           </v-card-actions>
           <v-layout row wrap @click="goToDetail">
             <v-flex xs8>
-              <v-card-text class="pa-0">
+              <v-card-text class="pa-0 grey--text">
                 <p>
                   {{ article.description }}
                 </p>

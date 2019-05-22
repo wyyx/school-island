@@ -38,7 +38,7 @@
         <span class="author mr-3">作者：xxx</span>
         <span class="date">2019/5/22</span>
       </div>
-      <div class="conent" v-html="article.context"></div>
+      <div class="content" v-html="article.context"></div>
 
       <div class="text-center">
         <div>
@@ -68,6 +68,14 @@
 
     <v-card class="pa-4 mb-5">
       <div class="comment-list">
+        <v-layout row wrap>
+          <v-flex xs8>
+            <v-tabs slider-color="primary" fixed-tabs>
+              <v-tab> 评论(95) </v-tab>
+              <v-tab> 谁来看过(630) </v-tab>
+            </v-tabs>
+          </v-flex>
+        </v-layout>
         <Comment
           class="mb-2"
           v-for="comment in comments"
@@ -111,7 +119,6 @@ export default Vue.extend({
     }
   },
   created() {
-    console.log('comments', this.comments)
     console.log('id', this.id)
     this.article = articles.filter(
       e => e.id === parseInt(this.id as any)
@@ -130,4 +137,10 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.content /deep/ p {
+  line-height: 180% !important;
+  word-spacing: 120%;
+  letter-spacing: 0.15rem;
+}
+</style>

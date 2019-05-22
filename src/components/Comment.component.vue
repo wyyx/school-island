@@ -24,9 +24,7 @@ export default Vue.extend({
   data: function() {
     return {}
   },
-  created() {
-    console.log('comment', this.comment)
-  }
+  created() {}
 })
 </script>
 
