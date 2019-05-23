@@ -12,12 +12,15 @@
     "core-js": "^2.6.5",
     "hammerjs": "^2.0.8",
     "material-design-icons-iconfont": "^5.0.1",
+    "quill": "^1.3.6",
+    "vee-validate": "^2.2.7",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.5",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@types/quill": "1.3.8",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-eslint": "^3.7.0",
     "@vue/cli-plugin-typescript": "^3.7.0",

@@ -1,6 +1,6 @@
 <template>
   <div class="container pa-0">
-    <Header :showBack="false" title="工作台"></Header>
+    <Header :showBack="false" title="数据中心"></Header>
     <v-layout row wrap class="header pa-3 primary white--text">
       <v-flex>
         <v-btn color="white" class="banner-btn elevation-0">

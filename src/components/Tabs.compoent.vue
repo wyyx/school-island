@@ -7,7 +7,7 @@
 
     <v-btn color="teal" flat value="workbench" to="/workbench">
       <span>数据中心</span>
-      <v-icon>laptop</v-icon>
+      <v-icon>insert_chart_outlined</v-icon>
     </v-btn>
 
     <v-btn color="teal" flat value="explore" to="/explore">

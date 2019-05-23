@@ -4,6 +4,9 @@ import App from './App.vue'
 import router from './router/router'
 import store from './store/store'
 import './styles/main.scss'
+import VeeValidate from 'vee-validate'
+
+Vue.use(VeeValidate)
 
 Vue.config.productionTip = false
 

@@ -138,8 +138,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.content /deep/ p {
-  line-height: 180% !important;
+.content /deep/ * {
+  line-height: 210% !important;
   word-spacing: 120%;
   letter-spacing: 0.15rem;
 }
