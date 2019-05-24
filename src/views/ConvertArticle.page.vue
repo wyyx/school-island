@@ -9,7 +9,7 @@
               fab
               outline
               small
-              color="primary"
+              :color="hasTag(tag) ? 'grey' : 'primary'"
               @click="toggleAddOrRemove(tag)"
             >
               <v-icon>{{ hasTag(tag) ? 'add' : 'remove' }}</v-icon>
@@ -19,8 +19,7 @@
             <div
               class="content"
               :class="{
-                'grey--text': hasTag(tag),
-                'blur-text': hasTag(tag)
+                blur: hasTag(tag)
               }"
               v-html="tag.outerHTML"
             ></div>
@@ -58,7 +57,9 @@ export default Vue.extend({
   computed: {},
   methods: {
     onBack() {
-      this.$router.back()
+      this.$router.push({
+        name: 'home'
+      })
     },
     toggleAddOrRemove(tag) {
       if (this.hasTag(tag)) {
@@ -104,7 +105,8 @@ export default Vue.extend({
   width: 100%;
 }
 
-.blur-text {
+.blur {
   filter: blur(5px);
+  opacity: 0.3;
 }
 </style>

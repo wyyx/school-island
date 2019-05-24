@@ -1,5 +1,5 @@
 <template>
-  <router-view></router-view>
+  <div>school run page</div>
 </template>
 
 <script lang="ts">

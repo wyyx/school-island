@@ -16,6 +16,24 @@ export default new Router({
     {
       path: '/workbench',
       name: 'workbench',
+      children: [
+        {
+          path: 'teacher',
+          name: 'teacher',
+          component: () =>
+            import(
+              /* webpackChunkName: "workbench-teacher" */ '../views/WorkbenchTeacher.page.vue'
+            )
+        },
+        {
+          path: 'school-run',
+          name: 'school-run',
+          component: () =>
+            import(
+              /* webpackChunkName: "workbench-school-run" */ '../views/WorkbenchSchoolRun.page.vue'
+            )
+        }
+      ],
       component: () =>
         import(
           /* webpackChunkName: "workbench" */ '../views/Workbench.page.vue'
@@ -47,7 +65,7 @@ export default new Router({
       name: 'create-article',
       component: () =>
         import(
-          /* webpackChunkName: "createA-article" */ '../views/CreateArticle.page.vue'
+          /* webpackChunkName: "create-article" */ '../views/CreateArticle.page.vue'
         ),
       props: true
     },

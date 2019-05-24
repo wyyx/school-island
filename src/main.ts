@@ -5,6 +5,8 @@ import router from './router/router'
 import store from './store/store'
 import './styles/main.scss'
 import VeeValidate from 'vee-validate'
+import './fontawesome'
+
 
 Vue.use(VeeValidate)
 

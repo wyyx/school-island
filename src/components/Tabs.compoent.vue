@@ -5,9 +5,9 @@
       <v-icon>home</v-icon>
     </v-btn>
 
-    <v-btn color="teal" flat value="workbench" to="/workbench">
-      <span>数据中心</span>
-      <v-icon>insert_chart_outlined</v-icon>
+    <v-btn color="teal" flat value="workbench" :to="`/workbench/${role}`">
+      <span>工作台</span>
+      <v-icon>laptop_mac</v-icon>
     </v-btn>
 
     <v-btn color="teal" flat value="explore" to="/explore">
@@ -27,7 +27,8 @@ import Vue from 'vue'
 export default Vue.extend({
   data: function() {
     return {
-      bottomNav: 'home'
+      bottomNav: 'home',
+      role: 'teacher'
     }
   },
   name: 'AppTabs'
