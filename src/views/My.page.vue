@@ -1,6 +1,6 @@
 <template>
   <div class="container pa-0">
-    <Header :showBack="false" title="个人中心"></Header>
+    <!-- <Header :showBack="false" title="个人中心"></Header> -->
     <v-card color="primary" class="mb-2">
       <v-layout class="teachers py-4" row wrap>
         <v-flex xs4>
@@ -177,8 +177,14 @@ import Header from '../components/Header.component.vue'
 
 export default Vue.extend({
   name: 'my',
-  components: {
-    Header
+  components: {},
+  created() {
+    this.changeTitle()
+  },
+  methods: {
+    changeTitle() {
+      document.title = '个人中心'
+    }
   }
 })
 </script>

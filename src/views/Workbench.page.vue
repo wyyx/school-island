@@ -7,6 +7,14 @@ import Vue from 'vue'
 export default Vue.extend({
   data: function() {
     return {}
+  },
+  created() {
+    this.changeTitle()
+  },
+  methods: {
+    changeTitle() {
+      document.title = '工作台'
+    }
   }
 })
 </script>

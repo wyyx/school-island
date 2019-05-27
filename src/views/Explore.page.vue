@@ -1,6 +1,6 @@
 <template>
   <div class="container pa-0">
-    <Header :showBack="false" title="发现"></Header>
+    <!-- <Header :showBack="false" title="发现"></Header> -->
     <v-list class="list">
       <v-list-tile class="elevation-1 mb-2 list-item">
         <v-list-tile-action>
@@ -69,7 +69,15 @@ import Header from '../components/Header.component.vue'
 
 export default Vue.extend({
   name: 'explore',
-  components: { Header }
+  components: {},
+  created() {
+    this.changeTitle()
+  },
+  methods: {
+    changeTitle() {
+      document.title = '发现'
+    }
+  }
 })
 </script>
 

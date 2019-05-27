@@ -1,7 +1,20 @@
 <template>
-  <div class="container pa-0 pb-4">
-    <Header :showBack="true" title="工作台" @back="onBack"></Header>
-    <v-card class="mb-3">
+  <div class="container pa-0">
+    <!-- <Header :showBack="true" title="工作台" @back="onBack"></Header> -->
+    <v-card class="mb-2">
+      <transition name="scale">
+        <swiper
+          @click="toCloseSwiper"
+          :options="swiperOption"
+          v-if="showSwiper"
+        >
+          <swiper-slide class="text-center" v-for="img in imgs" :key="img">
+            <img :src="img" style="width: 100%" />
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
+      </transition>
+
       <v-layout column wrap>
         <!-- header -->
         <v-flex class="class-selector">
@@ -9,16 +22,16 @@
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 py-1 px-2">
                 <v-autocomplete
-                  class="pa-0"
-                  v-model="classGrade"
-                  :items="items"
+                  @change="onAutocompleteChanged"
+                  class="pa-0 xxx"
+                  v-model="classId"
+                  :items="classList"
                   color="primary"
-                  item-text="text"
+                  item-text="className"
+                  item-value="classId"
                   hide-no-data
                   hide-selected
-                  item-value="API"
                   placeholder="选择班级"
-                  return-object
                   hide-details
                 ></v-autocomplete>
                 <v-rating
@@ -49,99 +62,10 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <!-- growing tree -->
-        <v-flex class="growing-tree primary lighten-5">
-          <!-- data -->
-          <v-layout class="data" column>
-            <v-flex>
-              <v-layout row wrap>
-                <v-flex xs4 class="text-center pb-2">
-                  <v-icon color="accent">wb_sunny</v-icon>
-                </v-flex>
-                <v-flex>
-                  <span class="pa-2 grey--text text--darken-1">8999</span>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-            <v-flex>
-              <v-layout row wrap>
-                <v-flex xs4 class="text-center">
-                  <span class="accent--text">LV</span>
-                </v-flex>
-                <v-flex>
-                  <span class="pa-2 grey--text text--darken-1">3</span>
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-          <!-- tree -->
-          <v-layout
-            class="tree"
-            row
-            wrap
-            justify-center
-            align-center
-            fill-height
-          >
-            <v-flex shrink class="text-align">
-              <!-- <font-awesome-icon icon="tree" class="green--text accent-3" /> -->
-              <v-layout fill-height row wrap justify-center align-center>
-                <v-flex class="pt-4">
-                  <!-- <img width="250px" src="../assets/tree_1.svg" alt="" /> -->
-                  <img width="240px" src="../assets/tree_2.svg" alt="" />
-                </v-flex>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-          <v-layout column wrap class="legend text-center">
-            <v-flex class="py-2">
-              <div><v-icon color="accent" large>local_florist</v-icon></div>
-              <div class="grey--text text--darken-1">花 朵</div>
-            </v-flex>
-            <v-flex class="py-2">
-              <div>
-                <font-awesome-icon icon="apple-alt" class="fruit-icon" />
-              </div>
-              <div class="grey--text text--darken-1">果 实</div>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-card>
-    <!-- energy -->
-    <v-card class="pa-2 mb-3">
-      <v-layout class="pa-2" row wrap>
-        <v-flex>
-          我获得的能量
-        </v-flex>
-        <v-flex shrink>
-          <v-icon>keyboard_arrow_right</v-icon>
-        </v-flex>
-      </v-layout>
-      <v-layout class="pa-2 text-center" row wrap>
-        <v-flex xs2 shrink class="pa-2">
-          <div>
-            <v-icon color="accent" medium>star</v-icon>
-          </div>
-          <div>
-            <span>100</span>
-          </div>
-        </v-flex>
-        <v-flex xs2 shrink class="pa-2">
-          <div>
-            <v-icon color="accent" medium>scatter_plot</v-icon>
-          </div>
-          <div>
-            <span>35</span>
-          </div>
-        </v-flex>
-        <v-flex class="pa-2 text-right">
-          <v-btn outline color="accent">新建能量卡</v-btn>
-        </v-flex>
       </v-layout>
     </v-card>
     <!-- report -->
-    <v-card class="pa-2 mb-3">
+    <v-card class="pa-3">
       <v-layout column>
         <v-flex>
           <v-layout row wrap>
@@ -150,84 +74,98 @@
                 <v-tab href="#tab-1">
                   值周
                 </v-tab>
-                <v-tab href="#tab-2">
-                  班级能量
-                </v-tab>
               </v-tabs>
             </v-flex>
           </v-layout>
         </v-flex>
         <v-flex>
-          <v-tabs-items v-model="model">
+          <v-tabs-items v-model="model" class="pt-3">
             <v-tab-item value="tab-1">
-              <v-card class="pa-4" flat>
+              <v-card flat>
                 <h3>
                   上周综合得分
                   <span class="accent--text text--darken-2">8.5分</span>
                 </h3>
                 <h5 class="grey--text">超过 72% 的班级</h5>
-                <div id="chart" class="pt-3"></div>
+                <!-- deduction week history graph -->
+                <div v-if="hasHistory" id="chart" class="pt-3"></div>
+                <div v-if="!hasHistory" class="loading-wrapper">
+                  <v-progress-circular
+                    indeterminate
+                    color="accent"
+                  ></v-progress-circular>
+                  <!-- <p class="text-center">暂无数据...</p> -->
+                </div>
+                <h3>扣分明细</h3>
+                <v-card-title class="pa-1">
+                  <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="搜索"
+                    single-line
+                    hide-details
+                  ></v-text-field>
+                </v-card-title>
                 <v-data-table
                   :headers="headers"
-                  :items="desserts"
+                  :items="deductionList"
                   class="elevation-0"
+                  hide-actions
+                  :search="search"
+                  no-data-text="暂无数据..."
                 >
                   <template v-slot:items="props">
-                    <td class="text-xs-right">{{ props.item.time }}</td>
-                    <td class="text-xs-right">{{ props.item.category }}</td>
-                    <td class="text-xs-right">{{ props.item.deduction }}</td>
-                    <td class="text-xs-right">{{ props.item.note }}</td>
+                    <td class="text-xs-right">{{ props.item.createTime }}</td>
+                    <td class="text-xs-right">{{ props.item.checkName }}</td>
+                    <td class="text-xs-right">
+                      {{ props.item.changeScore }}分
+                    </td>
+                    <td class="text-xs-right">
+                      <div>
+                        {{ props.item.remarks }}
+                        <v-card
+                          v-if="props.item.imageUrls"
+                          class="pa-0 mt-1 elevation-0"
+                          @click="toShowSwiper(props.item.imageUrls)"
+                        >
+                          <v-container grid-list-sm class="pa-0" fluid>
+                            <v-layout class="images-wrapper" row wrap>
+                              <v-flex
+                                v-for="img in props.item.imageUrls"
+                                :key="img"
+                                xs6
+                                d-flex
+                              >
+                                <v-card flat tile class="d-flex pa-0">
+                                  <v-img
+                                    :src="img"
+                                    :lazy-src="img"
+                                    aspect-ratio="1"
+                                    class="grey lighten-2"
+                                  >
+                                    <template v-slot:placeholder>
+                                      <v-layout
+                                        fill-height
+                                        align-center
+                                        justify-center
+                                        ma-0
+                                      >
+                                        <v-progress-circular
+                                          indeterminate
+                                          color="grey lighten-5"
+                                        ></v-progress-circular>
+                                      </v-layout>
+                                    </template>
+                                  </v-img>
+                                </v-card>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                        </v-card>
+                      </div>
+                    </td>
                   </template>
                 </v-data-table>
-              </v-card>
-            </v-tab-item>
-            <v-tab-item value="tab-2">
-              <v-card class="pa-3" flat>
-                <h3>
-                  组员综合表现
-                  <span class="accent--text text--darken-2">5.12~5.17分</span>
-                </h3>
-
-                <v-layout column wrap>
-                  <v-flex>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                    <v-layout row wrap>
-                      <v-flex shrink class="pa-2"> 王小明 </v-flex>
-                      <v-flex class="pa-2"> 12 </v-flex>
-                    </v-layout>
-                  </v-flex>
-                </v-layout>
               </v-card>
             </v-tab-item>
           </v-tabs-items>
@@ -235,7 +173,7 @@
       </v-layout>
     </v-card>
     <!-- bottom hint -->
-    <v-layout row wrap class="bottom-hint pa-2 mb-3">
+    <v-layout row wrap class="bottom-hint pa-2">
       <v-flex class="grey--text text-center">
         ~~~ 到底了 ~~~
       </v-flex>
@@ -246,146 +184,221 @@
 <script lang="ts">
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
-import echarts, { EChartsResponsiveOption, EChartOption } from 'echarts'
+import echarts, {
+  EChartsResponsiveOption,
+  EChartOption,
+  ECharts
+} from 'echarts'
+import { dutyService } from '../services/duty.service'
+import { Deduction } from '../models/deduction-list.model'
+import { ClassModel } from '../models/class.model'
+import {
+  DeductionHistoryByWeekResponse,
+  DeductionHistoryByWeekItem
+} from '../models/deduction-history-by-week.model'
+import { COLORS } from '../configs/config'
+import 'swiper/dist/css/swiper.css'
+
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+
+const SCHOOL_ID = 1
+
+interface Image {
+  src: string
+  thumbnail: string
+  w: number
+  h: number
+  title: string
+}
 
 export default Vue.extend({
   components: {
-    Header
+    swiper,
+    swiperSlide
   },
   data: function() {
     return {
-      classGrade: '',
-      items: [
-        { text: '2017年1班', value: 1 },
-        { text: '2017年2班', value: 2 },
-        { text: '2017年3班', value: 3 },
-        { text: '2017年4班', value: 4 },
-        { text: '2017年5班', value: 5 }
-      ],
+      classId: 0,
+      classList: [] as ClassModel[],
       rating: 4,
       model: 'tab-1',
       headers: [
         {
           text: '时间',
-          align: 'left',
+          align: 'right',
           sortable: true,
-          value: 'time'
+          value: 'createTime',
+          width: 10
         },
-        { text: '类别', align: 'left', sortable: false, value: 'category' },
-        { text: '扣分', align: 'left', sortable: true, value: 'deduction' },
-        { text: '备注', align: 'left', sortable: false, value: 'note' }
+        { text: '类别', align: 'right', sortable: false, value: 'checkName' },
+        { text: '扣分', align: 'right', sortable: true, value: 'changeScore' },
+        { text: '备注', align: 'right', sortable: false, value: 'remarks' }
       ],
-      desserts: [
-        {
-          time: '12.11',
-          category: 159,
-          deduction: 6.0,
-          note: '备注'
-        },
-        {
-          time: '12.12',
-          category: 237,
-          deduction: 9.0,
-          note: '备注'
-        },
-        {
-          time: '12.13',
-          category: 262,
-          deduction: 16.0,
-          note: '备注'
-        },
-        {
-          time: '12.14',
-          category: 305,
-          deduction: 3.7,
-          note: '备注'
-        },
-        {
-          time: '12.15',
-          category: 356,
-          deduction: 16.0,
-          note: '备注'
-        },
-        {
-          time: '12.16',
-          category: 375,
-          deduction: 0.0,
-          note: '备注'
-        },
-        {
-          time: '12.17',
-          category: 392,
-          deduction: 0.2,
-          note: '备注'
+      deductionList: [] as Deduction[],
+      deductionWeekHistory: [] as DeductionHistoryByWeekItem[],
+      search: '',
+      imgs: [
+        'https://picsum.photos/1920/1080',
+        'https://picsum.photos/1080/1920',
+        'https://picsum.photos/800/400'
+      ],
+      images: [] as Image[],
+      swiperOption: {
+        pagination: {
+          el: '.swiper-pagination'
         }
-      ]
+      },
+      showSwiper: false,
+      chart: {} as ECharts
     }
+  },
+  watch: {
+    classId(newVal, oldVal) {
+      this.loadDeducionList(newVal)
+      this.loadDeducionWeekHistory(this.classId)
+    },
+    showSwiper(newVal, oldVal) {
+      // this.chart.resize()
+    }
+  },
+  computed: {
+    legend() {
+      const that: any = this
+      return (
+        that.deductionWeekHistory &&
+        that.deductionWeekHistory.map(e => e.checkName)
+      )
+    },
+    hasHistory() {
+      const that: any = this
+      return that.deductionWeekHistory && that.deductionWeekHistory.length > 0
+    },
+    series() {
+      const that: any = this
+      console.log('series')
+      return that.converToSeries(that.deductionWeekHistory)
+    }
+  },
+  created() {
+    this.loadDeducionList(this.classId)
+    this.loadClassList(SCHOOL_ID)
+    this.loadDeducionWeekHistory(this.classId)
   },
   methods: {
     onBack() {
       this.$router.push({
         name: 'home'
       })
-    }
-  },
-  mounted() {
-    let chart = echarts.init(document.getElementById('chart') as HTMLDivElement)
-    // specify chart configuration item and data
-    var option: EChartOption = {
-      tooltip: {},
-      legend: {
-        data: ['纪律', '卫生', '两操', '文明', '安全']
-      },
-      xAxis: {
-        data: ['星期一', '星期二', '星期三', '星期四', '星期五']
-      },
-      yAxis: {},
-      series: [
-        {
-          name: '纪律',
+    },
+    converToSeries(weekHistory: DeductionHistoryByWeekItem[]) {
+      const series = weekHistory.map((e: DeductionHistoryByWeekItem) => {
+        return {
+          name: e.checkName,
           type: 'line',
-          data: [5, 20, 36, 10, 10, 20],
+          data: e.scores,
           itemStyle: {
             color: '#2196F3'
           }
-        },
-        {
-          name: '卫生',
-          type: 'line',
-          data: [13, 18, 22, 32, 28, 11],
-          itemStyle: {
-            color: '#00BCD4'
-          }
-        },
-        {
-          name: '两操',
-          type: 'line',
-          data: [7, 19, 34, 31, 27, 18],
-          itemStyle: {
-            color: '#FFC107'
-          }
-        },
-        {
-          name: '文明',
-          type: 'line',
-          data: [16, 22, 11, 27, 25, 27],
-          itemStyle: {
-            color: '#E91E63'
-          }
-        },
-        {
-          name: '安全',
-          type: 'line',
-          data: [25, 25, 17, 26, 27, 16],
-          itemStyle: {
-            color: '#4CAF50'
-          }
         }
-      ]
-    }
+      })
 
-    // use configuration item and data specified to show chart
-    chart.setOption(option)
+      // set different colors for each category
+      for (let index = 0; index < series.length; index++) {
+        const element: {
+          name: string
+          type: string
+          data: number[]
+          itemStyle: {
+            color: string
+          }
+        } = series[index]
+
+        element.itemStyle.color = COLORS[index]
+      }
+
+      return series
+    },
+    convertToImages(imgUrls: string[]) {
+      return imgUrls
+        ? imgUrls.map(url => {
+            return {
+              src: url,
+              thumbnail: url,
+              w: 300,
+              h: 300,
+              title: ''
+            } as Image
+          })
+        : []
+    },
+    onAutocompleteChanged() {
+      console.log('autocomplete')
+    },
+    initEcharts() {
+      let chart = echarts.init(document.getElementById(
+        'chart'
+      ) as HTMLDivElement)
+      this.chart = chart
+      // specify chart configuration item and data
+      const that: any = this
+      console.log('TCL: initEcharts -> this.legend', this.legend)
+
+      var option: EChartOption = {
+        tooltip: {},
+        legend: {
+          data: that.legend
+        },
+        xAxis: {
+          data: ['星期一', '星期二', '星期三', '星期四', '星期五']
+        },
+        yAxis: {},
+        series: that.series
+      }
+
+      // use configuration item and data specified to show chart
+      chart.setOption(option)
+    },
+    loadDeducionList(classId: number) {
+      dutyService.getDeductionList(classId, 0, 100).then(res => {
+        this.deductionList = res.data.content || []
+        console.log('TCL: loadDeducionList -> this.deductionList')
+      })
+    },
+    loadClassList(schoolId: number) {
+      dutyService.getClassList(1).then(res => {
+        this.classList = res.data.content
+
+        // show first class default
+        const firstClassId =
+          this.classList.length > 0 ? this.classList[0].classId : 0
+        this.setClassId(firstClassId)
+      })
+    },
+    setClassId(classId: number) {
+      this.classId = classId
+    },
+    loadDeducionWeekHistory(classId: number) {
+      // setTimeout(() => {
+      //   dutyService.getDeductionHistoryByWeek(classId).then(res => {
+      //     this.deductionWeekHistory = res.data.content
+
+      //     this.initEcharts()
+      //   })
+      // }, 3000)
+
+      dutyService.getDeductionHistoryByWeek(classId).then(res => {
+        this.deductionWeekHistory = res.data.content
+
+        this.initEcharts()
+      })
+    },
+    toShowSwiper(imgUrls: string[]) {
+      this.showSwiper = true
+      this.imgs = imgUrls
+    },
+    toCloseSwiper() {
+      this.showSwiper = false
+    }
   }
 })
 </script>
@@ -394,9 +407,22 @@ export default Vue.extend({
 .class-selection-box {
   border-radius: 2px;
 }
+
 .growing-tree {
   position: relative;
   height: 300px;
+}
+
+.note-image {
+  width: 100%;
+}
+
+.image-wrapper {
+  padding: 1px;
+}
+
+.images-wrapper {
+  padding: 1px;
 }
 
 .data {
@@ -433,6 +459,28 @@ table.v-table tbody td {
 }
 
 .bottom-hint {
-  margin-bottom: 48px !important;
+  margin-bottom: 56px !important;
+}
+
+.loading-wrapper {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container.grid-list-sm .layout .flex {
+  padding: 1px;
+}
+
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.scale-enter,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0);
 }
 </style>

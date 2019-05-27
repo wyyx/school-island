@@ -8,13 +8,15 @@
     </v-toolbar> -->
     <v-content>
       <router-view></router-view>
-      <AppTabs class="tabs"></AppTabs>
+      <AppTabs :role="role" class="tabs"></AppTabs>
     </v-content>
   </v-app>
 </template>
 
 <script>
 import AppTabs from './components/Tabs.compoent.vue'
+import Url from 'url-parse'
+import { dutyService } from './services/duty.service'
 
 export default {
   name: 'App',
@@ -22,7 +24,40 @@ export default {
     AppTabs
   },
   data() {
-    return {}
+    return {
+      role: ''
+    }
+  },
+  created() {
+    const currentUrl = window.location.href
+    console.log('TCL: created -> currentUrl', currentUrl)
+    const url = new Url(currentUrl, true)
+    console.log('TCL: created -> url', url)
+
+    const roleCode = url.query['r']
+    const s = url.query['s']
+    const xyd = url.query['xyd']
+
+    dutyService.setHeaders({
+      xyd,
+      s
+    })
+
+    console.log('TCL: created -> dutyService', dutyService)
+
+    switch (parseInt(roleCode)) {
+      case 1:
+        this.role = 'teacher'
+        console.log('TCL: created -> this.role', this.role)
+        break
+      case 2:
+        this.role = 'school-run'
+        break
+      default:
+        break
+    }
+
+    this.$router.push(`/workbench/${this.role}`)
   }
 }
 </script>

@@ -25,10 +25,15 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  props: {
+    role: {
+      type: String,
+      default: 'teacher'
+    }
+  },
   data: function() {
     return {
-      bottomNav: 'home',
-      role: 'teacher'
+      bottomNav: 'home'
     }
   },
   name: 'AppTabs'

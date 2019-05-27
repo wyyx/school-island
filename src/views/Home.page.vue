@@ -1,6 +1,6 @@
 <template>
   <div class="container pa-0">
-    <Header :showBack="false" title="成都市xxx小学"></Header>
+    <!-- <Header :showBack="false" title="成都市xxx小学"></Header> -->
     <div class="nav-wrapper white pa-0">
       <v-layout>
         <v-flex>
@@ -125,8 +125,10 @@ export default Vue.extend({
     }
   },
   name: 'home',
-  components: { Article, Header },
-  created() {},
+  components: { Article },
+  created() {
+    this.changeTitle()
+  },
   methods: {
     goToCreateArticle() {
       this.$router.push({
@@ -137,6 +139,9 @@ export default Vue.extend({
       this.$router.push({
         name: 'convert-article-guide'
       })
+    },
+    changeTitle() {
+      document.title = '成都市xxx小学'
     }
   }
 })
