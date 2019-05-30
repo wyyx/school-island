@@ -64,15 +64,18 @@
                 </h3>
                 <v-data-table
                   :headers="headers"
-                  :items="desserts"
+                  :items="addRanking(topItems)"
                   class="elevation-0"
                   hide-actions
+                  no-data-text="暂无数据..."
                 >
                   <template v-slot:items="props">
-                    <td class="text-xs-right">{{ props.item.createTime }}</td>
-                    <td class="text-xs-right">{{ props.item.checkName }}</td>
-                    <td class="text-xs-right">{{ props.item.changeScore }}</td>
-                    <td class="text-xs-right">{{ props.item.remarks }}</td>
+                    <td class="text-xs-right">{{ props.item.ranking }}</td>
+                    <td class="text-xs-right">
+                      {{ props.item.classFullName }}
+                    </td>
+                    <td class="text-xs-right">{{ props.item.amountScore }}</td>
+                    <td class="text-xs-right">{{ props.item.starLevel }}</td>
                   </template>
                 </v-data-table>
                 <div class="text-center">
@@ -98,94 +101,43 @@
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import echarts, { EChartsResponsiveOption, EChartOption } from 'echarts'
+import { dutyService } from '../services/duty.service'
+import { TopItem } from '../models/duty-top.model'
+
+import moment from 'moment'
+moment.locale('zh-CN')
+
+let now = moment().format('M月D日，A，h点m分')
+console.log('TCL: now', now)
 
 export default Vue.extend({
   components: {},
+  created() {
+    this.loadTop()
+  },
   data: function() {
     return {
       classGrade: '',
-      items: [
-        { text: '2017年1班', value: 1 },
-        { text: '2017年2班', value: 2 },
-        { text: '2017年3班', value: 3 },
-        { text: '2017年4班', value: 4 },
-        { text: '2017年5班', value: 5 }
-      ],
+      items: [],
       rating: 4,
       model: 'tab-1',
       headers: [
         {
-          text: '时间',
-          align: 'left',
+          text: '名次',
+          align: 'right',
           sortable: true,
-          value: 'time'
+          value: 'ranking'
         },
-        { text: '类别', align: 'left', sortable: false, value: 'category' },
-        { text: '扣分', align: 'left', sortable: true, value: 'deduction' },
-        { text: '备注', align: 'left', sortable: false, value: 'note' }
+        {
+          text: '班级',
+          align: 'right',
+          sortable: false,
+          value: 'classFullName'
+        },
+        { text: '得分', align: 'right', sortable: true, value: 'amountScore' },
+        { text: '星级', align: 'right', sortable: true, value: 'starLevel' }
       ],
-      desserts: [
-        {
-          time: '12.11',
-          category: 159,
-          deduction: 6.0,
-          note: '备注'
-        },
-        {
-          time: '12.12',
-          category: 237,
-          deduction: 9.0,
-          note: '备注'
-        },
-        {
-          time: '12.13',
-          category: 262,
-          deduction: 16.0,
-          note: '备注'
-        },
-        {
-          time: '12.14',
-          category: 305,
-          deduction: 3.7,
-          note: '备注'
-        },
-        {
-          time: '12.15',
-          category: 356,
-          deduction: 16.0,
-          note: '备注'
-        },
-        {
-          time: '12.16',
-          category: 375,
-          deduction: 0.0,
-          note: '备注'
-        },
-        {
-          time: '12.17',
-          category: 392,
-          deduction: 0.2,
-          note: '备注'
-        },
-        {
-          time: '12.18',
-          category: 356,
-          deduction: 16.0,
-          note: '备注'
-        },
-        {
-          time: '12.19',
-          category: 375,
-          deduction: 0.0,
-          note: '备注'
-        },
-        {
-          time: '12.20',
-          category: 392,
-          deduction: 0.2,
-          note: '备注'
-        }
-      ]
+      topItems: [] as TopItem[]
     }
   },
   methods: {
@@ -194,70 +146,29 @@ export default Vue.extend({
         name: 'home'
       })
     },
-    initEcharts() {
-      let chart = echarts.init(document.getElementById(
-        'chart'
-      ) as HTMLDivElement)
-      // specify chart configuration item and data
-      var option: EChartOption = {
-        tooltip: {},
-        legend: {
-          data: ['纪律', '卫生', '两操', '文明', '安全']
-        },
-        xAxis: {
-          data: ['星期一', '星期二', '星期三', '星期四', '星期五']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '纪律',
-            type: 'line',
-            data: [5, 20, 36, 10, 10, 20],
-            itemStyle: {
-              color: '#2196F3'
-            }
-          },
-          {
-            name: '卫生',
-            type: 'line',
-            data: [13, 18, 22, 32, 28, 11],
-            itemStyle: {
-              color: '#00BCD4'
-            }
-          },
-          {
-            name: '两操',
-            type: 'line',
-            data: [7, 19, 34, 31, 27, 18],
-            itemStyle: {
-              color: '#FFC107'
-            }
-          },
-          {
-            name: '文明',
-            type: 'line',
-            data: [16, 22, 11, 27, 25, 27],
-            itemStyle: {
-              color: '#E91E63'
-            }
-          },
-          {
-            name: '安全',
-            type: 'line',
-            data: [25, 25, 17, 26, 27, 16],
-            itemStyle: {
-              color: '#4CAF50'
-            }
-          }
-        ]
+    loadTop() {
+      dutyService.getDutyTop(1).then(res => {
+        console.log('TCL: loadTop -> res', res)
+        this.topItems = res.data.content
+      })
+    },
+    addRanking(topItems: TopItem[]) {
+      let items: {
+        ranking: number
+        classFullName: string
+        amountScore: number
+        starLevel: number
+      }[] = []
+
+      for (let index = 0; index < topItems.length; index++) {
+        items.push({
+          ...topItems[index],
+          ranking: index + 1
+        })
       }
 
-      // use configuration item and data specified to show chart
-      chart.setOption(option)
+      return items
     }
-  },
-  mounted() {
-    // this.initEcharts()
   }
 })
 </script>
@@ -297,11 +208,6 @@ export default Vue.extend({
 #chart {
   height: 300px;
   width: 100%;
-}
-
-table.v-table tbody td {
-  height: unset !important;
-  padding: 12px 12px;
 }
 
 .bottom-hint {

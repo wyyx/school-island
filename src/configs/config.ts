@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://xyd.husiwei.com'
+export const BASE_URL = process.env.VUE_APP_BASE_URL
 
 export const COLORS = [
   '#2196F3',

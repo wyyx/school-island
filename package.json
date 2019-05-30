@@ -14,10 +14,12 @@
     "@types/url-parse": "^1.4.3",
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
+    "date-fns": "^1.30.1",
     "echarts": "^4.2.1",
     "hammerjs": "^2.0.8",
     "img-vuer": "^0.17.2",
     "material-design-icons-iconfont": "^5.0.1",
+    "moment": "^2.24.0",
     "quill": "^1.3.6",
     "url-parse": "^1.4.7",
     "vee-validate": "^2.2.7",
@@ -26,6 +28,7 @@
     "vue-picture-swipe": "^1.1.0",
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.5",
+    "vuetify-toast-snackbar": "^0.2.4",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

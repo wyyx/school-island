@@ -64,7 +64,7 @@
         </v-flex>
       </v-layout>
     </v-card>
-    <!-- report -->
+    <!-- report and deduction list-->
     <v-card class="pa-3">
       <v-layout column>
         <v-flex>
@@ -115,7 +115,9 @@
                   no-data-text="暂无数据..."
                 >
                   <template v-slot:items="props">
-                    <td class="text-xs-right">{{ props.item.createTime }}</td>
+                    <td class="text-xs-right">
+                      {{ formatDate(props.item.createTime) }}
+                    </td>
                     <td class="text-xs-right">{{ props.item.checkName }}</td>
                     <td class="text-xs-right">
                       {{ props.item.changeScore }}分
@@ -124,12 +126,17 @@
                       <div>
                         {{ props.item.remarks }}
                         <v-card
-                          v-if="props.item.imageUrls"
+                          v-if="showThumbnail(props.item.imageUrls)"
                           class="pa-0 mt-1 elevation-0"
                           @click="toShowSwiper(props.item.imageUrls)"
                         >
                           <v-container grid-list-sm class="pa-0" fluid>
-                            <v-layout class="images-wrapper" row wrap>
+                            <v-layout
+                              v-if="props.item.imageUrls"
+                              class="images-wrapper"
+                              row
+                              wrap
+                            >
                               <v-flex
                                 v-for="img in props.item.imageUrls"
                                 :key="img"
@@ -200,6 +207,8 @@ import { COLORS } from '../configs/config'
 import 'swiper/dist/css/swiper.css'
 
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import moment from 'moment'
+moment.locale('zh-CN')
 
 const SCHOOL_ID = 1
 
@@ -227,8 +236,7 @@ export default Vue.extend({
           text: '时间',
           align: 'right',
           sortable: true,
-          value: 'createTime',
-          width: 10
+          value: 'createTime'
         },
         { text: '类别', align: 'right', sortable: false, value: 'checkName' },
         { text: '扣分', align: 'right', sortable: true, value: 'changeScore' },
@@ -275,7 +283,6 @@ export default Vue.extend({
     },
     series() {
       const that: any = this
-      console.log('series')
       return that.converToSeries(that.deductionWeekHistory)
     }
   },
@@ -289,6 +296,9 @@ export default Vue.extend({
       this.$router.push({
         name: 'home'
       })
+    },
+    formatDate(date) {
+      return moment(date).format('M月D日 kk:mm')
     },
     converToSeries(weekHistory: DeductionHistoryByWeekItem[]) {
       const series = weekHistory.map((e: DeductionHistoryByWeekItem) => {
@@ -341,7 +351,6 @@ export default Vue.extend({
       this.chart = chart
       // specify chart configuration item and data
       const that: any = this
-      console.log('TCL: initEcharts -> this.legend', this.legend)
 
       var option: EChartOption = {
         tooltip: {},
@@ -361,16 +370,16 @@ export default Vue.extend({
     loadDeducionList(classId: number) {
       dutyService.getDeductionList(classId, 0, 100).then(res => {
         this.deductionList = res.data.content || []
-        console.log('TCL: loadDeducionList -> this.deductionList')
       })
     },
     loadClassList(schoolId: number) {
       dutyService.getClassList(1).then(res => {
-        this.classList = res.data.content
+        this.classList = res.data.content || []
 
         // show first class default
         const firstClassId =
           this.classList.length > 0 ? this.classList[0].classId : 0
+
         this.setClassId(firstClassId)
       })
     },
@@ -393,11 +402,15 @@ export default Vue.extend({
       })
     },
     toShowSwiper(imgUrls: string[]) {
+      console.log('TCL: toShowSwiper -> imgUrls', imgUrls)
       this.showSwiper = true
       this.imgs = imgUrls
     },
     toCloseSwiper() {
       this.showSwiper = false
+    },
+    showThumbnail(imgUrls: string[]) {
+      return imgUrls && imgUrls.length > 0
     }
   }
 })
@@ -451,11 +464,6 @@ export default Vue.extend({
 #chart {
   height: 300px;
   width: 100%;
-}
-
-table.v-table tbody td {
-  height: unset !important;
-  padding: 12px 12px;
 }
 
 .bottom-hint {

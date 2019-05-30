@@ -1,11 +1,5 @@
 <template>
   <v-app>
-    <!-- <v-toolbar app height="48">
-      <v-toolbar-title class="title text-uppercase">
-        <span>成都市xxx学校</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar> -->
     <v-content>
       <router-view></router-view>
       <AppTabs :role="role" class="tabs"></AppTabs>
@@ -17,6 +11,7 @@
 import AppTabs from './components/Tabs.compoent.vue'
 import Url from 'url-parse'
 import { dutyService } from './services/duty.service'
+import { httpConfigService } from './services/http-config.service'
 
 export default {
   name: 'App',
@@ -25,39 +20,47 @@ export default {
   },
   data() {
     return {
-      role: ''
+      role: 'teacher'
     }
   },
   created() {
-    const currentUrl = window.location.href
-    console.log('TCL: created -> currentUrl', currentUrl)
-    const url = new Url(currentUrl, true)
-    console.log('TCL: created -> url', url)
+    this.resolveCurrentUser()
+  },
+  methods: {
+    resolveCurrentUser() {
+      // parse current url
+      const currentUrl = window.location.href
+      const url = new Url(currentUrl, true)
 
-    const roleCode = url.query['r']
-    const s = url.query['s']
-    const xyd = url.query['xyd']
+      // get query params
+      const roleCode = url.query['r']
+      const s = url.query['s']
+      const xyd = url.query['xyd']
 
-    dutyService.setHeaders({
-      xyd,
-      s
-    })
+      // set global headers
+      httpConfigService.setHeaders({
+        xyd: 'aa',
+        s: 'bbb'
+      })
 
-    console.log('TCL: created -> dutyService', dutyService)
+      // get current role
+      switch (parseInt(roleCode)) {
+        case 1:
+          this.role = 'teacher'
+          break
+        case 2:
+          this.role = 'school-run'
+          break
+        default:
+          break
+      }
 
-    switch (parseInt(roleCode)) {
-      case 1:
-        this.role = 'teacher'
-        console.log('TCL: created -> this.role', this.role)
-        break
-      case 2:
-        this.role = 'school-run'
-        break
-      default:
-        break
+      // //  switch route
+      // if (this.role) {
+      //   console.log('TCL: created -> this.role', this.role)
+      //   this.$router.push(`/workbench/${this.role}`)
+      // }
     }
-
-    this.$router.push(`/workbench/${this.role}`)
   }
 }
 </script>

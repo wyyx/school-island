@@ -1,31 +1,41 @@
-import { httpService } from './http.service'
 import { Article, ArticlePostData } from '@/models/article.model'
+import { HttpConfigService, httpConfigService } from './http-config.service'
 
 export class ArticleService {
-  httpService = httpService
+  httpConfigService: HttpConfigService = httpConfigService
 
   getArticleList(params: { schoolId: string; current: number; size: number }) {
-    return this.httpService.post('/w/article/list', null, { data: params })
-  }
-
-  getArticle(id: string) {
-    return this.httpService.post<Article>('/w/article/details', null, {
-      data: {
-        id
-      }
+    return this.httpConfigService.httpSercvice.post('/w/article/list', null, {
+      data: params
     })
   }
 
+  getArticle(id: string) {
+    return this.httpConfigService.httpSercvice.post<Article>(
+      '/w/article/details',
+      null,
+      {
+        data: {
+          id
+        }
+      }
+    )
+  }
+
   addArticle(article: ArticlePostData) {
-    return this.httpService.post('/w/article/add', null, {
+    return this.httpConfigService.httpSercvice.post('/w/article/add', null, {
       data: article
     })
   }
 
   setTop(id: string) {
-    return this.httpService.post('/w/article/priority', null, {
-      data: { id }
-    })
+    return this.httpConfigService.httpSercvice.post(
+      '/w/article/priority',
+      null,
+      {
+        data: { id }
+      }
+    )
   }
 }
 

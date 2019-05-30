@@ -1,7 +1,8 @@
-import { httpService } from './http.service'
+import axios from 'axios'
+import { HttpConfigService, httpConfigService } from './http-config.service'
 
 export class CommentService {
-  httpService = httpService
+  httpConfigService: HttpConfigService = httpConfigService
 }
 
 export const comments = [

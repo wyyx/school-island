@@ -1,33 +1,15 @@
-import { BASE_URL } from '@/configs/config'
-import { httpService } from './http.service'
-import { DeductionListResponse } from '@/models/deduction-list.model'
-import { DeductionHistoryByWeekResponse } from '@/models/deduction-history-by-week.model'
 import { ClasslistResponse } from '@/models/class.model'
-import axios, { AxiosRequestConfig, AxiosInstance } from 'axios'
+import { DeductionHistoryByWeekResponse } from '@/models/deduction-history-by-week.model'
+import { DeductionListResponse } from '@/models/deduction-list.model'
+import { httpConfigService, HttpConfigService } from './http-config.service'
+import { DutyTopResponse } from '@/models/duty-top.model'
 
 export class DutyService {
-  httpService: AxiosInstance
-  config: AxiosRequestConfig
-
-  constructor(baseUrl: string, config?: AxiosRequestConfig) {
-    this.config = config || {}
-    this.httpService = axios.create(config)
-  }
-
-  setHeaders(headers: { [key: string]: string | number }) {
-    this.config = {
-      ...this.config,
-      headers: {
-        ...this.config.headers,
-        ...headers
-      }
-    }
-    this.httpService = axios.create(this.config)
-  }
+  httpConfigService: HttpConfigService = httpConfigService
 
   getDeductionList(classId: number, offset: number = 0, size: number = 10) {
-    return this.httpService.post<DeductionListResponse>(
-      BASE_URL + '/w/score/list-page',
+    return this.httpConfigService.httpSercvice.post<DeductionListResponse>(
+      '/w/score/list-page',
       {
         classId: classId,
         pageNo: offset,
@@ -37,17 +19,25 @@ export class DutyService {
   }
 
   getDeductionHistoryByWeek(classId: number) {
-    return this.httpService.post<DeductionHistoryByWeekResponse>(
-      BASE_URL + '/w/score/report-froms',
+    return this.httpConfigService.httpSercvice.post<
+      DeductionHistoryByWeekResponse
+    >('/w/score/report-froms', {
+      classId
+    })
+  }
+
+  getClassList(schoolId: number) {
+    return this.httpConfigService.httpSercvice.post<ClasslistResponse>(
+      '/w/class/list',
       {
-        classId
+        schoolId
       }
     )
   }
 
-  getClassList(schoolId: number) {
-    return this.httpService.post<ClasslistResponse>(
-      BASE_URL + '/w/class/list',
+  getDutyTop(schoolId: number) {
+    return this.httpConfigService.httpSercvice.post<DutyTopResponse>(
+      '/w/score-week/list-page',
       {
         schoolId
       }
@@ -55,4 +45,4 @@ export class DutyService {
   }
 }
 
-export const dutyService = new DutyService(BASE_URL)
+export const dutyService = new DutyService()

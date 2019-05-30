@@ -45,20 +45,13 @@ Content-Type: application/json
 ###
 
 
-# 查询班级的星级排名
-POST http://192.168.1.10:8888/a/scoreWeek/selectDutyRank HTTP/1.1
+# 值周排行榜
+POST http://192.168.1.10:8888/w/score-week/list-page HTTP/1.1
 Content-Type: application/json
 
 {
   "pageNo": 0,
-  "pageSize": 0,
-  "schoolId": 0
+  "pageSize": 100,
+  "schoolId": 1
 }
 ###
-
-# 查询班级本周值周分，和超过班级的百分比
-POST http://192.168.1.10:8888/a/scoreWeek/selectDutyWeek HTTP/1.1
-Content-Type: application/json
-
-###
-

@@ -2,8 +2,8 @@
   <div class="article">
     <v-layout>
       <v-flex>
-        <v-card class="pa-3">
-          <v-card-actions class="header pa-0">
+        <v-card>
+          <v-card-actions class="header pl-3">
             <v-card-title primary-title class="pa-0">
               <h3 class="subheading mb-0">2017级8班 李小龙的妈妈</h3>
             </v-card-title>
@@ -22,7 +22,7 @@
               </v-list>
             </v-menu>
           </v-card-actions>
-          <v-layout row wrap @click="goToDetail">
+          <v-layout class="pa-3" row wrap @click="goToDetail">
             <v-flex xs8>
               <v-card-text class="pa-0 grey--text">
                 <p>
@@ -36,7 +36,7 @@
           </v-layout>
           <v-divider></v-divider>
 
-          <v-card-actions class="footer pa-0">
+          <v-card-actions class="footer pa-3">
             <v-avatar
               v-for="avatar in avatars"
               :tile="false"
