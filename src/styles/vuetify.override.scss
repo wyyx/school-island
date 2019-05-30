@@ -11,3 +11,8 @@ table.v-table tbody td:first-child {
   height: unset !important;
   padding: 12px 12px !important;
 }
+
+.v-carousel__controls {
+  background: transparent;
+  height: unset !important;
+}

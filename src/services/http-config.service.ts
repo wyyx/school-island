@@ -1,6 +1,8 @@
 import { BASE_URL } from '@/configs/config'
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
+console.log('TCL: BASE_URL', BASE_URL)
+
 export class HttpConfigService {
   httpSercvice: AxiosInstance
   config: AxiosRequestConfig

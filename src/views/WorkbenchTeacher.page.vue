@@ -113,6 +113,7 @@
                   hide-actions
                   :search="search"
                   no-data-text="暂无数据..."
+                  no-results-text="没有匹配的数据..."
                 >
                   <template v-slot:items="props">
                     <td class="text-xs-right">

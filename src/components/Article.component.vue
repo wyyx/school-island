@@ -3,7 +3,7 @@
     <v-layout>
       <v-flex>
         <v-card>
-          <v-card-actions class="header pl-3">
+          <v-card-actions class="header py-2 pl-3 pr-1">
             <v-card-title primary-title class="pa-0">
               <h3 class="subheading mb-0">2017级8班 李小龙的妈妈</h3>
             </v-card-title>
@@ -36,7 +36,7 @@
           </v-layout>
           <v-divider></v-divider>
 
-          <v-card-actions class="footer pa-3">
+          <v-card-actions class="footer py-2 pl-3 pr-1">
             <v-avatar
               v-for="avatar in avatars"
               :tile="false"
@@ -122,7 +122,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .header,
 .footer {
-  height: 36px;
+  height: 56px;
 }
 
 .comment-menu .v-btn {

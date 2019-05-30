@@ -24,7 +24,7 @@
         </v-flex>
       </v-layout>
     </div>
-    <v-carousel class="banners" hide-delimiters height="160">
+    <v-carousel class="banners" height="160" hide-controls interval="5000">
       <v-carousel-item
         v-for="(item, i) in images"
         :key="i"
@@ -164,5 +164,9 @@ export default Vue.extend({
   position: fixed;
   bottom: 80px;
   right: 20px;
+}
+
+.v-carousel__controls {
+  background: transparent !important;
 }
 </style>

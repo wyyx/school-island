@@ -1,6 +1,5 @@
 <template>
   <div class="container pa-0">
-    <Header :showBack="true" :showTitle="false" @back="onBack"></Header>
     <v-card color="primary pa-2" class="">
       <v-layout class="" row wrap>
         <v-flex xs6 class="pr-1">
@@ -96,7 +95,7 @@ import { comments } from '../services/comment.service'
 
 export default Vue.extend({
   name: 'my',
-  components: { Header, Comment },
+  components: { Comment },
   props: {
     id: {
       type: Number

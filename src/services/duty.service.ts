@@ -7,13 +7,13 @@ import { DutyTopResponse } from '@/models/duty-top.model'
 export class DutyService {
   httpConfigService: HttpConfigService = httpConfigService
 
-  getDeductionList(classId: number, offset: number = 0, size: number = 10) {
+  getDeductionList(classId: number, pageNo: number = 0, pageSize: number = 10) {
     return this.httpConfigService.httpSercvice.post<DeductionListResponse>(
       '/w/score/list-page',
       {
-        classId: classId,
-        pageNo: offset,
-        pageSize: size
+        classId,
+        pageNo,
+        pageSize
       }
     )
   }
@@ -35,11 +35,13 @@ export class DutyService {
     )
   }
 
-  getDutyTop(schoolId: number) {
+  getDutyTop(schoolId: number, pageNo: number = 0, pageSize: number = 10) {
     return this.httpConfigService.httpSercvice.post<DutyTopResponse>(
       '/w/score-week/list-page',
       {
-        schoolId
+        schoolId,
+        pageNo,
+        pageSize
       }
     )
   }

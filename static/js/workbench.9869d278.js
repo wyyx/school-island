@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["workbench"],{"0985":function(e,t,n){"use strict";n.r(t);var c=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("router-view")},a=[],i=n("2b0e"),o=i["a"].extend({data:function(){return{}},created:function(){this.changeTitle()},methods:{changeTitle:function(){document.title="工作台"}}}),r=o,u=n("0c7c"),d=Object(u["a"])(r,c,a,!1,null,"9af6dd26",null);t["default"]=d.exports}}]);
-//# sourceMappingURL=workbench.9869d278.js.map
