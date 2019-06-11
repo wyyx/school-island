@@ -1,35 +1,31 @@
 {
-  "content": [
-    {
-      "classFullName": "一年级六班",
-      "starLevel": 5,
-      "amountScore": 100.0
-    },
-    {
-      "classFullName": "二年级四班",
-      "starLevel": 4,
-      "amountScore": 80.0
-    },
-    {
-      "classFullName": "三年级八班",
-      "starLevel": 3,
-      "amountScore": 60.0
-    },
-    {
-      "classFullName": "四年级一班",
-      "starLevel": 2,
-      "amountScore": 40.0
-    },
-    {
-      "classFullName": "五年级二班",
-      "starLevel": 1,
-      "amountScore": 20.0
-    },
-    {
-      "classFullName": "六年级三班",
-      "starLevel": 1,
-      "amountScore": 1.0
-    }
-  ],
-  "status": "OK"
+  "content": {
+    "binding": 0,
+    "city": "string",
+    "country": "string",
+    "headImgUrl": "string",
+    "id": 0,
+    "idcard": "string",
+    "language": "string",
+    "loginErrorCount": 0,
+    "mobile": "string",
+    "name": "string",
+    "nickname": "string",
+    "openId": "string",
+    "privilege": "string",
+    "province": "string",
+    "pwd": "string",
+    "refId": 0,
+    "roleCode": 0,
+    "roleName": "string",
+    "salt": "string",
+    "sex": 0,
+    "status": 0,
+    "unionId": "string",
+    "userName": "string",
+    "userType": 0
+  },
+  "errorCode": "string",
+  "errorMsg": "string",
+  "status": "string"
 }

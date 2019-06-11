@@ -12,6 +12,8 @@ import AppTabs from './components/Tabs.compoent.vue'
 import Url from 'url-parse'
 import { dutyService } from './services/duty.service'
 import { httpConfigService } from './services/http-config.service'
+import { userService } from './services/user.service'
+import { BindingStatus } from './models/user.model'
 
 export default {
   name: 'App',
@@ -25,12 +27,14 @@ export default {
   },
   created() {
     this.resolveCurrentUser()
+    this.checkBinding()
   },
   methods: {
     resolveCurrentUser() {
       // parse current url
       const currentUrl = window.location.href
       const url = new Url(currentUrl, true)
+      console.log('TCL: resolveCurrentUser -> url', url)
 
       // get query params
       const roleCode = url.query['r']
@@ -39,8 +43,8 @@ export default {
 
       // set global headers
       httpConfigService.setHeaders({
-        xyd: 'aa',
-        s: 'bbb'
+        xyd,
+        s
       })
 
       // get current role
@@ -60,6 +64,16 @@ export default {
       //   console.log('TCL: created -> this.role', this.role)
       //   this.$router.push(`/workbench/${this.role}`)
       // }
+    },
+    checkBinding() {
+      userService.getUserInfo().then(res => {
+        console.log('TCL: checkBinding -> res', res)
+        if (res.data.content.binding === BindingStatus.NotBinding) {
+          this.$router.push({
+            name: 'binding'
+          })
+        }
+      })
     }
   }
 }

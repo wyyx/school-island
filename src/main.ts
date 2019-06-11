@@ -12,9 +12,9 @@ import './styles/main.scss'
 import VuePictureSwipe from 'vue-picture-swipe'
 Vue.component('vue-picture-swipe', VuePictureSwipe)
 
-// vconsole
-import VConsole from 'vconsole'
-var vConsole = new VConsole()
+// // vconsole
+// import VConsole from 'vconsole'
+// var vConsole = new VConsole()
 
 Vue.config.productionTip = false
 

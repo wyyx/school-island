@@ -86,6 +86,13 @@ export default new Router({
           /* webpackChunkName: "convert-article" */ '../views/ConvertArticle.page.vue'
         ),
       props: true
+    },
+    {
+      path: '/binding',
+      name: 'binding',
+      component: () =>
+        import(/* webpackChunkName: "binding" */ '../views/Binding.page.vue'),
+      props: true
     }
   ]
 })
