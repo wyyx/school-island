@@ -111,6 +111,7 @@ import { getRandomInt } from '@/utils/math.util'
 import Article from '../components/Article.component.vue'
 import Header from '../components/Header.component.vue'
 import { articles } from '../services/article.service'
+import { dutyService } from '../services/duty.service'
 
 export default Vue.extend({
   data: function() {
@@ -128,6 +129,8 @@ export default Vue.extend({
   components: { Article },
   created() {
     this.changeTitle()
+    dutyService.baseUrl
+    console.log('TCL: created -> dutyService.baseUrl', dutyService.baseUrl)
   },
   methods: {
     goToCreateArticle() {

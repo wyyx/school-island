@@ -2,17 +2,22 @@ import { Article, ArticlePostData } from '@/models/article.model'
 import { HttpConfigService, httpConfigService } from './http-config.service'
 
 export class ArticleService {
+  baseUrl: string = ''
   httpConfigService: HttpConfigService = httpConfigService
 
   getArticleList(params: { schoolId: string; current: number; size: number }) {
-    return this.httpConfigService.httpSercvice.post('/w/article/list', null, {
-      data: params
-    })
+    return this.httpConfigService.httpSercvice.post(
+      this.baseUrl + '/w/article/list',
+      null,
+      {
+        data: params
+      }
+    )
   }
 
   getArticle(id: string) {
     return this.httpConfigService.httpSercvice.post<Article>(
-      '/w/article/details',
+      this.baseUrl + '/w/article/details',
       null,
       {
         data: {
@@ -23,14 +28,18 @@ export class ArticleService {
   }
 
   addArticle(article: ArticlePostData) {
-    return this.httpConfigService.httpSercvice.post('/w/article/add', null, {
-      data: article
-    })
+    return this.httpConfigService.httpSercvice.post(
+      this.baseUrl + '/w/article/add',
+      null,
+      {
+        data: article
+      }
+    )
   }
 
   setTop(id: string) {
     return this.httpConfigService.httpSercvice.post(
-      '/w/article/priority',
+      this.baseUrl + '/w/article/priority',
       null,
       {
         data: { id }

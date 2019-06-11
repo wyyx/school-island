@@ -7,7 +7,8 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
 import AppTabs from './components/Tabs.compoent.vue'
 import Url from 'url-parse'
 import { dutyService } from './services/duty.service'
@@ -15,7 +16,7 @@ import { httpConfigService } from './services/http-config.service'
 import { userService } from './services/user.service'
 import { BindingStatus } from './models/user.model'
 
-export default {
+export default Vue.extend({
   name: 'App',
   components: {
     AppTabs
@@ -48,7 +49,7 @@ export default {
       })
 
       // get current role
-      switch (parseInt(roleCode)) {
+      switch (parseInt(roleCode || '')) {
         case 1:
           this.role = 'teacher'
           break
@@ -59,11 +60,7 @@ export default {
           break
       }
 
-      // //  switch route
-      // if (this.role) {
-      //   console.log('TCL: created -> this.role', this.role)
-      //   this.$router.push(`/workbench/${this.role}`)
-      // }
+      this.getSchoolInfo(parseInt(s || ''))
     },
     checkBinding() {
       userService.getUserInfo().then(res => {
@@ -74,9 +71,13 @@ export default {
           })
         }
       })
+    },
+    getSchoolInfo(schoolId: number) {
+      console.log('TCL: getSchoolInfo -> schoolId', schoolId)
+      userService.getSchoolInfo(schoolId)
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

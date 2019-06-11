@@ -1,4 +1,6 @@
 export const BASE_URL = process.env.VUE_APP_BASE_URL
+export const YANG_BASE_URL = process.env.VUE_APP_YANG_BASE_URL
+export const GUO_BASE_URL = process.env.VUE_APP_GUO_BASE_URL
 
 export const COLORS = [
   '#2196F3',

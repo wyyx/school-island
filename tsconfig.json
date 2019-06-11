@@ -10,6 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "noImplicitAny": false,
+    "strictPropertyInitialization": false,
     "baseUrl": ".",
     "types": ["webpack-env", "vuetify"],
     "paths": {
@@ -22,7 +23,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "src/plugins/vee-validate.message.js"
   ],
   "exclude": ["node_modules"]
 }

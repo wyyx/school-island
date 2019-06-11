@@ -12,7 +12,7 @@ export class HttpConfigService {
     this.httpSercvice = axios.create(this.config)
   }
 
-  setHeaders(headers: { [key: string]: string | number }) {
+  setHeaders(headers: { [key: string]: string | number | undefined }) {
     this.config = {
       ...this.config,
       headers: { ...this.config.headers, ...headers }

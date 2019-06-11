@@ -2,14 +2,14 @@
   <div>
     <div class="header">
       <div class="badge">
-        <img src="" class="badgeimg" alt="" />
+        <img :src="schoolLogo" class="badgeimg" alt="" />
       </div>
-      <div class="schoolname">成都市XXX小学校</div>
+      <div class="schoolname">{{ schoolName }}</div>
     </div>
     <div class="content">
       <div class="roleList">
         <div
-          class="role"
+          class="role clickable"
           :class="{ active: showParents }"
           name="1"
           @click="showParentsInput"
@@ -17,7 +17,7 @@
           家长
         </div>
         <div
-          class="role"
+          class="role clickable"
           :class="{ active: !showParents }"
           name="2"
           @click="showTeacherInput"
@@ -37,6 +37,7 @@
             v-model="name"
             v-validate="'required'"
             name="name"
+            data-vv-as="名字"
           />
           <ul class="error-messages">
             <li
@@ -62,6 +63,7 @@
               length: 18
             }"
             name="idCard"
+            data-vv-as="身份证号"
           />
           <ul class="error-messages">
             <li
@@ -86,6 +88,7 @@
             v-model="name"
             v-validate="'required'"
             name="name"
+            data-vv-as="名字"
           />
           <ul class="error-messages">
             <li
@@ -111,6 +114,7 @@
               length: 18
             }"
             name="idCard"
+            data-vv-as="身份证号"
           />
           <ul class="error-messages">
             <li
@@ -142,8 +146,8 @@
         </select>
       </div>
       <div class="roleList line">
-        <div class="tourists" @click="giveUpBinding">游客访问</div>
-        <div class="attestation" @click="submit">立即认证</div>
+        <div class="tourists clickable" @click="giveUpBinding">游客访问</div>
+        <div class="attestation clickable" @click="submit">立即认证</div>
       </div>
     </div>
   </div>
@@ -163,7 +167,18 @@ export default Vue.extend({
       userType: 1
     }
   },
-  created() {},
+  computed: {
+    schoolName() {
+      return userService.schoolInfo.name
+    },
+    schoolLogo() {
+      const logos = userService.schoolInfo.logo
+      return logos ? logos[0] : ''
+    }
+  },
+  created() {
+    this.$validator.localize('zh_CN')
+  },
   methods: {
     showParentsInput() {
       this.showParents = true
@@ -198,9 +213,7 @@ export default Vue.extend({
         }
       })
     },
-    onSelectChange() {
-      console.log('TCL: giveUpBinding -> this.relation', this.relation)
-    }
+    onSelectChange() {}
   }
 })
 </script>
@@ -215,7 +228,7 @@ export default Vue.extend({
   width: 100%;
   height: 150px;
   box-sizing: border-box;
-  background-color: rgb(60, 184, 246);
+  background-color: #00bcd4;
   padding-top: 1px;
 }
 .badge {
@@ -225,6 +238,7 @@ export default Vue.extend({
   border-radius: 50px;
   background: white;
   margin-top: 10px;
+  overflow: hidden;
 }
 .badgeimg {
   width: 100%;
@@ -250,6 +264,7 @@ export default Vue.extend({
   border-radius: 8px;
   background-color: rgb(255, 255, 251);
 }
+
 .roleList {
   width: 80%;
   margin: auto;
@@ -257,6 +272,7 @@ export default Vue.extend({
   font-size: 16px;
   margin-top: 15px;
 }
+
 .role {
   width: 49%;
   float: left;
@@ -268,17 +284,18 @@ export default Vue.extend({
 }
 
 .active {
-  color: rgb(60, 184, 246);
+  color: #00bcd4;
 }
 
 .studentinfo {
   height: 100%;
-  width: 80%;
+  width: 100%;
   padding-left: 16px;
   background: rgb(242, 242, 242);
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
 }
+
 .studentRelation {
   white-space: nowrap;
   text-align: left;
@@ -309,16 +326,20 @@ select {
   color: rgb(174, 174, 174);
   float: left;
   width: 30%;
+  height: 100%;
+  line-height: 50px;
 }
 .attestation {
   height: 100%;
   width: 65%;
   float: right;
-  background: rgb(104, 205, 255);
+  background: #00bcd4;
   color: rgb(255, 255, 255);
-  border-radius: 10px;
+  border-radius: 4px;
   text-align: center;
   line-height: 50px;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
 .ts_alert {
@@ -338,5 +359,14 @@ select {
 
 .error-message {
   color: red;
+}
+select {
+  border-radius: 4px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.error-messages {
+  list-style: none;
 }
 </style>
