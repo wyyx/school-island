@@ -2,7 +2,8 @@ import { HttpConfigService, httpConfigService } from './http-config.service'
 import {
   BindingPost,
   UserInfoResponse,
-  BindingResponse
+  BindingResponse,
+  UserInfo
 } from '@/models/user.model'
 import { YANG_BASE_URL, GUO_BASE_URL } from '@/configs/config'
 import { SchoolInfoResponse, SchoolInfo } from '@/models/school.model'
@@ -13,6 +14,7 @@ export class UserService {
   httpConfigService: HttpConfigService = httpConfigService
 
   schoolInfo: SchoolInfo = {} as SchoolInfo
+  userInfo: UserInfo = {} as UserInfo
 
   bind(data: BindingPost) {
     return this.httpConfigService.httpSercvice.post<BindingResponse>(
@@ -22,9 +24,20 @@ export class UserService {
   }
 
   getUserInfo() {
-    return this.httpConfigService.httpSercvice.post<UserInfoResponse>(
-      this.baseUrl + '/w/user/select-by-id'
-    )
+    return this.httpConfigService.httpSercvice
+      .post<UserInfoResponse>(this.baseUrl + '/w/user/select-by-id')
+      .then(res => {
+        if (res.data.content) {
+          this.userInfo = res.data.content
+        }
+
+        console.log(
+          'TCL: UserService -> getUserInfo -> this.userInfo',
+          this.userInfo
+        )
+
+        return res
+      })
   }
 
   getSchoolInfo(schoolId: number) {

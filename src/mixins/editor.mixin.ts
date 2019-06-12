@@ -1,28 +1,36 @@
-import { format, formatTextColor } from '@/utils/format.util'
+import * as formatUtil from '@/utils/format.util'
 
 export const editorMixin = {
   methods: {
     formatBold() {
       const that: any = this
-      format(that.editor, 'bold')
+      formatUtil.format(that.editor, 'bold')
     },
     formatItalic() {
       const that: any = this
-      console.log('TCL: formatItalic -> that.editor', that.editor)
 
-      format(that.editor, 'italic')
+      formatUtil.format(that.editor, 'italic')
     },
-    formatColor(color: string) {
+    formatColor(color: string, currentSelection: any) {
       const that: any = this
 
-      const selection = that.editor.getSelection()
-      console.log('TCL: formatColor -> selection aaa', selection)
+      that.editor.setSelection(currentSelection)
+      formatUtil.formatTextColor(that.editor, 'color', color)
+    },
+    formatClearColor(currentSelection: any) {
+      const that: any = this
 
-      formatTextColor(that.editor, 'color', color)
+      that.editor.setSelection(currentSelection)
+      formatUtil.formatClearTextColor(that.editor, 'color')
     },
     formatUnderline() {
       const that: any = this
-      format(that.editor, 'underline')
+      formatUtil.format(that.editor, 'underline')
+    },
+    insertImage(imageUrl: string, currentSelection: Range) {
+      console.log('TCL: insertImage -> currentSelection', currentSelection)
+      const that: any = this
+      formatUtil.insertEmbed(that.editor, imageUrl)
     }
   }
 }

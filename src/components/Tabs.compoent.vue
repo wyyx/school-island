@@ -5,9 +5,26 @@
       <v-icon>home</v-icon>
     </v-btn>
 
-    <v-btn color="primary" flat value="workbench" :to="`/workbench/${role}`">
-      <span>工作台</span>
-      <v-icon>laptop_mac</v-icon>
+    <v-btn
+      v-if="role === teacher"
+      color="primary"
+      flat
+      value="workbench"
+      :to="`/workbench/${role}`"
+    >
+      <span>老师助手</span>
+      <v-icon>assignment_turned_in</v-icon>
+    </v-btn>
+
+    <v-btn
+      v-if="role === schoolRun"
+      color="primary"
+      flat
+      value="workbench"
+      :to="`/workbench/${role}`"
+    >
+      <span>校办助手</span>
+      <v-icon>assessment</v-icon>
     </v-btn>
 
     <v-btn color="primary" flat value="explore" to="/explore">
@@ -23,6 +40,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { Role } from '../configs/config'
 
 export default Vue.extend({
   props: {
@@ -33,7 +51,9 @@ export default Vue.extend({
   },
   data: function() {
     return {
-      bottomNav: 'home'
+      bottomNav: 'home',
+      teacher: Role.Teacher,
+      schoolRun: Role.SchoolRun
     }
   },
   name: 'AppTabs'

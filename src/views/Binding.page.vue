@@ -150,6 +150,12 @@
         <div class="attestation clickable" @click="submit">立即认证</div>
       </div>
     </div>
+    <v-snackbar v-model="showSnackbar" :color="'red'" :timeout="3000">
+      {{ errMessage }}
+      <v-btn dark flat @click="showSnackbar = false">
+        关闭
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -164,7 +170,9 @@ export default Vue.extend({
       name: '',
       idCard: '',
       relation: 1,
-      userType: 1
+      userType: 1,
+      showSnackbar: false,
+      errMessage: '出现未知错误，请稍后再试'
     }
   },
   computed: {
@@ -209,7 +217,24 @@ export default Vue.extend({
         console.log('TCL: submit -> data', data)
 
         if (valid) {
-          userService.bind(data)
+          userService
+            .bind(data)
+            .then(res => {
+              if (res.data.content) {
+                console.log('绑定成功！跳转到首页')
+
+                this.$router.push({
+                  name: 'home'
+                })
+              } else {
+                console.log('绑定失败', res.data.errorMsg)
+                this.errMessage = res.data.errorMsg
+                this.showSnackbar = true
+              }
+            })
+            .catch(() => {
+              console.log('catch bind')
+            })
         }
       })
     },

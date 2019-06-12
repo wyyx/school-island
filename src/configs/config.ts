@@ -14,3 +14,8 @@ export const COLORS = [
   '9E9E9E',
   '9E9E9E'
 ]
+
+export enum Role {
+  Teacher = 'teacher',
+  SchoolRun = 'school-run'
+}

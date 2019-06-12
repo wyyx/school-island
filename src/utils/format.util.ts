@@ -2,11 +2,8 @@ import Quill from 'quill'
 
 export function format(quill: Quill, type: string) {
   const selection = quill.getSelection()
-  console.log('TCL: format -> selection', selection)
   const currentFormat = quill.getFormat(selection)
   const isFormatted = currentFormat[type]
-
-  console.log('TCL: format -> currentFormat', currentFormat)
 
   if (isFormatted) {
     quill.format(type, false)
@@ -16,14 +13,13 @@ export function format(quill: Quill, type: string) {
 }
 
 export function formatTextColor(quill: Quill, type: string, value: string) {
-  const selection = quill.getSelection()
-  console.log('TCL: formatTextColor -> selection bbb', selection)
-  // const currentFormat = quill.getFormat(selection)
-  // console.log('TCL: formatTextColor -> currentFormat', currentFormat)
+  quill.format(type, value)
+}
 
-  // if (isFormatted) {
-  // quill.format(type, value)
-  // } else {
-  //   quill.format(type, '')
-  // }
+export function formatClearTextColor(quill: Quill, type: string) {
+  quill.format(type, '')
+}
+
+export function insertEmbed(quill: Quill, type: string) {
+  quill.insertEmbed(2, 'image', 'https://picsum.photos/id/884/200/300')
 }

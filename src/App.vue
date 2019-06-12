@@ -2,7 +2,7 @@
   <v-app>
     <v-content>
       <router-view></router-view>
-      <AppTabs :role="role" class="tabs"></AppTabs>
+      <AppTabs v-if="showTabs" :role="role" class="tabs"></AppTabs>
     </v-content>
   </v-app>
 </template>
@@ -23,19 +23,21 @@ export default Vue.extend({
   },
   data() {
     return {
-      role: 'teacher'
+      role: 'teacher',
+      showTabs: userService.userInfo.binding === 0
     }
   },
   created() {
-    this.resolveCurrentUser()
+    this.showTabs = true
+    this.resolveInitUrl()
     this.checkBinding()
   },
   methods: {
-    resolveCurrentUser() {
+    resolveInitUrl() {
       // parse current url
       const currentUrl = window.location.href
       const url = new Url(currentUrl, true)
-      console.log('TCL: resolveCurrentUser -> url', url)
+      console.log('TCL: resolveInitUrl -> url', url)
 
       // get query params
       const roleCode = url.query['r']
@@ -45,7 +47,8 @@ export default Vue.extend({
       // set global headers
       httpConfigService.setHeaders({
         xyd,
-        s
+        s,
+        r: roleCode
       })
 
       // get current role
@@ -63,24 +66,23 @@ export default Vue.extend({
       this.getSchoolInfo(parseInt(s || ''))
     },
     checkBinding() {
-      userService
-        .getUserInfo()
-        .then(res => {
-          console.log('TCL: checkBinding -> res', res)
-          if (res.data.content.binding === BindingStatus.NotBinding) {
-            this.$router.push({
-              name: 'binding'
-            })
-          }
-        })
-        .catch(error => {
+      userService.getUserInfo().then(res => {
+        console.log('TCL: checkBinding -> res', res)
+        if (res.data.content.binding === BindingStatus.NotBinding) {
+          this.$router.push({
+            name: 'binding'
+          })
+        } else {
           this.$router.push({
             name: 'home'
           })
-        })
+        }
+      })
+    },
+    getUserInfo() {
+      userService.getUserInfo()
     },
     getSchoolInfo(schoolId: number) {
-      console.log('TCL: getSchoolInfo -> schoolId', schoolId)
       userService.getSchoolInfo(schoolId)
     }
   }

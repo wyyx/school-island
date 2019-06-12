@@ -42,11 +42,13 @@
       <!-- toobar group1 -->
       <v-flex class="text-center">
         <div class="toolbar-container pa-1 ">
+          <!-- format bold -->
           <div>
             <v-btn @click="formatBold" fab depressed small color="transparent">
               <v-icon medium color="grey darken-1">format_bold</v-icon>
             </v-btn>
           </div>
+          <!-- format font color -->
           <div>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
@@ -58,44 +60,6 @@
                   color="transparent"
                   @click="saveCurrentSelection"
                 >
-                  <v-icon medium color="grey darken-1"
-                    >format_color_text
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-tile>
-                  <v-list-tile-title>
-                    <v-layout row wrap>
-                      <v-flex shrink @click="formatColor('red')">
-                        <div class="color-sample red-color-sample"></div>
-                      </v-flex>
-                    </v-layout>
-                  </v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-title>
-                    <v-layout row wrap>
-                      <v-flex shrink @click="formatColor('green')">
-                        <div class="color-sample green-color-sample"></div>
-                      </v-flex> </v-layout
-                  ></v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile>
-                  <v-list-tile-title>
-                    <v-layout row wrap>
-                      <v-flex shrink @click="formatColor('blue')">
-                        <div class="color-sample blue-color-sample"></div>
-                      </v-flex> </v-layout
-                  ></v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
-          </div>
-          <div>
-            <v-menu offset-y>
-              <template v-slot:activator="{ on }">
-                <v-btn v-on="on" fab depressed small color="transparent">
                   <v-icon medium color="grey darken-1">
                     format_color_fill
                   </v-icon>
@@ -105,7 +69,24 @@
                 <v-list-tile>
                   <v-list-tile-title>
                     <v-layout row wrap>
-                      <v-flex shrink>
+                      <v-flex
+                        shrink
+                        @click="formatClearColor(currentSelection)"
+                      >
+                        <div class="color-sample no-color-sample">
+                          <v-icon>format_color_reset</v-icon>
+                        </div>
+                      </v-flex>
+                    </v-layout>
+                  </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-title>
+                    <v-layout row wrap>
+                      <v-flex
+                        shrink
+                        @click="formatColor('red', currentSelection)"
+                      >
                         <div class="color-sample red-color-sample"></div>
                       </v-flex>
                     </v-layout>
@@ -114,7 +95,10 @@
                 <v-list-tile>
                   <v-list-tile-title>
                     <v-layout row wrap>
-                      <v-flex shrink>
+                      <v-flex
+                        shrink
+                        @click="formatColor('green', currentSelection)"
+                      >
                         <div class="color-sample green-color-sample"></div>
                       </v-flex> </v-layout
                   ></v-list-tile-title>
@@ -122,7 +106,10 @@
                 <v-list-tile>
                   <v-list-tile-title>
                     <v-layout row wrap>
-                      <v-flex shrink>
+                      <v-flex
+                        shrink
+                        @click="formatColor('blue', currentSelection)"
+                      >
                         <div class="color-sample blue-color-sample"></div>
                       </v-flex> </v-layout
                   ></v-list-tile-title>
@@ -130,11 +117,53 @@
               </v-list>
             </v-menu>
           </div>
+          <!-- insert photo -->
           <div>
-            <v-btn fab depressed small color="transparent">
-              <v-icon medium color="grey darken-1">add_photo_alternate </v-icon>
-            </v-btn>
+            <div class="text-xs-center">
+              <v-menu
+                v-model="insertingImageMenu"
+                :close-on-content-click="false"
+                :nudge-width="200"
+                offset-x
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    fab
+                    depressed
+                    small
+                    color="transparent"
+                    @click="insertImagePopover"
+                    v-on="on"
+                  >
+                    <v-icon medium color="grey darken-1"
+                      >add_photo_alternate
+                    </v-icon>
+                  </v-btn>
+                </template>
+
+                <v-card>
+                  <v-list>
+                    <v-list-tile avatar>
+                      <v-list-tile-content>
+                        <v-text-field
+                          class="insert-image-url"
+                          placeholder="图片的Url地址"
+                        ></v-text-field>
+                      </v-list-tile-content>
+                    </v-list-tile>
+                  </v-list>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn flat @click="insertingImageMenu = false">取消</v-btn>
+                    <v-btn color="primary" flat @click="startInsertImage">
+                      确定
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-menu>
+            </div>
           </div>
+          <!-- clear all format -->
           <div>
             <v-btn fab depressed small color="transparent">
               <v-icon medium color="grey darken-1">format_clear </v-icon>
@@ -183,7 +212,8 @@ export default Vue.extend({
       articleHtml: ARTICLE_TEXT_HOLDER,
       // articleHtml: '',
       previewMode: false,
-      currentSelection: null as any
+      currentSelection: null as any,
+      insertingImageMenu: false
     }
   },
   components: {
@@ -210,6 +240,16 @@ export default Vue.extend({
     saveCurrentSelection() {
       const that: any = this
       this.currentSelection = this.editor.getSelection()
+    },
+    insertImagePopover() {
+      const that: any = this
+      this.saveCurrentSelection()
+    },
+    startInsertImage(imageUrl: string) {
+      const that: any = this
+      that.insertImage(imageUrl, this.currentSelection)
+
+      this.insertingImageMenu = false
     }
   },
   mounted() {
@@ -287,5 +327,17 @@ export default Vue.extend({
 }
 .blue-color-sample {
   background-color: rgb(75, 75, 236);
+}
+.no-color-sample {
+  background-color: white;
+}
+
+.v-menu__content {
+  width: 100%;
+  left: unset;
+}
+
+.insert-image-url {
+  width: 100%;
 }
 </style>
