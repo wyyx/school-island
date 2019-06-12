@@ -20,6 +20,7 @@
           v-model="title"
           v-validate="'required'"
           name="title"
+          data-vv-as="标题"
           :error-messages="errors.collect('title')"
           :error="errors.has('title')"
         ></v-text-field>
@@ -28,6 +29,7 @@
           v-model="cover"
           v-validate="'required'"
           name="cover"
+          data-vv-as="封面图"
           :error-messages="errors.collect('cover')"
           :error="errors.has('cover')"
           label="封面图"
@@ -46,31 +48,49 @@
             </v-btn>
           </div>
           <div>
-            <v-btn
-              @click="formatItalic"
-              fab
-              depressed
-              small
-              color="transparent"
-            >
-              <v-icon medium color="grey darken-1">format_italic</v-icon>
-            </v-btn>
-          </div>
-          <div>
-            <v-btn
-              @click="formatUnderline"
-              fab
-              depressed
-              small
-              color="transparent"
-            >
-              <v-icon medium color="grey darken-1">format_underlined</v-icon>
-            </v-btn>
-          </div>
-          <div>
-            <v-btn fab depressed small color="transparent">
-              <v-icon medium color="grey darken-1">format_color_text </v-icon>
-            </v-btn>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-on="on"
+                  fab
+                  depressed
+                  small
+                  color="transparent"
+                  @click="saveCurrentSelection"
+                >
+                  <v-icon medium color="grey darken-1"
+                    >format_color_text
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-tile>
+                  <v-list-tile-title>
+                    <v-layout row wrap>
+                      <v-flex shrink @click="formatColor('red')">
+                        <div class="color-sample red-color-sample"></div>
+                      </v-flex>
+                    </v-layout>
+                  </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-title>
+                    <v-layout row wrap>
+                      <v-flex shrink @click="formatColor('green')">
+                        <div class="color-sample green-color-sample"></div>
+                      </v-flex> </v-layout
+                  ></v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile>
+                  <v-list-tile-title>
+                    <v-layout row wrap>
+                      <v-flex shrink @click="formatColor('blue')">
+                        <div class="color-sample blue-color-sample"></div>
+                      </v-flex> </v-layout
+                  ></v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
           </div>
           <div>
             <v-menu offset-y>
@@ -110,7 +130,11 @@
               </v-list>
             </v-menu>
           </div>
-
+          <div>
+            <v-btn fab depressed small color="transparent">
+              <v-icon medium color="grey darken-1">add_photo_alternate </v-icon>
+            </v-btn>
+          </div>
           <div>
             <v-btn fab depressed small color="transparent">
               <v-icon medium color="grey darken-1">format_clear </v-icon>
@@ -146,6 +170,8 @@ import Quill from 'quill'
 import { format } from '../utils/format.util'
 import { editorMixin } from '../mixins/editor.mixin'
 
+const ARTICLE_TEXT_HOLDER = '这里添加文章的内容...'
+
 export default Vue.extend({
   mixins: [editorMixin],
   data: function() {
@@ -154,8 +180,10 @@ export default Vue.extend({
       title: '',
       cover: 'https://picsum.photos/id/68/536/354',
       editor: {} as Quill,
-      articleHtml: '这里添加文章的内容...',
-      previewMode: false
+      articleHtml: ARTICLE_TEXT_HOLDER,
+      // articleHtml: '',
+      previewMode: false,
+      currentSelection: null as any
     }
   },
   components: {
@@ -178,6 +206,10 @@ export default Vue.extend({
           console.log('TCL: publish -> valid', valid)
         }
       })
+    },
+    saveCurrentSelection() {
+      const that: any = this
+      this.currentSelection = this.editor.getSelection()
     }
   },
   mounted() {
@@ -227,6 +259,12 @@ export default Vue.extend({
 
 .ql-container {
   border-radius: 2px;
+}
+
+.ql-editor {
+  position: absolute !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .editor /deep/ * {

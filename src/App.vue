@@ -63,14 +63,21 @@ export default Vue.extend({
       this.getSchoolInfo(parseInt(s || ''))
     },
     checkBinding() {
-      userService.getUserInfo().then(res => {
-        console.log('TCL: checkBinding -> res', res)
-        if (res.data.content.binding === BindingStatus.NotBinding) {
+      userService
+        .getUserInfo()
+        .then(res => {
+          console.log('TCL: checkBinding -> res', res)
+          if (res.data.content.binding === BindingStatus.NotBinding) {
+            this.$router.push({
+              name: 'binding'
+            })
+          }
+        })
+        .catch(error => {
           this.$router.push({
-            name: 'binding'
+            name: 'home'
           })
-        }
-      })
+        })
     },
     getSchoolInfo(schoolId: number) {
       console.log('TCL: getSchoolInfo -> schoolId', schoolId)
