@@ -20,8 +20,8 @@ module.exports = {
       user: 'root',
       host: ['66.42.68.208'],
       ref: 'origin/master',
-      repo: 'http://gitlab.husiwei.com/h5/xyd-wechat.git',
-      path: '/www/website/production',
+      repo: 'https://github.com/wyyx/school-island.git',
+      path: '/www/xyd-wechat/production',
       'pre-deploy': 'git fetch origin master && git reset --hard origin/master',
       'post-deploy':
         'yarn start && pm2 startOrRestart ecosystem.config.js --env production'
