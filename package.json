@@ -33,7 +33,8 @@
     "vue-router": "^3.0.3",
     "vuetify": "^1.5.5",
     "vuetify-toast-snackbar": "^0.2.4",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "vuex-pathify": "^1.2.2"
   },
   "devDependencies": {
     "@types/echarts": "^4.1.9",

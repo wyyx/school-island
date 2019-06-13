@@ -15,4 +15,5 @@ export interface SchoolInfo {
   history: string
   idea: string
   description: string
+  schoolId: string
 }

@@ -35,12 +35,12 @@
           label="封面图"
         >
         </v-text-field>
-        <div class="preview-wrapper text-center">
+        <div class="preview-wrapper text-xs-center">
           <img class="preview" :src="cover" alt="" />
         </div>
       </v-flex>
       <!-- toobar group1 -->
-      <v-flex class="text-center">
+      <v-flex class="text-xs-center">
         <div class="toolbar-container pa-1 ">
           <!-- format bold -->
           <div>

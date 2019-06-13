@@ -2,7 +2,7 @@
   <v-app>
     <v-content>
       <router-view></router-view>
-      <AppTabs v-if="showTabs" :role="role" class="tabs"></AppTabs>
+      <AppTabs v-if="showTabs" :role="roleRoute" class="tabs"></AppTabs>
     </v-content>
   </v-app>
 </template>
@@ -15,6 +15,19 @@ import { dutyService } from './services/duty.service'
 import { httpConfigService } from './services/http-config.service'
 import { userService } from './services/user.service'
 import { BindingStatus } from './models/user.model'
+import { BASE_URL, YANG_BASE_URL, GUO_BASE_URL } from './configs/config'
+import { get } from 'vuex-pathify'
+import {
+  authModulePath,
+  showTabs,
+  user,
+  roleRoute,
+  schoolId
+} from './store/auth/auth.paths'
+import {
+  loadUserInfoAction,
+  loadSchoolInfoAction
+} from './store/auth/auth.actions'
 
 export default Vue.extend({
   name: 'App',
@@ -22,15 +35,18 @@ export default Vue.extend({
     AppTabs
   },
   data() {
-    return {
-      role: 'teacher',
-      showTabs: userService.userInfo.binding === 0
-    }
+    return {}
   },
   created() {
-    this.showTabs = true
     this.resolveInitUrl()
-    this.checkBinding()
+    this.logBaseStatus()
+    this.loadUserInfo()
+  },
+  computed: {
+    ...get(authModulePath, {
+      showTabs,
+      roleRoute
+    })
   },
   methods: {
     resolveInitUrl() {
@@ -40,50 +56,38 @@ export default Vue.extend({
       console.log('TCL: resolveInitUrl -> url', url)
 
       // get query params
-      const roleCode = url.query['r']
       const s = url.query['s']
+      console.log('TCL: resolveInitUrl -> s', s)
       const xyd = url.query['xyd']
 
       // set global headers
       httpConfigService.setHeaders({
         xyd,
-        s,
-        r: roleCode
+        s
       })
 
-      // get current role
-      switch (parseInt(roleCode || '')) {
-        case 1:
-          this.role = 'teacher'
-          break
-        case 2:
-          this.role = 'school-run'
-          break
-        default:
-          break
-      }
+      // set state
+      const store: any = this.$store
+      store.set(authModulePath + schoolId, s)
 
-      this.getSchoolInfo(parseInt(s || ''))
+      this.loadSchoolInfo(s)
     },
-    checkBinding() {
-      userService.getUserInfo().then(res => {
-        console.log('TCL: checkBinding -> res', res)
-        if (res.data.content.binding === BindingStatus.NotBinding) {
-          this.$router.push({
-            name: 'binding'
-          })
-        } else {
-          this.$router.push({
-            name: 'home'
-          })
-        }
-      })
+    loadUserInfo() {
+      this.$store
+        .dispatch(authModulePath + loadUserInfoAction)
+        .then(() => {})
+        .catch(error => {})
     },
-    getUserInfo() {
-      userService.getUserInfo()
+    loadSchoolInfo(schoolId: string) {
+      this.$store
+        .dispatch(authModulePath + loadSchoolInfoAction, schoolId)
+        .then(() => {})
+        .catch(error => {})
     },
-    getSchoolInfo(schoolId: number) {
-      userService.getSchoolInfo(schoolId)
+    logBaseStatus() {
+      console.log('TCL: logBaseStatus -> BASE_URL', BASE_URL)
+      console.log('TCL: logBaseStatus -> YANG_BASE_URL', YANG_BASE_URL)
+      console.log('TCL: logBaseStatus -> GUO_BASE_URL', GUO_BASE_URL)
     }
   }
 })

@@ -2,15 +2,12 @@
   <div class="container pa-0">
     <!-- <Header :showBack="false" title="个人中心"></Header> -->
     <v-card color="primary" class="mb-2">
-      <v-layout class="teachers py-4" row wrap>
+      <v-layout class="teachers py-3" row wrap>
         <v-flex xs4>
           <v-layout row wrap fill-height justify-center align-center>
             <v-flex shrink>
-              <v-avatar :tile="false" :size="48" color="grey lighten-4">
-                <img
-                  src="https://randomuser.me/api/portraits/women/44.jpg"
-                  alt="avatar"
-                />
+              <v-avatar :tile="false" :size="64" color="grey lighten-4">
+                <img :src="user.headImgUrl" alt="avatar" />
               </v-avatar>
             </v-flex>
           </v-layout>
@@ -23,15 +20,29 @@
               <span class="pl-3">切换</span>
             </v-flex>
             <v-flex class="pa-2">
-              <span class="pr-3">英语老师</span>
-              <span>体育老师</span>
+              <v-layout row wrap>
+                <v-flex class="v-center">
+                  <span class="pr-1">昵称：</span><span>小白</span>
+                </v-flex>
+                <v-flex shrink class="px-2">
+                  <v-btn
+                    large
+                    flat
+                    icon
+                    color="white"
+                    @click="goToUserSettingsPage"
+                  >
+                    <v-icon>keyboard_arrow_right</v-icon>
+                  </v-btn>
+                </v-flex>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-btn small class="check-in-btn" color="accent">
+        <!-- <v-btn small class="check-in-btn" color="accent">
           <v-icon small>check</v-icon>
           <span class="pl-1">签到</span>
-        </v-btn>
+        </v-btn> -->
       </v-layout>
       <v-layout class="scores white pa-1" row wrap>
         <v-flex>
@@ -51,7 +62,7 @@
         </v-flex>
       </v-layout>
     </v-card>
-    <v-card class="mb-2">
+    <v-card v-if="false" class="mb-2">
       <v-layout class="scores white pa-3 text--secondary" row wrap>
         <v-flex>
           <div><v-icon color="accent">star</v-icon></div>
@@ -77,7 +88,7 @@
     </v-card>
 
     <!-- list -->
-    <v-card>
+    <v-card v-if="false">
       <v-list subheader class="text--secondary">
         <v-list-tile avatar>
           <v-list-tile-avatar>
@@ -174,16 +185,28 @@
 <script lang="ts">
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
+import { get } from 'vuex-pathify'
+import { authModulePath, user } from '../store/auth/auth.paths'
 
 export default Vue.extend({
   name: 'my',
   components: {},
+  computed: {
+    ...get(authModulePath, {
+      user
+    })
+  },
   created() {
     this.changeTitle()
   },
   methods: {
     changeTitle() {
       document.title = '个人中心'
+    },
+    goToUserSettingsPage() {
+      this.$router.push({
+        name: 'user-settings'
+      })
     }
   }
 })

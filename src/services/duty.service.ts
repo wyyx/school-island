@@ -3,10 +3,10 @@ import { DeductionHistoryByWeekResponse } from '@/models/deduction-history-by-we
 import { DeductionListResponse } from '@/models/deduction-list.model'
 import { httpConfigService, HttpConfigService } from './http-config.service'
 import { DutyTopResponse } from '@/models/duty-top.model'
-import { GUO_BASE_URL } from '@/configs/config'
+import { GUO_BASE_URL, YANG_BASE_URL } from '@/configs/config'
 
 export class DutyService {
-  baseUrl: string = GUO_BASE_URL ? GUO_BASE_URL : ''
+  baseUrl: string = YANG_BASE_URL ? YANG_BASE_URL : ''
 
   httpConfigService: HttpConfigService = httpConfigService
 
@@ -21,15 +21,16 @@ export class DutyService {
     )
   }
 
-  getDeductionHistoryByWeek(classId: number) {
+  getDeductionHistoryByWeek(classId: number, schoolId: string) {
     return this.httpConfigService.httpSercvice.post<
       DeductionHistoryByWeekResponse
     >(this.baseUrl + '/w/score/report-froms', {
-      classId
+      classId,
+      schoolId
     })
   }
 
-  getClassList(schoolId: number) {
+  getClassList(schoolId: string) {
     return this.httpConfigService.httpSercvice.post<ClasslistResponse>(
       this.baseUrl + '/w/class/list',
       {
@@ -38,7 +39,7 @@ export class DutyService {
     )
   }
 
-  getDutyTop(schoolId: number, pageNo: number = 0, pageSize: number = 10) {
+  getDutyTop(schoolId: string, pageNo: number = 0, pageSize: number = 10) {
     return this.httpConfigService.httpSercvice.post<DutyTopResponse>(
       this.baseUrl + '/w/score-week/list-page',
       {

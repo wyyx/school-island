@@ -1,15 +1,15 @@
-import { HttpConfigService, httpConfigService } from './http-config.service'
+import { YANG_BASE_URL } from '@/configs/config'
+import { SchoolInfo, SchoolInfoResponse } from '@/models/school.model'
 import {
   BindingPost,
-  UserInfoResponse,
   BindingResponse,
-  UserInfo
+  UserInfo,
+  UserInfoResponse
 } from '@/models/user.model'
-import { YANG_BASE_URL, GUO_BASE_URL } from '@/configs/config'
-import { SchoolInfoResponse, SchoolInfo } from '@/models/school.model'
+import { HttpConfigService, httpConfigService } from './http-config.service'
 
 export class UserService {
-  baseUrl: string = GUO_BASE_URL ? GUO_BASE_URL : ''
+  baseUrl: string = YANG_BASE_URL ? YANG_BASE_URL : ''
 
   httpConfigService: HttpConfigService = httpConfigService
 
@@ -24,39 +24,26 @@ export class UserService {
   }
 
   getUserInfo() {
-    return this.httpConfigService.httpSercvice
-      .post<UserInfoResponse>(this.baseUrl + '/w/user/select-by-id')
-      .then(res => {
-        if (res.data.content) {
-          this.userInfo = res.data.content
-        }
-
-        console.log(
-          'TCL: UserService -> getUserInfo -> this.userInfo',
-          this.userInfo
-        )
-
-        return res
-      })
+    return this.httpConfigService.httpSercvice.post<UserInfoResponse>(
+      this.baseUrl + '/w/user/select-by-school-id'
+    )
   }
 
-  getSchoolInfo(schoolId: number) {
-    return this.httpConfigService.httpSercvice
-      .post<SchoolInfoResponse>(this.baseUrl + '/w/school/id', {
+  getSchoolInfo(schoolId: string) {
+    return this.httpConfigService.httpSercvice.post<SchoolInfoResponse>(
+      this.baseUrl + '/w/school/id',
+      {
         id: schoolId
-      })
-      .then(res => {
-        if (res.data.content) {
-          this.schoolInfo = res.data.content
-        }
+      }
+    )
+  }
 
-        console.log(
-          'TCL: UserService -> getSchoolInfo -> this.schoolInfo',
-          this.schoolInfo
-        )
+  _setBinded() {
+    this.userInfo.binding = 1
+  }
 
-        return res
-      })
+  _setNotBinded() {
+    this.userInfo.binding = 0
   }
 }
 

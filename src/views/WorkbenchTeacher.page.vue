@@ -8,7 +8,7 @@
           :options="swiperOption"
           v-if="showSwiper"
         >
-          <swiper-slide class="text-center" v-for="img in imgs" :key="img">
+          <swiper-slide class="text-xs-center" v-for="img in imgs" :key="img">
             <img :src="img" style="width: 100%" />
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
@@ -94,7 +94,7 @@
                     indeterminate
                     color="accent"
                   ></v-progress-circular>
-                  <!-- <p class="text-center">暂无数据...</p> -->
+                  <!-- <p class="text-xs-center">暂无数据...</p> -->
                 </div>
                 <h3>扣分明细</h3>
                 <v-card-title class="pa-1">
@@ -182,7 +182,7 @@
     </v-card>
     <!-- bottom hint -->
     <v-layout row wrap class="bottom-hint pa-2">
-      <v-flex class="grey--text text-center">
+      <v-flex class="grey--text text-xs-center">
         ~~~ 到底了 ~~~
       </v-flex>
     </v-layout>
@@ -209,9 +209,9 @@ import 'swiper/dist/css/swiper.css'
 
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import moment from 'moment'
+import { httpConfigService } from '../services/http-config.service'
+import { userService } from '../services/user.service'
 moment.locale('zh-CN')
-
-const SCHOOL_ID = 1
 
 interface Image {
   src: string
@@ -264,7 +264,10 @@ export default Vue.extend({
   watch: {
     classId(newVal, oldVal) {
       this.loadDeducionList(newVal)
-      this.loadDeducionWeekHistory(this.classId)
+      this.loadDeducionWeekHistory(
+        this.classId,
+        httpConfigService.config.headers['s']
+      )
     },
     showSwiper(newVal, oldVal) {
       // this.chart.resize()
@@ -289,8 +292,10 @@ export default Vue.extend({
   },
   created() {
     this.loadDeducionList(this.classId)
-    this.loadClassList(SCHOOL_ID)
-    this.loadDeducionWeekHistory(this.classId)
+    this.loadClassList(userService.schoolInfo.schoolId)
+  },
+  mounted() {
+    this.loadDeducionWeekHistory(this.classId, userService.schoolInfo.schoolId)
   },
   methods: {
     onBack() {
@@ -373,8 +378,8 @@ export default Vue.extend({
         this.deductionList = res.data.content || []
       })
     },
-    loadClassList(schoolId: number) {
-      dutyService.getClassList(1).then(res => {
+    loadClassList(schoolId: string) {
+      dutyService.getClassList(userService.schoolInfo.schoolId).then(res => {
         this.classList = res.data.content || []
 
         // show first class default
@@ -387,16 +392,8 @@ export default Vue.extend({
     setClassId(classId: number) {
       this.classId = classId
     },
-    loadDeducionWeekHistory(classId: number) {
-      // setTimeout(() => {
-      //   dutyService.getDeductionHistoryByWeek(classId).then(res => {
-      //     this.deductionWeekHistory = res.data.content
-
-      //     this.initEcharts()
-      //   })
-      // }, 3000)
-
-      dutyService.getDeductionHistoryByWeek(classId).then(res => {
+    loadDeducionWeekHistory(classId: number, schoolId: string) {
+      dutyService.getDeductionHistoryByWeek(classId, schoolId).then(res => {
         this.deductionWeekHistory = res.data.content
 
         this.initEcharts()

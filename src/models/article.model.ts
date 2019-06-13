@@ -20,7 +20,7 @@ export interface Article {
   id: number
   likeNum: number
   priority: number
-  schoolId: number
+  schoolId: string
   schoolName: string
   subTitle: string
   title: string

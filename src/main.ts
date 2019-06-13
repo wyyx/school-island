@@ -15,7 +15,11 @@ Vue.component('vue-picture-swipe', VuePictureSwipe)
 // vconsole
 import VConsole from 'vconsole'
 
-if (process.env.NODE_ENV) {
+// set moment
+import moment from 'moment'
+moment.locale('zh-CN')
+
+if (process.env.NODE_ENV === 'production') {
   var vConsole = new VConsole()
 }
 

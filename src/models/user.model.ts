@@ -44,6 +44,7 @@ export interface UserInfo {
   unionId: string
   userName: string
   userType: number
+  studentName?: string
 }
 
 export enum BindingStatus {

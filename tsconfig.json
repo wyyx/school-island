@@ -11,6 +11,7 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "strictPropertyInitialization": false,
+    "strictNullChecks": false,
     "baseUrl": ".",
     "types": ["webpack-env", "vuetify"],
     "paths": {

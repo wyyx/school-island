@@ -110,7 +110,7 @@
                     </td>
                   </template>
                 </v-data-table>
-                <div class="text-center">
+                <div class="text-xs-center">
                   <v-btn
                     v-if="showAllTopBtn"
                     outline
@@ -129,7 +129,7 @@
 
     <!-- bottom hint -->
     <v-layout row wrap class="bottom-hint pa-2">
-      <v-flex class="grey--text text-center">
+      <v-flex class="grey--text text-xs-center">
         ~~~ 到底了 ~~~
       </v-flex>
     </v-layout>
@@ -144,6 +144,7 @@ import { dutyService } from '../services/duty.service'
 import { TopItem } from '../models/duty-top.model'
 
 import moment from 'moment'
+import { userService } from '../services/user.service'
 moment.locale('zh-CN')
 
 let now = moment().format('M月D日，A，h点m分')
@@ -234,7 +235,7 @@ export default Vue.extend({
     loadTop() {
       this.showLoading = true
       dutyService
-        .getDutyTop(1, 0, 1000)
+        .getDutyTop(userService.schoolInfo.schoolId, 0, 1000)
         .then(res => {
           this.allTopItems = res.data.content
           this.topItems = this.allTopItems.slice(0, 10)

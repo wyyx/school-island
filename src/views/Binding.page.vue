@@ -10,23 +10,23 @@
       <div class="roleList">
         <div
           class="role clickable"
-          :class="{ active: showParents }"
+          :class="{ active: tab === 1 }"
           name="1"
-          @click="showParentsInput"
+          @click="tab = 1"
         >
           家长
         </div>
         <div
           class="role clickable"
-          :class="{ active: !showParents }"
+          :class="{ active: tab === 2 }"
           name="2"
-          @click="showTeacherInput"
+          @click="tab = 2"
         >
           老师
         </div>
       </div>
       <!-- parents inputs -->
-      <div class="parents-input-wrapper" v-if="showParents">
+      <div class="parents-input-wrapper" v-if="tab === 1">
         <div class="roleList studentDiv">
           <input
             type="text"
@@ -77,7 +77,7 @@
         </div>
       </div>
       <!-- teacher inputs -->
-      <div class="teacher-input-wrapper" v-else>
+      <div class="teacher-input-wrapper" v-if="tab === 2">
         <div class="roleList teacherDiv">
           <input
             type="text"
@@ -128,22 +128,27 @@
         </div>
       </div>
 
-      <div class="roleList line" id="relationDiv" v-if="showParents">
+      <div class="roleList line" id="relationDiv" v-if="tab === 1">
         <div class="studentRelation">与学生关系</div>
-        <select
-          name=""
-          id="relation"
-          v-model="relation"
-          @change="onSelectChange"
-        >
-          <option value="1">爸爸</option>
-          <option value="2">妈妈</option>
-          <option value="3">爷爷</option>
-          <option value="4">奶奶</option>
-          <option value="5">外公</option>
-          <option value="6">外婆</option>
-          <option value="7">亲戚</option>
-        </select>
+        <div>
+          <select name="relation" id="relation" v-model="relation">
+            <option disabled selected value="0">请选择关系</option>
+            <option value="1">爸爸</option>
+            <option value="2">妈妈</option>
+            <option value="3">爷爷</option>
+            <option value="4">奶奶</option>
+            <option value="5">外公</option>
+            <option value="6">外婆</option>
+            <option value="7">亲戚</option>
+          </select>
+        </div>
+        <div>
+          <ul class="error-messages" v-if="validated && relation === 0">
+            <li class="error-message">
+              关系为必选项
+            </li>
+          </ul>
+        </div>
       </div>
       <div class="roleList line">
         <div class="tourists clickable" @click="giveUpBinding">游客访问</div>
@@ -162,17 +167,19 @@
 <script lang="ts">
 import Vue from 'vue'
 import { userService } from '../services/user.service'
+import { authModulePath, showTabs, isTourist } from '../store/auth/auth.paths'
 
 export default Vue.extend({
   data: function() {
     return {
-      showParents: true,
+      tab: 2,
       name: '',
       idCard: '',
-      relation: 1,
+      relation: 0,
       userType: 1,
       showSnackbar: false,
-      errMessage: '出现未知错误，请稍后再试'
+      errMessage: '出现未知错误，请稍后再试',
+      validated: false
     }
   },
   computed: {
@@ -188,26 +195,23 @@ export default Vue.extend({
     this.$validator.localize('zh_CN')
   },
   methods: {
-    showParentsInput() {
-      this.showParents = true
-      this.userType = 1
-    },
-    showTeacherInput() {
-      this.showParents = false
-      this.userType = 3
-      this.relation = 0
-    },
     giveUpBinding() {
       this.$router.push({
         name: 'home'
       })
-    },
 
+      const store: any = this.$store
+      store.set(authModulePath + isTourist, true)
+      store.set(authModulePath + showTabs, true)
+
+      this.$router.push({ name: 'home' })
+    },
     submit() {
       // parents 1
       // teacher 3
       this.$validator.validate().then(valid => {
         console.log('TCL: submit -> valid', valid)
+        this.validated = true
         const data = {
           idcard: this.idCard,
           name: this.name,
@@ -216,7 +220,7 @@ export default Vue.extend({
         }
         console.log('TCL: submit -> data', data)
 
-        if (valid) {
+        if (valid && (this.relation >= 1 || this.relation <= 7)) {
           userService
             .bind(data)
             .then(res => {
@@ -238,7 +242,10 @@ export default Vue.extend({
         }
       })
     },
-    onSelectChange() {}
+    resetInputState() {
+      console.log('resetInputState')
+      this.relation = 0
+    }
   }
 })
 </script>
