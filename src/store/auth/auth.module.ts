@@ -1,4 +1,4 @@
-import { mockUserInfo } from '@/configs/config'
+import { mockUserInfo, mockSchoolInfo } from '@/configs/config'
 import { SchoolInfo } from '@/models/school.model'
 import { UserInfo } from '@/models/user.model'
 import { make } from 'vuex-pathify'
@@ -8,15 +8,13 @@ import { authGetters } from './auth.getters'
 export interface AuthState {
   user: UserInfo
   school: SchoolInfo
-  schoolId: string
   showTabs: boolean
   isTourist: boolean
 }
 
 const initialAuthState: AuthState = {
   user: mockUserInfo,
-  school: null,
-  schoolId: null,
+  school: mockSchoolInfo,
   showTabs: false,
   isTourist: false
 }

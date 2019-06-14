@@ -15,7 +15,7 @@
         <v-flex class="white--text" xs8>
           <v-layout column wrap>
             <v-flex class="pa-2 title">
-              <span class="pr-3">马老师</span>
+              <span class="pr-3">{{ user.nickname }}</span>
               <v-icon color="white">swap_horiz</v-icon>
               <span class="pl-3">切换</span>
             </v-flex>

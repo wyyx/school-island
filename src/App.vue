@@ -21,8 +21,7 @@ import {
   authModulePath,
   showTabs,
   user,
-  roleRoute,
-  schoolId
+  roleRoute
 } from './store/auth/auth.paths'
 import {
   loadUserInfoAction,
@@ -40,6 +39,8 @@ export default Vue.extend({
   created() {
     this.resolveInitUrl()
     this.logBaseStatus()
+
+    // open when build
     this.loadUserInfo()
   },
   computed: {
@@ -66,11 +67,10 @@ export default Vue.extend({
         s
       })
 
-      // set state
-      const store: any = this.$store
-      store.set(authModulePath + schoolId, s)
-
+      // open when build
       this.loadSchoolInfo(s)
+
+      this.$router.push({ name: 'home' })
     },
     loadUserInfo() {
       this.$store
@@ -80,7 +80,7 @@ export default Vue.extend({
     },
     loadSchoolInfo(schoolId: string) {
       this.$store
-        .dispatch(authModulePath + loadSchoolInfoAction, schoolId)
+        .dispatch(authModulePath + loadSchoolInfoAction)
         .then(() => {})
         .catch(error => {})
     },

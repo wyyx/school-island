@@ -1,4 +1,5 @@
 import { UserInfo } from '@/models/user.model'
+import { SchoolInfo } from '@/models/school.model'
 
 export const BASE_URL = process.env.VUE_APP_BASE_URL
 export const YANG_BASE_URL = process.env.VUE_APP_YANG_BASE_URL
@@ -34,7 +35,7 @@ export const mockUserInfo: UserInfo = {
   loginErrorCount: 0,
   mobile: 'string',
   name: 'string',
-  nickname: 'string',
+  nickname: '刘老师的昵称',
   openId: 'string',
   privilege: 'string',
   province: 'string',
@@ -51,40 +52,15 @@ export const mockUserInfo: UserInfo = {
   studentName: '王小明'
 }
 
-export const mockUserInfoResponseSuccess = {
-  content: {
-    binding: 0,
-    city: 'string',
-    country: 'string',
-    headImgUrl: 'string',
-    id: 0,
-    idcard: 'string',
-    language: 'string',
-    loginErrorCount: 0,
-    mobile: 'string',
-    name: 'string',
-    nickname: 'string',
-    openId: 'string',
-    privilege: 'string',
-    province: 'string',
-    pwd: 'string',
-    refId: 0,
-    roleCode: 0,
-    roleName: 'string',
-    salt: 'string',
-    sex: 0,
-    status: 0,
-    unionId: 'string',
-    userName: 'string',
-    userType: 0
-  },
-  errorCode: 'string',
-  errorMsg: 'string',
-  status: 'string'
-}
-
-export const mockUserInfoResponseFail = {
-  errorCode: 'string',
-  errorMsg: 'string',
-  status: 'string'
+export const mockSchoolInfo: SchoolInfo = {
+  code: 'aaabbbcccddd',
+  name: '成都市希望小学',
+  logo: ['string'],
+  tel: 'string',
+  email: 'string',
+  address: 'string',
+  history: 'string',
+  idea: 'string',
+  description: 'string',
+  schoolId: 'string'
 }

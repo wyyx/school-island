@@ -16,12 +16,14 @@ export const authGetters = {
 
     // convert role to path
     switch (state.user.roleCode) {
-      case 1:
-        return 'teacher'
-      case 2:
+      case 100:
         return 'school-run'
-      case 3:
+      case 200:
+        return 'teacher'
+      case 300:
         return 'parents'
+      case 500:
+        return 'teacher'
       default:
         return ''
     }

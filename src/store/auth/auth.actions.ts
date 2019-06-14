@@ -1,6 +1,7 @@
 import { userService } from '@/services/user.service'
 import { UserInfo } from '@/models/user.model'
 import { user, school } from './auth.paths'
+import router from '@/router/router'
 
 // user info actions
 export const loadUserInfoAction = 'loadUserInfoAction'
@@ -19,7 +20,17 @@ export const authActions = {
       userService
         .getUserInfo()
         .then(res => {
+          console.log('TCL: userInfo', res)
           dispatch(loadUserInfoSuccessAction, res.data.content)
+
+          console.log(
+            'TCL: res.data.content && res.data.content.binding',
+            res.data.content && res.data.content.binding
+          )
+          // if (res.data.content && res.data.content.binding) {
+          //   router.push({ name: 'home' })
+          // }
+
           resolve()
         })
         .catch(error => {
@@ -35,14 +46,14 @@ export const authActions = {
     commit(user, null)
   },
   // load school info
-  [loadSchoolInfoAction]({ dispatch, commit }, schoolId: string) {
+  [loadSchoolInfoAction]({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
-      userService.getSchoolInfo(schoolId).then(res => {
+      userService.getSchoolInfo().then(res => {
         if (res.data.content) {
           dispatch(loadSchoolInfoSuccessAction, res.data.content)
 
           // save schoolInfo to userService
-          userService.schoolInfo = { ...res.data.content, schoolId }
+          userService.schoolInfo = { ...res.data.content }
           resolve()
           console.log('TCL: userService.schoolInfo', userService.schoolInfo)
         } else {

@@ -5,7 +5,6 @@ export const authModulePath = 'auth/'
 export const user = 'user'
 export const school = 'school'
 export const isTourist = 'isTourist'
-export const schoolId = 'schoolId'
 
 // custom paths
 export const showTabs = 'showTabs'

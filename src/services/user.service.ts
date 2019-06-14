@@ -29,12 +29,9 @@ export class UserService {
     )
   }
 
-  getSchoolInfo(schoolId: string) {
+  getSchoolInfo() {
     return this.httpConfigService.httpSercvice.post<SchoolInfoResponse>(
-      this.baseUrl + '/w/school/id',
-      {
-        id: schoolId
-      }
+      this.baseUrl + '/w/school/id'
     )
   }
 
