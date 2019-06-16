@@ -29,6 +29,7 @@ import {
   loadUserInfoSuccessAction,
   loadUserInfoFailAction
 } from './store/auth/auth.actions'
+import store from './store/store'
 
 export default Vue.extend({
   name: 'App',
@@ -93,6 +94,9 @@ export default Vue.extend({
         )
 
         if (userInfo.binding === undefined || (userInfo && userInfo.binding)) {
+          // show tabs if binded
+          ;(store as any).set(authModulePath + showTabs, true)
+
           this.$router.push({
             name: 'home'
           })

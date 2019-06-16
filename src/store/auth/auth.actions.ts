@@ -21,7 +21,13 @@ export const authActions = {
         .getUserInfo()
         .then(res => {
           console.log('TCL: userInfo', res)
-          dispatch(loadUserInfoSuccessAction, res.data.content)
+          const userInfo = res.data.content
+          if (userInfo) {
+            dispatch(loadUserInfoSuccessAction, res.data.content)
+          } else {
+            dispatch(loadUserInfoFailAction)
+            reject()
+          }
 
           resolve()
         })
@@ -40,23 +46,29 @@ export const authActions = {
   // load school info
   [loadSchoolInfoAction]({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
-      userService.getSchoolInfo().then(res => {
-        const schoolInfo = res.data.content
-        if (schoolInfo) {
-          dispatch(loadSchoolInfoSuccessAction, schoolInfo)
+      userService
+        .getSchoolInfo()
+        .then(res => {
+          const schoolInfo = res.data.content
+          if (schoolInfo) {
+            dispatch(loadSchoolInfoSuccessAction, schoolInfo)
 
-          // change html title
-          setPageTitle(schoolInfo.name)
+            // change html title
+            setPageTitle(schoolInfo.name)
 
-          // save schoolInfo to userService
-          userService.schoolInfo = { ...res.data.content }
-          resolve()
-          console.log('TCL: userService.schoolInfo', userService.schoolInfo)
-        } else {
+            // save schoolInfo to userService
+            userService.schoolInfo = { ...res.data.content }
+            resolve()
+            console.log('TCL: userService.schoolInfo', userService.schoolInfo)
+          } else {
+            dispatch(loadSchoolInfoFailAction)
+            reject()
+          }
+        })
+        .catch(error => {
           dispatch(loadSchoolInfoFailAction)
           reject()
-        }
-      })
+        })
     })
   },
   [loadSchoolInfoSuccessAction]({ dispatch, commit }, payload: UserInfo) {

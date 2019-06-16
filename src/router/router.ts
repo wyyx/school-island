@@ -12,8 +12,8 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      beforeEnter: authGuard,
-      component: HomePage
+      component: HomePage,
+      beforeEnter: authGuard
     },
     {
       path: '/workbench',

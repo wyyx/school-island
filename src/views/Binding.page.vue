@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card color="primary">
+    <v-card color="primary" class="mb-2">
       <v-layout column wrap class="pa-3">
         <v-flex class="text-xs-center">
           <v-avatar size="64">
@@ -14,32 +14,52 @@
     </v-card>
 
     <div class="card-wrapper pa-2">
-      <v-card class="pa-3">
+      <v-card class="px-3 pb-3 pt-2">
         <v-tabs v-model="tabs" fixed-tabs color="transparent">
           <v-tabs-slider color="primary"></v-tabs-slider>
-          <v-tab href="#parents" class="title">
+          <v-tab
+            href="#parents"
+            class="title"
+            @click=";(tab = 1), (userType = 1), (validated = false)"
+          >
             家长
           </v-tab>
 
-          <v-tab href="#teacher" class="title">
+          <v-tab
+            href="#teacher"
+            class="title"
+            @click=";(tab = 2), (userType = 3), (validated = false)"
+          >
             老师
           </v-tab>
         </v-tabs>
 
         <v-tabs-items v-model="tabs" class="white py-2">
           <!-- parents input -->
-          <v-tab-item value="parents">
+          <v-tab-item value="parents" v-if="showTab1Input">
             <v-text-field
               clearable
               label="姓名"
-              :error-messages="['名字不能为空']"
               persistent-hint
+              :error-messages="validated ? errors.collect('name') : []"
+              v-model="name"
+              v-validate="'required'"
+              name="name"
+              data-vv-as="名字"
             ></v-text-field>
             <v-text-field
               clearable
               label="身份证号码"
-              :error-messages="['身份证号码不能为空']"
               persistent-hint
+              :error-messages="validated ? errors.collect('idCard') : []"
+              v-model="idCard"
+              v-validate="{
+                required: true,
+                length: 18,
+                regex: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+              }"
+              name="idCard"
+              data-vv-as="身份证号"
             ></v-text-field>
             <div>
               <v-layout row wrap>
@@ -54,6 +74,12 @@
                     item-value="value"
                     persistent-hint
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="relation"
+                    data-vv-as="与学生的关系"
+                    :error-messages="
+                      validated && relation === 0 ? ['请选择与学生的关系'] : []
+                    "
                   >
                     <template v-slot:append-outer>
                       <v-slide-x-reverse-transition mode="out-in">
@@ -66,28 +92,40 @@
           </v-tab-item>
 
           <!-- teacher input -->
-          <v-tab-item value="teacher">
+          <v-tab-item value="teacher" v-if="showTab2Input">
             <v-text-field
               clearable
               label="姓名"
-              :error-messages="['名字不能为空']"
+              :error-messages="validated ? errors.collect('name2') : []"
+              v-model="name2"
+              v-validate="'required'"
+              name="name2"
+              data-vv-as="名字"
               persistent-hint
             ></v-text-field>
             <v-text-field
               clearable
               label="身份证号码"
-              :error-messages="['身份证号码不能为空']"
               persistent-hint
+              :error-messages="validated ? errors.collect('idCard2') : []"
+              v-model="idCard2"
+              v-validate="{
+                required: true,
+                length: 18,
+                regex: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+              }"
+              name="idCard2"
+              data-vv-as="身份证号"
             ></v-text-field>
           </v-tab-item>
         </v-tabs-items>
         <v-card-actions>
           <v-layout row wrap>
             <v-flex class="px-2">
-              <v-btn block large flat>游客访问</v-btn>
+              <v-btn block large flat @click="giveUpBinding">游客访问</v-btn>
             </v-flex>
             <v-flex class="px-2">
-              <v-btn block color="primary" large="">绑定</v-btn>
+              <v-btn block color="accent" large @click="submit">立即认证</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
@@ -147,8 +185,10 @@ export default Vue.extend({
       validated: false,
       color: 'success',
       showLoading: false,
-      tabs: null,
+      tabs: 'teacher',
       model: null,
+      showTab1Input: true,
+      showTab2Input: true,
       relations: [
         {
           value: 1,
@@ -213,45 +253,67 @@ export default Vue.extend({
     submit() {
       // parents 1
       // teacher 3
-      this.$validator.validate().then(valid => {
-        console.log('TCL: submit -> valid', valid)
-        this.validated = true
 
-        let data: any = {}
+      // destory other tabs that include form inputs which interfere validations
+      if (this.tab === 1) {
+        this.showTab2Input = false
+      }
 
-        if (this.tab === 1) {
-          data = {
-            idcard: this.idCard,
-            name: this.name,
-            parentType: this.relation,
-            userType: this.userType
+      if (this.tab === 2) {
+        this.showTab1Input = false
+      }
+
+      setTimeout(() => {
+        this.$validator.validate().then(valid => {
+          console.log('TCL: submit -> valid', valid)
+          this.validated = true
+
+          let data: any = {}
+
+          if (this.tab === 1) {
+            data = {
+              idcard: this.idCard,
+              name: this.name,
+              parentType: this.relation,
+              userType: this.userType
+            }
           }
-        }
 
-        if (this.tab === 2) {
-          data = {
-            idcard: this.idCard2,
-            name: this.name2,
-            userType: this.userType
+          if (this.tab === 2) {
+            data = {
+              idcard: this.idCard2,
+              name: this.name2,
+              userType: this.userType
+            }
           }
-        }
 
-        console.log('TCL: submit -> data', data)
+          console.log('TCL: submit -> data', data)
 
-        // when parents
-        if (
-          valid &&
-          this.tab === 1 &&
-          (this.relation >= 1 || this.relation <= 7)
-        ) {
-          this.toBind(data)
-        }
+          // when parents
+          if (
+            valid &&
+            this.tab === 1 &&
+            (this.relation >= 1 && this.relation <= 7)
+          ) {
+            console.log('toBind()')
+            // open when build
+            this.toBind(data)
+          }
 
-        // when teacher
-        if (valid && this.tab === 2) {
-          this.toBind(data)
-        }
-      })
+          // when teacher
+          if (valid && this.tab === 2) {
+            console.log('toBind()')
+            // open when build
+            this.toBind(data)
+          }
+
+          this.ensureAllTabsShow()
+        })
+      }, 50)
+    },
+    ensureAllTabsShow() {
+      this.showTab1Input = true
+      this.showTab2Input = true
     },
     toBind(data) {
       this.showLoading = true
@@ -273,7 +335,8 @@ export default Vue.extend({
           }
         })
         .catch(() => {
-          console.log('catch bind')
+          this.showLoading = false
+          this.showFailMessage('出现未知错误，请稍后重试！')
         })
     },
     reloadUserInfo() {
