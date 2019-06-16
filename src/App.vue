@@ -25,7 +25,9 @@ import {
 } from './store/auth/auth.paths'
 import {
   loadUserInfoAction,
-  loadSchoolInfoAction
+  loadSchoolInfoAction,
+  loadUserInfoSuccessAction,
+  loadUserInfoFailAction
 } from './store/auth/auth.actions'
 
 export default Vue.extend({
@@ -39,9 +41,12 @@ export default Vue.extend({
   created() {
     this.resolveInitUrl()
     this.logBaseStatus()
+    // this.checkBinding()
 
-    // open when build
-    this.loadUserInfo()
+    // // open when build
+    // this.loadUserInfo()
+    // // open when build
+    // this.loadSchoolInfo()
   },
   computed: {
     ...get(authModulePath, {
@@ -67,10 +72,36 @@ export default Vue.extend({
         s
       })
 
-      // open when build
-      this.loadSchoolInfo(s)
-
       this.$router.push({ name: 'home' })
+    },
+    checkBinding() {
+      userService.getUserInfo().then(res => {
+        const userInfo = res.data.content
+
+        if (userInfo) {
+          this.$store.dispatch(
+            authModulePath + loadUserInfoSuccessAction,
+            userInfo
+          )
+        } else {
+          this.$store.dispatch(authModulePath + loadUserInfoFailAction)
+        }
+
+        console.log(
+          'TCL: checkBinding -> userInfo.binding === undefined || (userInfo && userInfo.binding)',
+          userInfo.binding === undefined || (userInfo && userInfo.binding)
+        )
+
+        if (userInfo.binding === undefined || (userInfo && userInfo.binding)) {
+          this.$router.push({
+            name: 'home'
+          })
+        } else {
+          this.$router.push({
+            name: 'binding'
+          })
+        }
+      })
     },
     loadUserInfo() {
       this.$store
@@ -78,7 +109,7 @@ export default Vue.extend({
         .then(() => {})
         .catch(error => {})
     },
-    loadSchoolInfo(schoolId: string) {
+    loadSchoolInfo() {
       this.$store
         .dispatch(authModulePath + loadSchoolInfoAction)
         .then(() => {})

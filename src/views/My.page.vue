@@ -201,7 +201,7 @@ export default Vue.extend({
   },
   methods: {
     changeTitle() {
-      document.title = '个人中心'
+      document.title = '账号'
     },
     goToUserSettingsPage() {
       this.$router.push({

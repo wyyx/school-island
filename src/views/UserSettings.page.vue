@@ -1,7 +1,6 @@
 <template>
   <div class="fill-height">
-    <Header :showBack="true" title="个人中心" @back="back"></Header>
-    <v-list two-line>
+    <v-list>
       <!-- nickname -->
       <v-list-tile v-ripple>
         <v-list-tile-content>
@@ -75,11 +74,15 @@ export default Vue.extend({
       school
     })
   },
-  components: { Header },
-  created() {},
+  created() {
+    this.changeTitle()
+  },
   methods: {
     back() {
       this.$router.back()
+    },
+    changeTitle() {
+      document.title = '个人中心'
     }
   }
 })

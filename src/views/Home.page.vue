@@ -121,8 +121,15 @@ import { articles } from '../services/article.service'
 import { dutyService } from '../services/duty.service'
 import { get } from 'vuex-pathify'
 import { developing } from '../store/global.paths'
+import { school, authModulePath } from '@/store/auth/auth.paths'
+import { SchoolInfo } from '../models/school.model'
 
 export default Vue.extend({
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      ;(vm as any).changeTitle()
+    })
+  },
   data: function() {
     return {
       images: [
@@ -137,7 +144,8 @@ export default Vue.extend({
   computed: {
     ...get({
       developing
-    })
+    }),
+    ...get(authModulePath, { school })
   },
   name: 'home',
   components: { Article },
@@ -158,7 +166,8 @@ export default Vue.extend({
       })
     },
     changeTitle() {
-      document.title = '成都市xxx小学'
+      const that: any = this
+      document.title = (that.school as SchoolInfo).name
     }
   }
 })

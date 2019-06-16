@@ -7,6 +7,10 @@ export const authGetters = {
       return false
     }
 
+    if (state.user.binding === undefined) {
+      return true
+    }
+
     return state.user.binding === 0 ? false : true
   },
   [roleRoute](state: AuthState, getters): string {

@@ -23,14 +23,6 @@ export const authActions = {
           console.log('TCL: userInfo', res)
           dispatch(loadUserInfoSuccessAction, res.data.content)
 
-          console.log(
-            'TCL: res.data.content && res.data.content.binding',
-            res.data.content && res.data.content.binding
-          )
-          // if (res.data.content && res.data.content.binding) {
-          //   router.push({ name: 'home' })
-          // }
-
           resolve()
         })
         .catch(error => {
@@ -43,14 +35,18 @@ export const authActions = {
     commit(user, payload)
   },
   [loadUserInfoFailAction]({ dispatch, commit }) {
-    commit(user, null)
+    commit(user, {})
   },
   // load school info
   [loadSchoolInfoAction]({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
       userService.getSchoolInfo().then(res => {
-        if (res.data.content) {
-          dispatch(loadSchoolInfoSuccessAction, res.data.content)
+        const schoolInfo = res.data.content
+        if (schoolInfo) {
+          dispatch(loadSchoolInfoSuccessAction, schoolInfo)
+
+          // change html title
+          setPageTitle(schoolInfo.name)
 
           // save schoolInfo to userService
           userService.schoolInfo = { ...res.data.content }
@@ -67,6 +63,10 @@ export const authActions = {
     commit(school, payload)
   },
   [loadSchoolInfoFailAction]({ dispatch, commit }) {
-    commit(school, null)
+    commit(school, {})
   }
+}
+
+function setPageTitle(title: string) {
+  document.title = title
 }

@@ -1,4 +1,4 @@
-import { YANG_BASE_URL } from '@/configs/config'
+import { YANG_BASE_URL, mockUserInfo } from '@/configs/config'
 import { SchoolInfo, SchoolInfoResponse } from '@/models/school.model'
 import {
   BindingPost,
