@@ -55,7 +55,9 @@ export const mockUserInfo: UserInfo = {
 export const mockSchoolInfo: SchoolInfo = {
   code: 'aaabbbcccddd',
   name: '成都市希望小学',
-  logo: ['string'],
+  logo: [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDaBS6PmCeZJhT3HHmGPikU6l8mBI-yWJouXvA2heBNkKmOX17'
+  ],
   tel: 'string',
   email: 'string',
   address: 'string',
