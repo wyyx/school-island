@@ -57,6 +57,7 @@ import Vue from 'vue'
 import { Role } from '../configs/config'
 import { get } from 'vuex-pathify'
 import { authModulePath, user, isTourist } from '../store/auth/auth.paths'
+import { UserInfo } from '../models/user.model'
 
 export default Vue.extend({
   props: {
@@ -79,7 +80,9 @@ export default Vue.extend({
     }),
     studentName() {
       const that: any = this
-      return that.user && that.user.studentName
+      const user: UserInfo = that.user
+      const student = user.studentVoList && user.studentVoList[0]
+      return student.name
     },
     myRoute() {
       const that: any = this

@@ -24,6 +24,7 @@ export class UserService {
   }
 
   getUserInfo() {
+    console.log('xxxxxxxxxxxxxxxxxxxxx')
     return this.httpConfigService.httpSercvice.post<UserInfoResponse>(
       this.baseUrl + '/w/user/select-by-school-id'
     )
@@ -33,14 +34,6 @@ export class UserService {
     return this.httpConfigService.httpSercvice.post<SchoolInfoResponse>(
       this.baseUrl + '/w/school/id'
     )
-  }
-
-  _setBinded() {
-    this.userInfo.binding = 1
-  }
-
-  _setNotBinded() {
-    this.userInfo.binding = 0
   }
 }
 

@@ -1,7 +1,8 @@
 import { userService } from '@/services/user.service'
 import { UserInfo } from '@/models/user.model'
-import { user, school } from './auth.paths'
+import { user, school, currentRole } from './auth.paths'
 import router from '@/router/router'
+import store from '../store'
 
 // user info actions
 export const loadUserInfoAction = 'loadUserInfoAction'
@@ -22,8 +23,13 @@ export const authActions = {
         .then(res => {
           console.log('TCL: userInfo', res)
           const userInfo = res.data.content
+
           if (userInfo) {
             dispatch(loadUserInfoSuccessAction, res.data.content)
+
+            // set first role as default
+            const firstRole = userInfo.roleVoList && userInfo.roleVoList[0]
+            ;(store as any).set(currentRole, firstRole)
           } else {
             dispatch(loadUserInfoFailAction)
             reject()

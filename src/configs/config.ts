@@ -25,44 +25,65 @@ export enum Role {
 }
 
 export const mockUserInfo: UserInfo = {
-  binding: 0,
-  city: 'string',
-  country: 'string',
+  city: '成都',
+  country: '中国',
   headImgUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
-  id: 0,
-  idcard: 'string',
-  language: 'string',
-  loginErrorCount: 0,
-  mobile: 'string',
-  name: 'string',
-  nickname: '刘老师的昵称',
-  openId: 'string',
-  privilege: 'string',
-  province: 'string',
-  pwd: 'string',
-  refId: 0,
-  roleCode: 0,
-  roleName: 'string',
-  salt: 'string',
+  id: 123,
+  language: '中文',
+  name: '王磊',
+  nickname: '星空',
+  province: '成都',
+  roleVoList: [
+    {
+      name: '家长',
+      code: 300
+    },
+    {
+      name: '老师',
+      code: 200
+    },
+    {
+      name: '校办',
+      code: 100
+    }
+  ],
   sex: 0,
-  status: 0,
-  unionId: 'string',
-  userName: 'string',
-  userType: 0,
-  studentName: '王小明'
+  studentVoList: [
+    {
+      age: 13,
+      classId: 1,
+      id: 553,
+      idcard: '345677884433333333',
+      mobile: '15633257890',
+      name: '王小明',
+      nickname: '小白',
+      rainAmount: 56,
+      schoolId: 1,
+      sex: '男',
+      studentNumber: '20153366',
+      userName: 'string'
+    }
+  ]
 }
 
 export const mockSchoolInfo: SchoolInfo = {
+  address: '成都市天府三街',
   code: 'aaabbbcccddd',
-  name: '成都市希望小学',
+  description: 'faswerh erhg4y eargye35 ',
+  email: 'string',
+  history: 'string',
+  idea: 'string',
+  lat: 0,
+  lng: 0,
   logo: [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDaBS6PmCeZJhT3HHmGPikU6l8mBI-yWJouXvA2heBNkKmOX17'
   ],
+  masterId: 0,
+  masterName: 'string',
+  mobile: 'string',
+  name: 'string',
+  qrCode: 'string',
+  start: 'string',
   tel: 'string',
-  email: 'string',
-  address: 'string',
-  history: 'string',
-  idea: 'string',
-  description: 'string',
-  schoolId: 'string'
+  schoolId: '1'
 }

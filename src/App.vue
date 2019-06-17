@@ -42,12 +42,13 @@ export default Vue.extend({
   created() {
     this.resolveInitUrl()
     this.logBaseStatus()
-    // this.checkBinding()
 
-    // // open when build
-    // this.loadUserInfo()
-    // // open when build
-    // this.loadSchoolInfo()
+    // open when build
+    this.checkBinding()
+    // open when build
+    this.loadUserInfo()
+    // open when build
+    this.loadSchoolInfo()
   },
   computed: {
     ...get(authModulePath, {
@@ -73,6 +74,7 @@ export default Vue.extend({
         s
       })
 
+      // open when build
       this.$router.push({ name: 'home' })
     },
     checkBinding() {
@@ -88,12 +90,7 @@ export default Vue.extend({
           this.$store.dispatch(authModulePath + loadUserInfoFailAction)
         }
 
-        console.log(
-          'TCL: checkBinding -> userInfo.binding === undefined || (userInfo && userInfo.binding)',
-          userInfo.binding === undefined || (userInfo && userInfo.binding)
-        )
-
-        if (userInfo.binding === undefined || (userInfo && userInfo.binding)) {
+        if (userInfo.roleVoList.length > 0) {
           // show tabs if binded
           ;(store as any).set(authModulePath + showTabs, true)
 

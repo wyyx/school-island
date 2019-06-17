@@ -15,14 +15,33 @@
         <v-flex class="white--text" xs8>
           <v-layout column wrap>
             <v-flex class="pa-2 title">
-              <span class="pr-3">{{ user.nickname }}</span>
+              <span class="pr-3">{{ user.name }}</span>
               <v-icon color="white">swap_horiz</v-icon>
-              <span class="pl-3">切换</span>
+              <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                  <v-btn flat dark v-on="on">
+                    <span class="title">切换</span>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-tile
+                    v-for="role in roleList || []"
+                    :key="role.code"
+                    @click="switchRole(role)"
+                  >
+                    {{ role.name }}
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
+              <v-btn dark flat @click="goToBindingPage()">
+                <v-icon>add</v-icon> <span>添加绑定</span>
+              </v-btn>
             </v-flex>
             <v-flex class="pa-2">
               <v-layout row wrap>
                 <v-flex class="v-center">
-                  <span class="pr-1">昵称：</span><span>小白</span>
+                  <span class="pr-1">昵称：</span
+                  ><span>{{ user.nickname }}</span>
                 </v-flex>
                 <v-flex shrink class="px-2">
                   <v-btn
@@ -186,14 +205,16 @@
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import { get } from 'vuex-pathify'
-import { authModulePath, user } from '../store/auth/auth.paths'
+import { authModulePath, user, roleList } from '../store/auth/auth.paths'
+import { RoleVo } from '../models/user.model'
 
 export default Vue.extend({
   name: 'my',
   components: {},
   computed: {
     ...get(authModulePath, {
-      user
+      user,
+      roleList
     })
   },
   created() {
@@ -207,7 +228,13 @@ export default Vue.extend({
       this.$router.push({
         name: 'user-settings'
       })
-    }
+    },
+    goToBindingPage() {
+      this.$router.push({
+        name: 'binding'
+      })
+    },
+    switchRole(role: RoleVo) {}
   }
 })
 </script>

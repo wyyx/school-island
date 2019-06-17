@@ -6,14 +6,21 @@ export interface SchoolInfoResponse {
 }
 
 export interface SchoolInfo {
-  code: string
-  name: string
-  logo: string[]
-  tel: string
-  email: string
   address: string
+  code: string
+  description: string
+  email: string
   history: string
   idea: string
-  description: string
+  lat: number
+  lng: number
+  logo: string[]
+  masterId: number
+  masterName: string
+  mobile: string
+  name: string
+  qrCode: string
+  start: string
+  tel: string
   schoolId: string
 }

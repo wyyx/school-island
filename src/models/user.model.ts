@@ -20,31 +20,37 @@ export interface UserInfoResponse {
 }
 
 export interface UserInfo {
-  binding: number
   city: string
   country: string
   headImgUrl: string
   id: number
-  idcard: string
   language: string
-  loginErrorCount: number
+  name: string
+  nickname: string
+  province: string
+  roleVoList: RoleVo[]
+  sex: number
+  studentVoList: StudentVoList[]
+}
+
+export interface RoleVo {
+  code: number
+  name: string
+}
+
+export interface StudentVoList {
+  age: number
+  classId: number
+  id: number
+  idcard: string
   mobile: string
   name: string
   nickname: string
-  openId: string
-  privilege: string
-  province: string
-  pwd: string
-  refId: number
-  roleCode: number
-  roleName: string
-  salt: string
-  sex: number
-  status: number
-  unionId: string
+  rainAmount: number
+  schoolId: number
+  sex: string
+  studentNumber: string
   userName: string
-  userType: number
-  studentName?: string
 }
 
 export enum BindingStatus {

@@ -169,6 +169,7 @@ import {
 } from '../store/auth/auth.paths'
 import { loadUserInfoAction } from '../store/auth/auth.actions'
 import { get } from 'vuex-pathify'
+import store from '../store/store'
 
 export default Vue.extend({
   data: function() {
@@ -213,10 +214,6 @@ export default Vue.extend({
         {
           value: 6,
           text: '外婆'
-        },
-        {
-          value: 7,
-          text: '亲戚'
         }
       ]
     }
@@ -293,7 +290,7 @@ export default Vue.extend({
           if (
             valid &&
             this.tab === 1 &&
-            (this.relation >= 1 && this.relation <= 7)
+            (this.relation >= 1 && this.relation <= 6)
           ) {
             console.log('toBind()')
             // open when build
@@ -326,6 +323,7 @@ export default Vue.extend({
 
             this.showSuccessMessage('绑定成功！')
             this.reloadUserInfo()
+            ;(store as any).set(authModulePath + showTabs, true)
           } else {
             console.log('绑定失败', res.data.errorMsg)
 
