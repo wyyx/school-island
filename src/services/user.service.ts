@@ -24,13 +24,14 @@ export class UserService {
   }
 
   getUserInfo() {
-    console.log('xxxxxxxxxxxxxxxxxxxxx')
+    console.log("TCL: UserService -> getUserInfo -> getUserInfo")
     return this.httpConfigService.httpSercvice.post<UserInfoResponse>(
       this.baseUrl + '/w/user/select-by-school-id'
     )
   }
 
   getSchoolInfo() {
+    console.log("TCL: UserService -> getSchoolInfo -> getSchoolInfo")
     return this.httpConfigService.httpSercvice.post<SchoolInfoResponse>(
       this.baseUrl + '/w/school/id'
     )

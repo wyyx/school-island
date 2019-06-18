@@ -2,7 +2,7 @@ import { userService } from '@/services/user.service'
 import { UserInfo } from '@/models/user.model'
 import { user, school, currentRole } from './auth.paths'
 import router from '@/router/router'
-import store from '../store'
+// import store from '../store'
 
 // user info actions
 export const loadUserInfoAction = 'loadUserInfoAction'
@@ -18,6 +18,7 @@ export const authActions = {
   // load user info
   [loadUserInfoAction]({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
+      console.log('loadUserInfoAction xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
       userService
         .getUserInfo()
         .then(res => {
@@ -29,7 +30,7 @@ export const authActions = {
 
             // set first role as default
             const firstRole = userInfo.roleVoList && userInfo.roleVoList[0]
-            ;(store as any).set(currentRole, firstRole)
+            // ;(store as any).set(currentRole, firstRole)
           } else {
             dispatch(loadUserInfoFailAction)
             reject()

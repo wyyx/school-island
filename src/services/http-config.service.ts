@@ -15,7 +15,11 @@ export class HttpConfigService {
   setHeaders(headers: { [key: string]: string | number | undefined }) {
     this.config = {
       ...this.config,
-      headers: { ...this.config.headers, ...headers }
+      headers: {
+        ...this.config.headers,
+        ...headers,
+        'Content-Type': 'application/json'
+      }
     }
 
     this.httpSercvice = axios.create(this.config)

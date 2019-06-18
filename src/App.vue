@@ -21,7 +21,8 @@ import {
   authModulePath,
   showTabs,
   user,
-  roleRoute
+  roleRoute,
+  isTourist
 } from './store/auth/auth.paths'
 import {
   loadUserInfoAction,
@@ -29,7 +30,7 @@ import {
   loadUserInfoSuccessAction,
   loadUserInfoFailAction
 } from './store/auth/auth.actions'
-import store from './store/store'
+import { storeService } from './services/store.service'
 
 export default Vue.extend({
   name: 'App',
@@ -60,6 +61,7 @@ export default Vue.extend({
     resolveInitUrl() {
       // parse current url
       const currentUrl = window.location.href
+      console.log('TCL: resolveInitUrl -> currentUrl', currentUrl)
       const url = new Url(currentUrl, true)
       console.log('TCL: resolveInitUrl -> url', url)
 
@@ -71,7 +73,8 @@ export default Vue.extend({
       // set global headers
       httpConfigService.setHeaders({
         xyd,
-        s
+        s,
+        'Content-Type': 'application/json'
       })
 
       // open when build
@@ -80,6 +83,7 @@ export default Vue.extend({
     checkBinding() {
       userService.getUserInfo().then(res => {
         const userInfo = res.data.content
+        console.log('TCL: checkBinding -> userInfo', userInfo)
 
         if (userInfo) {
           this.$store.dispatch(
@@ -92,7 +96,7 @@ export default Vue.extend({
 
         if (userInfo.roleVoList.length > 0) {
           // show tabs if binded
-          ;(store as any).set(authModulePath + showTabs, true)
+          storeService.store.set(authModulePath + showTabs, true)
 
           this.$router.push({
             name: 'home'

@@ -169,7 +169,6 @@ import {
 } from '../store/auth/auth.paths'
 import { loadUserInfoAction } from '../store/auth/auth.actions'
 import { get } from 'vuex-pathify'
-import store from '../store/store'
 
 export default Vue.extend({
   data: function() {
@@ -230,6 +229,10 @@ export default Vue.extend({
       const that: any = this
       const logos = that.school && that.school.logo
       return logos ? logos[0] : ''
+    },
+    store() {
+      const that: any = this
+      return that.$store
     }
   },
   created() {
@@ -323,7 +326,8 @@ export default Vue.extend({
 
             this.showSuccessMessage('绑定成功！')
             this.reloadUserInfo()
-            ;(store as any).set(authModulePath + showTabs, true)
+            const store: any = this.$store
+            store.set(authModulePath + showTabs, true)
           } else {
             console.log('绑定失败', res.data.errorMsg)
 
@@ -338,7 +342,7 @@ export default Vue.extend({
         })
     },
     reloadUserInfo() {
-      this.$store
+      this.store
         .dispatch(authModulePath + loadUserInfoAction)
         .then(() => {
           this.showLoading = false

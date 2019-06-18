@@ -4,6 +4,7 @@ import router from './router/router'
 import store from './store/store'
 import './plugins'
 import './fontawesome'
+import './ttt.js'
 
 // styles
 import './styles/main.scss'
@@ -17,6 +18,7 @@ import VConsole from 'vconsole'
 
 // set moment
 import moment from 'moment'
+import { storeService } from './services/store.service'
 moment.locale('zh-CN')
 
 if (process.env.NODE_ENV === 'production') {
@@ -24,6 +26,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 Vue.config.productionTip = false
+
+storeService.store = store
 
 new Vue({
   router,

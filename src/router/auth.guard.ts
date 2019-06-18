@@ -4,20 +4,20 @@ import {
   isTourist,
   showTabs
 } from '@/store/auth/auth.paths'
-import store from '../store/store'
+
 import router from './router'
+import { storeService } from '@/services/store.service'
 
 export function authGuard(to, from, next) {
-  const _isBinded = store.getters[authModulePath + isBinded]
+  const _isBinded = storeService.store.getters[authModulePath + isBinded]
   console.log('TCL: authGuard -> _isBinded', _isBinded)
 
-  const _isTourist = store.getters[authModulePath + isTourist]
+  const _isTourist = storeService.store.getters[authModulePath + isTourist]
   console.log('TCL: authGuard -> _isTourist', _isTourist)
 
   // show tabs if binded
   if (_isBinded) {
-    const _store: any = store
-    _store.set(authModulePath + showTabs, true)
+    storeService.store.set(authModulePath + showTabs, true)
   }
 
   // go to binding page if binded and not tourist
