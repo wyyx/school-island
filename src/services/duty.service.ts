@@ -11,6 +11,7 @@ export class DutyService {
   httpConfigService: HttpConfigService = httpConfigService
 
   getDeductionList(classId: number, pageNo: number = 0, pageSize: number = 10) {
+    console.log('TCL: DutyService -> getDeductionList -> classId', classId)
     return this.httpConfigService.httpSercvice.post<DeductionListResponse>(
       this.baseUrl + '/w/score/list-page',
       {
@@ -21,20 +22,23 @@ export class DutyService {
     )
   }
 
-  getDeductionHistoryByWeek(classId: number, schoolId: string) {
+  getDeductionHistoryByWeek(classId: number) {
+    console.log(
+      'TCL: DutyService -> getDeductionHistoryByWeek -> classId',
+      classId
+    )
     return this.httpConfigService.httpSercvice.post<
       DeductionHistoryByWeekResponse
-    >(this.baseUrl + '/w/score/report-froms', {
-      classId,
-      schoolId
+    >(this.baseUrl + '/w/score/class-report-froms', {
+      classId
     })
   }
 
-  getClassList(schoolId: string) {
+  getClassList(teacherId: number) {
     return this.httpConfigService.httpSercvice.post<ClasslistResponse>(
-      this.baseUrl + '/w/class/list',
+      this.baseUrl + '/w/class/list-by-teacher-id',
       {
-        schoolId
+        teacherId
       }
     )
   }

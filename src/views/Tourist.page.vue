@@ -13,7 +13,7 @@
         <v-flex class="white--text" xs8>
           <v-layout column wrap>
             <v-flex class="pa-2 title">
-              <span class="px-4">游客</span>
+              <span class="px-4">{{ user.nickname }}</span>
             </v-flex>
             <v-flex class="pa-2">
               <v-btn color="accent" @click="goToBindingPage">
@@ -30,10 +30,15 @@
 <script lang="ts">
 import Vue from 'vue'
 import { get } from 'vuex-pathify'
-import { authModulePath, isTourist } from '../store/auth/auth.paths'
+import { authModulePath, isTourist, user } from '../store/auth/auth.paths'
 
 export default Vue.extend({
   name: 'tourist',
+  computed: {
+    ...get(authModulePath, {
+      user
+    })
+  },
   methods: {
     goToBindingPage() {
       this.$router.push({

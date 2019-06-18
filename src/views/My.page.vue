@@ -20,16 +20,22 @@
               <span v-if="currentRole.code === roleType.Parents" class="pr-3">
                 {{ currentStudent.name }}的{{ getRelationName(currentStudent) }}
               </span>
+              <span v-if="currentRole.code === roleType.SchoolRun" class="pr-3">
+                {{ user.name }}{{ currentRole.name }}
+              </span>
               <v-icon color="white">swap_horiz</v-icon>
               <!-- switch role -->
               <v-menu offset-y v-if="roleList.length > 0">
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on">
-                    <span class="title">切换角色</span>
+                    <span class="title">切换</span>
                   </v-btn>
                 </template>
                 <v-list>
                   <v-list-tile
+                    :class="{
+                      'grey lighten-3': currentRole.code === role.code
+                    }"
                     v-for="role in roleList || []"
                     :key="role.code"
                     @click="switchRole(role)"
@@ -38,31 +44,6 @@
                   </v-list-tile>
                 </v-list>
               </v-menu>
-
-              <!-- switch student -->
-              <v-menu
-                offset-y
-                v-if="
-                  currentRole.code === roleType.Parents &&
-                    studentList.length > 0
-                "
-              >
-                <template v-slot:activator="{ on }">
-                  <v-btn flat dark v-on="on">
-                    <span class="title">切换学生</span>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-tile
-                    v-for="student in studentList || []"
-                    :key="student.name"
-                    @click="switchStudent(student)"
-                  >
-                    {{ student.name }}
-                  </v-list-tile>
-                </v-list>
-              </v-menu>
-
               <v-btn dark flat @click="goToBindingPage()">
                 <v-icon>add</v-icon> <span>添加绑定</span>
               </v-btn>
@@ -280,12 +261,6 @@ export default Vue.extend({
     },
     switchRole(role: RoleVo) {
       storeService.store.set(authModulePath + currentRole, role)
-    },
-    switchStudent(student: Student) {
-      console.log('TCL: student', student)
-
-      const store: any = this.$store
-      store.set(authModulePath + currentStudent, student)
     },
     getRelationName(student: Student) {
       const parentsType = parentsTypes.filter(

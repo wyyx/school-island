@@ -23,7 +23,7 @@
               <div class="class-selection-box primary lighten-4 py-1 px-2">
                 <v-autocomplete
                   @change="onAutocompleteChanged"
-                  class="pa-0 xxx"
+                  class="pa-0"
                   v-model="classId"
                   :items="classList"
                   color="primary"
@@ -211,6 +211,9 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import moment from 'moment'
 import { httpConfigService } from '../services/http-config.service'
 import { userService } from '../services/user.service'
+import { get } from 'vuex-pathify'
+import { authModulePath, user, currentRole } from '../store/auth/auth.paths'
+import { UserInfo } from '../models/user.model'
 moment.locale('zh-CN')
 
 interface Image {
@@ -264,16 +267,17 @@ export default Vue.extend({
   watch: {
     classId(newVal, oldVal) {
       this.loadDeducionList(newVal)
-      this.loadDeducionWeekHistory(
-        this.classId,
-        httpConfigService.config.headers['s']
-      )
+      this.loadDeducionWeekHistory(this.classId)
     },
     showSwiper(newVal, oldVal) {
       // this.chart.resize()
     }
   },
   computed: {
+    ...get(authModulePath, {
+      user,
+      currentRole
+    }),
     legend() {
       const that: any = this
       return (
@@ -292,10 +296,11 @@ export default Vue.extend({
   },
   created() {
     this.loadDeducionList(this.classId)
-    this.loadClassList(userService.schoolInfo.schoolId)
+    const that: any = this
+    this.loadClassList((that.user as UserInfo).id)
   },
   mounted() {
-    this.loadDeducionWeekHistory(this.classId, userService.schoolInfo.schoolId)
+    this.loadDeducionWeekHistory(this.classId)
   },
   methods: {
     onBack() {
@@ -378,8 +383,8 @@ export default Vue.extend({
         this.deductionList = res.data.content || []
       })
     },
-    loadClassList(schoolId: string) {
-      dutyService.getClassList(userService.schoolInfo.schoolId).then(res => {
+    loadClassList(teacherId: number) {
+      dutyService.getClassList(teacherId).then(res => {
         this.classList = res.data.content || []
 
         // show first class default
@@ -392,8 +397,8 @@ export default Vue.extend({
     setClassId(classId: number) {
       this.classId = classId
     },
-    loadDeducionWeekHistory(classId: number, schoolId: string) {
-      dutyService.getDeductionHistoryByWeek(classId, schoolId).then(res => {
+    loadDeducionWeekHistory(classId: number) {
+      dutyService.getDeductionHistoryByWeek(classId).then(res => {
         this.deductionWeekHistory = res.data.content
 
         this.initEcharts()

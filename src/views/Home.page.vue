@@ -163,7 +163,8 @@ export default Vue.extend({
     },
     changeTitle() {
       const that: any = this
-      document.title = (that.school as SchoolInfo).name
+      const schoolName = (that.school as SchoolInfo).name
+      document.title = schoolName ? schoolName : ''
     }
   }
 })
