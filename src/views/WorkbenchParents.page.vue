@@ -7,20 +7,23 @@
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 py-1 px-2">
-                <v-autocomplete
-                  @change="onAutocompleteChanged"
-                  class="pa-0"
-                  v-model="student"
-                  :items="user.studentVoList || []"
-                  color="primary"
-                  item-text="name"
-                  item-value="id"
-                  hide-no-data
-                  hide-selected
-                  placeholder="切换学生"
-                  hide-details
-                  :return-object="true"
-                ></v-autocomplete>
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn light flat v-on="on" class="subheading">
+                      {{ currentStudent.name }}
+                      <v-icon>swap_horiz</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-tile
+                      v-for="(student, index) in studentList"
+                      :key="index"
+                      @click="switchStudent(student)"
+                    >
+                      <v-list-tile-title>{{ student.name }}</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
               </div>
             </v-flex>
             <v-spacer></v-spacer>
@@ -51,7 +54,7 @@ import { get } from 'vuex-pathify'
 import { authModulePath, user, currentStudent } from '../store/auth/auth.paths'
 import Developing from '../components/Developing.component.vue'
 import { developing } from '../store/global.paths'
-import { Student } from '../models/user.model'
+import { Student, UserInfo } from '../models/user.model'
 
 export default Vue.extend({
   data: function() {
@@ -61,9 +64,14 @@ export default Vue.extend({
   },
   computed: {
     ...get(authModulePath, {
-      user
+      user,
+      currentStudent
     }),
-    ...get({ developing })
+    ...get({ developing }),
+    studentList() {
+      const that: any = this
+      return (that.user as UserInfo).studentVoList || []
+    }
   },
   components: {},
   created() {},
@@ -82,4 +90,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.class-selection-box {
+  border-radius: 2px;
+}
+</style>
