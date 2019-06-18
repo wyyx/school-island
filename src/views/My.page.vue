@@ -1,6 +1,5 @@
 <template>
   <div class="container pa-0">
-    <!-- <Header :showBack="false" title="个人中心"></Header> -->
     <v-card color="primary" class="mb-2">
       <v-layout class="teachers py-3" row wrap>
         <v-flex xs4>
@@ -15,9 +14,9 @@
         <v-flex class="white--text" xs8>
           <v-layout column wrap>
             <v-flex class="pa-2 title">
-              <span class="pr-3">{{ user.name }}</span>
+              <span class="pr-3">{{ user.name }}{{ currentRole.name }}</span>
               <v-icon color="white">swap_horiz</v-icon>
-              <v-menu offset-y>
+              <v-menu offset-y v-if="roleList.length > 0">
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on">
                     <span class="title">切换</span>
@@ -36,6 +35,23 @@
               <v-btn dark flat @click="goToBindingPage()">
                 <v-icon>add</v-icon> <span>添加绑定</span>
               </v-btn>
+
+              <v-menu offset-y v-if="studentList.length > 0">
+                <template v-slot:activator="{ on }">
+                  <v-btn flat dark v-on="on">
+                    <span class="title">切换学生</span>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-tile
+                    v-for="student in studentList || []"
+                    :key="student.name"
+                    @click="switchStudent(student)"
+                  >
+                    {{ student.name }}
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
             </v-flex>
             <v-flex class="pa-2">
               <v-layout row wrap>
@@ -58,10 +74,6 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <!-- <v-btn small class="check-in-btn" color="accent">
-          <v-icon small>check</v-icon>
-          <span class="pl-1">签到</span>
-        </v-btn> -->
       </v-layout>
       <v-layout class="scores white pa-1" row wrap>
         <v-flex>
@@ -205,8 +217,15 @@
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import { get } from 'vuex-pathify'
-import { authModulePath, user, roleList } from '../store/auth/auth.paths'
-import { RoleVo } from '../models/user.model'
+import {
+  authModulePath,
+  user,
+  roleList,
+  currentRole,
+  currentStudent
+} from '../store/auth/auth.paths'
+import { RoleVo, Student } from '../models/user.model'
+import { storeService } from '../services/store.service'
 
 export default Vue.extend({
   name: 'my',
@@ -214,8 +233,13 @@ export default Vue.extend({
   computed: {
     ...get(authModulePath, {
       user,
-      roleList
-    })
+      roleList,
+      currentRole
+    }),
+    studentList() {
+      const that: any = this
+      return that.user.studentVoList || []
+    }
   },
   created() {
     this.changeTitle()
@@ -234,7 +258,15 @@ export default Vue.extend({
         name: 'binding'
       })
     },
-    switchRole(role: RoleVo) {}
+    switchRole(role: RoleVo) {
+      storeService.store.set(authModulePath + currentRole, role)
+    },
+    switchStudent(student: Student) {
+      console.log('TCL: student', student)
+
+      const store: any = this.$store
+      store.set(authModulePath + currentStudent, student)
+    }
   }
 })
 </script>

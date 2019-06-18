@@ -1,6 +1,6 @@
 <template>
   <div class="container pa-0">
-    workbench parents works!
+    <Developing v-if="developing"></Developing>
   </div>
 </template>
 
@@ -8,14 +8,17 @@
 import Vue from 'vue'
 import { get } from 'vuex-pathify'
 import { authModulePath, user } from '../store/auth/auth.paths'
+import Developing from '../components/Developing.component.vue'
+import { developing } from '../store/global.paths'
 
 export default Vue.extend({
   computed: {
     ...get(authModulePath, {
       user
-    })
+    }),
+    ...get({ developing })
   },
-  components: {},
+  components: { Developing },
   created() {},
   data: function() {
     return {}

@@ -39,7 +39,7 @@
           <v-tab-item value="parents" v-if="showTab1Input">
             <v-text-field
               clearable
-              label="姓名"
+              label="学生姓名"
               persistent-hint
               :error-messages="validated ? errors.collect('name') : []"
               v-model="name"
@@ -49,7 +49,7 @@
             ></v-text-field>
             <v-text-field
               clearable
-              label="身份证号码"
+              label="学生身份证号码"
               persistent-hint
               :error-messages="validated ? errors.collect('idCard') : []"
               v-model="idCard"
@@ -121,8 +121,8 @@
         </v-tabs-items>
         <v-card-actions>
           <v-layout row wrap>
-            <v-flex class="px-2">
-              <v-btn block large flat @click="giveUpBinding">游客访问</v-btn>
+            <v-flex class="px-2" v-if="!isBinded">
+              <v-btn block large flat @click="browseAsTourist">游客访问</v-btn>
             </v-flex>
             <v-flex class="px-2">
               <v-btn block color="accent" large @click="submit">立即认证</v-btn>
@@ -165,7 +165,8 @@ import {
   authModulePath,
   showTabs,
   isTourist,
-  school
+  school,
+  isBinded
 } from '../store/auth/auth.paths'
 import { loadUserInfoAction } from '../store/auth/auth.actions'
 import { get } from 'vuex-pathify'
@@ -219,7 +220,8 @@ export default Vue.extend({
   },
   computed: {
     ...get(authModulePath, {
-      school
+      school,
+      isBinded
     }),
     schoolName() {
       const that: any = this
@@ -236,10 +238,12 @@ export default Vue.extend({
     }
   },
   created() {
+    const that: any = this
+    this.store.set(authModulePath + isTourist, false)
     this.$validator.localize('zh_CN')
   },
   methods: {
-    giveUpBinding() {
+    browseAsTourist() {
       this.$router.push({
         name: 'home'
       })
@@ -347,9 +351,11 @@ export default Vue.extend({
         .then(() => {
           this.showLoading = false
 
-          this.$router.push({
-            name: 'home'
-          })
+          setTimeout(() => {
+            this.$router.push({
+              name: 'home'
+            })
+          }, 1000)
         })
         .catch(error => {})
     },

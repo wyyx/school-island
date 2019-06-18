@@ -1,6 +1,6 @@
 import { AuthState } from './auth.module'
 import { isBinded, roleRoute, currentRole } from './auth.paths'
-import { RoleVo } from '@/models/user.model'
+import { RoleVo, RoleType } from '@/models/user.model'
 
 export const authGetters = {
   [isBinded](state: AuthState, getters): boolean {
@@ -18,27 +18,27 @@ export const authGetters = {
   },
   [roleRoute](state: AuthState, getters): string {
     const role = getters[currentRole] as RoleVo
-    const roleCode = role.code
+    const roleCode = role && role.code
 
     // convert role to path
     switch (roleCode) {
       // 校办
-      case 100:
+      case RoleType.SchoolRun:
         return 'school-run'
       // 班主任 -> 显示老师界面
-      case 200:
+      case RoleType.HeadTeacher:
         return 'teacher'
       // 家长
-      case 300:
+      case RoleType.Parents:
         return 'parents'
       // 学生
-      case 400:
+      case RoleType.Student:
         return 'student'
       // 老师
-      case 500:
+      case RoleType.Teacher:
         return 'teacher'
       // 家委会
-      case 600:
+      case RoleType.ParentsCommittee:
         return 'parents-committee'
       default:
         return ''

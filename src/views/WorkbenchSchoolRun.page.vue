@@ -238,7 +238,7 @@ export default Vue.extend({
         .getDutyTop(userService.schoolInfo.schoolId, 0, 1000)
         .then(res => {
           this.allTopItems = res.data.content
-          this.topItems = this.allTopItems.slice(0, 10)
+          this.topItems = this.allTopItems ? this.allTopItems.slice(0, 10) : []
           this.showLoading = false
         })
         .finally(() => {

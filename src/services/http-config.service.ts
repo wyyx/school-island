@@ -17,8 +17,7 @@ export class HttpConfigService {
       ...this.config,
       headers: {
         ...this.config.headers,
-        ...headers,
-        'Content-Type': 'application/json'
+        ...headers
       }
     }
 

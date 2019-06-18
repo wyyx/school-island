@@ -1,11 +1,6 @@
 <template>
   <div class="fill-height">
-    <div v-if="developing" class="developing both-center fill-height">
-      <h2 class="grey--text title">
-        <v-icon>hourglass_empty</v-icon> 开发中...
-      </h2>
-    </div>
-
+    <Developing v-if="developing"></Developing>
     <div v-else class="container pa-0">
       <!-- <Header :showBack="false" title="发现"></Header> -->
       <v-list class="list">
@@ -76,6 +71,7 @@ import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import { get } from 'vuex-pathify'
 import { developing } from '../store/global.paths'
+import Developing from '../components/Developing.component.vue'
 
 export default Vue.extend({
   name: 'explore',
@@ -84,7 +80,7 @@ export default Vue.extend({
       developing
     })
   },
-  components: {},
+  components: { Developing },
   created() {
     this.changeTitle()
   },

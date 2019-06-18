@@ -1,6 +1,11 @@
 <template>
   <v-app>
     <v-content>
+      <ul v-if="false">
+        <li>isBinded:{{ isBinded }}</li>
+        <li>isTourist:{{ isTourist }}</li>
+        <li>roleRoute:{{ roleRoute }}</li>
+      </ul>
       <router-view></router-view>
       <AppTabs v-if="showTabs" :role="roleRoute" class="tabs"></AppTabs>
     </v-content>
@@ -14,7 +19,6 @@ import Url from 'url-parse'
 import { dutyService } from './services/duty.service'
 import { httpConfigService } from './services/http-config.service'
 import { userService } from './services/user.service'
-import { BindingStatus } from './models/user.model'
 import { BASE_URL, YANG_BASE_URL, GUO_BASE_URL } from './configs/config'
 import { get } from 'vuex-pathify'
 import {
@@ -22,7 +26,8 @@ import {
   showTabs,
   user,
   roleRoute,
-  isTourist
+  isTourist,
+  isBinded
 } from './store/auth/auth.paths'
 import {
   loadUserInfoAction,
@@ -54,14 +59,15 @@ export default Vue.extend({
   computed: {
     ...get(authModulePath, {
       showTabs,
-      roleRoute
+      roleRoute,
+      isTourist,
+      isBinded
     })
   },
   methods: {
     resolveInitUrl() {
       // parse current url
       const currentUrl = window.location.href
-      console.log('TCL: resolveInitUrl -> currentUrl', currentUrl)
       const url = new Url(currentUrl, true)
       console.log('TCL: resolveInitUrl -> url', url)
 
@@ -73,8 +79,7 @@ export default Vue.extend({
       // set global headers
       httpConfigService.setHeaders({
         xyd,
-        s,
-        'Content-Type': 'application/json'
+        s
       })
 
       // open when build
@@ -94,7 +99,7 @@ export default Vue.extend({
           this.$store.dispatch(authModulePath + loadUserInfoFailAction)
         }
 
-        if (userInfo.roleVoList.length > 0) {
+        if (userInfo && userInfo.roleVoList && userInfo.roleVoList.length > 0) {
           // show tabs if binded
           storeService.store.set(authModulePath + showTabs, true)
 

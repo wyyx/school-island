@@ -18,12 +18,6 @@ export const COLORS = [
   '9E9E9E'
 ]
 
-export enum Role {
-  Teacher = 'teacher',
-  SchoolRun = 'school-run',
-  Parents = 'parents'
-}
-
 export const mockUserInfo: UserInfo = {
   city: '成都',
   country: '中国',
@@ -61,7 +55,8 @@ export const mockUserInfo: UserInfo = {
       schoolId: 1,
       sex: '男',
       studentNumber: '20153366',
-      userName: 'string'
+      userName: 'string',
+      parentType: 2
     }
   ]
 }

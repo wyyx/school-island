@@ -1,12 +1,7 @@
 <template>
   <div class="fill-height">
-    <div v-if="developing" class="developing both-center fill-height">
-      <h2 class="grey--text title">
-        <v-icon>hourglass_empty</v-icon> 开发中...
-      </h2>
-    </div>
+    <Developing v-if="developing"></Developing>
     <div v-else class="container pa-0">
-      <!-- <Header :showBack="false" title="成都市xxx小学"></Header> -->
       <div class="nav-wrapper white pa-0">
         <v-layout>
           <v-flex>
@@ -123,6 +118,7 @@ import { get } from 'vuex-pathify'
 import { developing } from '../store/global.paths'
 import { school, authModulePath } from '@/store/auth/auth.paths'
 import { SchoolInfo } from '../models/school.model'
+import Developing from '../components/Developing.component.vue'
 
 export default Vue.extend({
   beforeRouteEnter(to, from, next) {
@@ -148,7 +144,7 @@ export default Vue.extend({
     ...get(authModulePath, { school })
   },
   name: 'home',
-  components: { Article },
+  components: { Article, Developing },
   created() {
     this.changeTitle()
     dutyService.baseUrl

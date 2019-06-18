@@ -1,7 +1,14 @@
 import { userService } from '@/services/user.service'
 import { UserInfo } from '@/models/user.model'
-import { user, school, currentRole } from './auth.paths'
+import {
+  user,
+  school,
+  currentRole,
+  authModulePath,
+  currentStudent
+} from './auth.paths'
 import router from '@/router/router'
+import { storeService } from '@/services/store.service'
 // import store from '../store'
 
 // user info actions
@@ -30,7 +37,14 @@ export const authActions = {
 
             // set first role as default
             const firstRole = userInfo.roleVoList && userInfo.roleVoList[0]
-            // ;(store as any).set(currentRole, firstRole)
+            storeService.store.set(authModulePath + currentRole, firstRole)
+
+            const firstStudent =
+              userInfo.studentVoList && userInfo.studentVoList[0]
+            storeService.store.set(
+              authModulePath + currentStudent,
+              firstStudent
+            )
           } else {
             dispatch(loadUserInfoFailAction)
             reject()

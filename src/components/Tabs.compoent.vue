@@ -37,7 +37,7 @@
       value="workbench"
       :to="`/workbench/${role}`"
     >
-      <span>{{ studentName }}</span>
+      <span>{{ currentStudent.name }}</span>
       <v-icon>face</v-icon>
     </v-btn>
 
@@ -54,10 +54,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Role } from '../configs/config'
 import { get } from 'vuex-pathify'
-import { authModulePath, user, isTourist } from '../store/auth/auth.paths'
-import { UserInfo } from '../models/user.model'
+import {
+  authModulePath,
+  user,
+  isTourist,
+  currentStudent
+} from '../store/auth/auth.paths'
+import { UserInfo, Role } from '../models/user.model'
 
 export default Vue.extend({
   props: {
@@ -76,14 +80,9 @@ export default Vue.extend({
   computed: {
     ...get(authModulePath, {
       user,
-      isTourist
+      isTourist,
+      currentStudent
     }),
-    studentName() {
-      const that: any = this
-      const user: UserInfo = that.user
-      const student = user.studentVoList && user.studentVoList[0]
-      return student.name
-    },
     myRoute() {
       const that: any = this
       return that.isTourist ? '/account/tourist' : '/account/my'
