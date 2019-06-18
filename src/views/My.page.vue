@@ -14,12 +14,18 @@
         <v-flex class="white--text" xs8>
           <v-layout column wrap>
             <v-flex class="pa-2 title">
-              <span class="pr-3">{{ user.name }}{{ currentRole.name }}</span>
+              <span v-if="currentRole.code === roleType.Teacher" class="pr-3">
+                {{ user.name }}{{ currentRole.name }}
+              </span>
+              <span v-if="currentRole.code === roleType.Parents" class="pr-3">
+                {{ currentStudent.name }}的{{ getRelationName(currentStudent) }}
+              </span>
               <v-icon color="white">swap_horiz</v-icon>
+              <!-- switch role -->
               <v-menu offset-y v-if="roleList.length > 0">
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on">
-                    <span class="title">切换</span>
+                    <span class="title">切换角色</span>
                   </v-btn>
                 </template>
                 <v-list>
@@ -32,11 +38,15 @@
                   </v-list-tile>
                 </v-list>
               </v-menu>
-              <v-btn dark flat @click="goToBindingPage()">
-                <v-icon>add</v-icon> <span>添加绑定</span>
-              </v-btn>
 
-              <v-menu offset-y v-if="studentList.length > 0">
+              <!-- switch student -->
+              <v-menu
+                offset-y
+                v-if="
+                  currentRole.code === roleType.Parents &&
+                    studentList.length > 0
+                "
+              >
                 <template v-slot:activator="{ on }">
                   <v-btn flat dark v-on="on">
                     <span class="title">切换学生</span>
@@ -52,6 +62,10 @@
                   </v-list-tile>
                 </v-list>
               </v-menu>
+
+              <v-btn dark flat @click="goToBindingPage()">
+                <v-icon>add</v-icon> <span>添加绑定</span>
+              </v-btn>
             </v-flex>
             <v-flex class="pa-2">
               <v-layout row wrap>
@@ -224,17 +238,23 @@ import {
   currentRole,
   currentStudent
 } from '../store/auth/auth.paths'
-import { RoleVo, Student } from '../models/user.model'
+import { RoleVo, Student, RoleType, parentsTypes } from '../models/user.model'
 import { storeService } from '../services/store.service'
 
 export default Vue.extend({
   name: 'my',
+  data: function() {
+    return {
+      roleType: RoleType
+    }
+  },
   components: {},
   computed: {
     ...get(authModulePath, {
       user,
       roleList,
-      currentRole
+      currentRole,
+      currentStudent
     }),
     studentList() {
       const that: any = this
@@ -266,6 +286,13 @@ export default Vue.extend({
 
       const store: any = this.$store
       store.set(authModulePath + currentStudent, student)
+    },
+    getRelationName(student: Student) {
+      const parentsType = parentsTypes.filter(
+        p => p.value === student.parentType
+      )[0]
+
+      return parentsType ? parentsType.text : ''
     }
   }
 })

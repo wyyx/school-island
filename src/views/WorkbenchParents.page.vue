@@ -1,5 +1,5 @@
 <template>
-  <div class="container pa-0">
+  <div class="fill-height">
     <Developing v-if="developing"></Developing>
   </div>
 </template>

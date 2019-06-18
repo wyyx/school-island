@@ -69,7 +69,7 @@ export enum RoleType {
   ParentsCommittee = 600
 }
 
-export const parentTypes = [
+export const parentsTypes = [
   {
     value: 1,
     text: '爸爸'
