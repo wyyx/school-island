@@ -42,7 +42,9 @@
                     <v-list-tile
                       v-for="(aclass, index) in classList"
                       :key="index"
-                      @click="switchClass(aclass)"
+                      @click="
+                        switchClass(aclass), (showClassMenu = !showClassMenu)
+                      "
                     >
                       <v-list-tile-title>{{
                         aclass.className
@@ -71,9 +73,46 @@
                   </v-btn>
                 </v-flex>
                 <v-flex class="">
-                  <v-btn depressed color="transparent" fab>
-                    <v-icon>add_circle_outline</v-icon>
-                  </v-btn>
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        depressed
+                        color="transparent"
+                        fab
+                        light
+                        v-on="on"
+                        class="subheading"
+                      >
+                        <v-icon>add_circle_outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile @click="inDeveloping">
+                        <v-list-tile-title>
+                          <v-icon>aspect_ratio</v-icon>
+                          <span class="menu-text pl-2">扫一扫</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile @click="inDeveloping">
+                        <v-list-tile-title>
+                          <v-icon>assignment</v-icon>
+                          <span class="menu-text pl-2">任务中心</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile>
+                        <v-list-tile-title>
+                          <v-icon>vertical_split</v-icon>
+                          <span class="menu-text pl-2">任教班级</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile @click="inDeveloping">
+                        <v-list-tile-title>
+                          <v-icon>folder_shared</v-icon>
+                          <span class="menu-text pl-2">我的档案</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -208,6 +247,12 @@
         ~~~ 到底了 ~~~
       </v-flex>
     </v-layout>
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+      {{ message }}
+      <v-btn dark flat @click="showSnackbar = false">
+        关闭
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -236,6 +281,7 @@ import { userService } from '../services/user.service'
 import { get } from 'vuex-pathify'
 import { authModulePath, user, currentRole } from '../store/auth/auth.paths'
 import { UserInfo } from '../models/user.model'
+import { snackbarMixin } from '../mixins/snackbar.mixin'
 moment.locale('zh-CN')
 
 interface Image {
@@ -248,6 +294,7 @@ interface Image {
 const PER_PAGE_SIZE = 20
 
 export default Vue.extend({
+  mixins: [snackbarMixin],
   components: {
     swiper,
     swiperSlide
@@ -521,6 +568,10 @@ export default Vue.extend({
     },
     hideLoadingMore() {
       this.loadingMore = false
+    },
+    inDeveloping() {
+      const that: any = this
+      that.showMessage('此功能正在开发中，敬请期待...')
     }
   }
 })
@@ -600,5 +651,9 @@ export default Vue.extend({
 .scale-leave-to {
   opacity: 0;
   transform: scale(0);
+}
+
+.menu-text {
+  vertical-align: top;
 }
 </style>

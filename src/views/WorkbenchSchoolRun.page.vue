@@ -21,18 +21,35 @@
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 pa-2">
-                <v-autocomplete
-                  class="pa-0"
-                  v-model="grade"
-                  :items="gradeItems"
-                  color="primary"
-                  item-text="label"
-                  item-value="value"
-                  hide-no-data
-                  hide-selected
-                  placeholder="选择年级"
-                  hide-details
-                ></v-autocomplete>
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      light
+                      flat
+                      v-on="on"
+                      class="subheading"
+                      @click="showGradeMenu = !showGradeMenu"
+                    >
+                      <span class="pr-1">
+                        {{ currentGrade.label }}
+                      </span>
+
+                      <v-icon v-if="showGradeMenu">arrow_drop_up</v-icon>
+                      <v-icon v-else>arrow_drop_down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-tile
+                      v-for="(grade, index) in gradeItems"
+                      :key="index"
+                      @click="
+                        switchGrade(grade), (showGradeMenu = !showGradeMenu)
+                      "
+                    >
+                      <v-list-tile-title>{{ grade.label }}</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
               </div>
             </v-flex>
             <v-spacer></v-spacer>
@@ -44,9 +61,46 @@
                   </v-btn>
                 </v-flex>
                 <v-flex>
-                  <v-btn depressed color="transparent" fab>
-                    <v-icon>add_circle_outline</v-icon>
-                  </v-btn>
+                  <v-menu offset-y>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        depressed
+                        color="transparent"
+                        fab
+                        light
+                        v-on="on"
+                        class="subheading"
+                      >
+                        <v-icon>add_circle_outline</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile @click="inDeveloping">
+                        <v-list-tile-title>
+                          <v-icon>equalizer</v-icon>
+                          <span class="menu-text pl-2">数据中心</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile @click="inDeveloping">
+                        <v-list-tile-title>
+                          <v-icon>assignment</v-icon>
+                          <span class="menu-text pl-2">任务中心</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile>
+                        <v-list-tile-title>
+                          <v-icon>school</v-icon>
+                          <span class="menu-text pl-2">校园展示</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                      <v-list-tile @click="inDeveloping">
+                        <v-list-tile-title>
+                          <v-icon>folder_shared</v-icon>
+                          <span class="menu-text pl-2">我的档案</span>
+                        </v-list-tile-title>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
                 </v-flex>
               </v-layout>
             </v-flex>
@@ -133,6 +187,12 @@
         ~~~ 到底了 ~~~
       </v-flex>
     </v-layout>
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+      {{ message }}
+      <v-btn dark flat @click="showSnackbar = false">
+        关闭
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -145,6 +205,7 @@ import { TopItem } from '../models/duty-top.model'
 
 import moment from 'moment'
 import { userService } from '../services/user.service'
+import { snackbarMixin } from '../mixins/snackbar.mixin'
 moment.locale('zh-CN')
 
 let now = moment().format('M月D日，A，h点m分')
@@ -153,13 +214,17 @@ console.log('TCL: now', now)
 const TOP_NUM = 10
 
 export default Vue.extend({
+  mixins: [snackbarMixin],
   components: {},
   created() {
     this.loadTop()
   },
   data: function() {
     return {
-      grade: '全部年级',
+      currentGrade: {
+        label: '全部年级',
+        value: '全部年级'
+      },
       gradeItems: [
         {
           label: '全部年级',
@@ -205,25 +270,33 @@ export default Vue.extend({
           sortable: false,
           value: 'classFullName'
         },
-        { text: '得分', align: 'right', sortable: true, value: 'amountScore' },
+        {
+          text: '得分',
+          align: 'right',
+          sortable: true,
+          value: 'amountScore'
+        },
         { text: '星级', align: 'right', sortable: true, value: 'starLevel' }
       ],
       topItems: [] as TopItem[],
       allTopItems: [] as TopItem[],
       showAllTopBtn: true,
       showLoading: false,
-      search: ''
+      search: '',
+      showGradeMenu: false
     }
   },
   computed: {
     filteredTopItems() {
       const that: any = this
 
-      if (that.grade === '全部年级') {
+      if (that.currentGrade.value === '全部年级') {
         return that.addRanking(that.topItems)
       }
 
-      return that.addRanking(that.topItems).filter(e => e.grade === that.grade)
+      return that
+        .addRanking(that.topItems)
+        .filter(e => e.grade === that.currentGrade.value)
     }
   },
   methods: {
@@ -235,9 +308,9 @@ export default Vue.extend({
     loadTop() {
       this.showLoading = true
       dutyService
-        .getDutyTop(userService.schoolInfo.schoolId, 0, 1000)
+        .getDutyTop(0, 1000)
         .then(res => {
-          this.allTopItems = res.data.content
+          this.allTopItems = res.data.content || []
           this.topItems = this.allTopItems ? this.allTopItems.slice(0, 10) : []
           this.showLoading = false
         })
@@ -296,10 +369,10 @@ export default Vue.extend({
           title = '冠军'
           break
         case 2:
-          title = '季军'
+          title = '亚军'
           break
         case 3:
-          title = '亚军'
+          title = '季军'
           break
         default:
           title = ranking
@@ -307,6 +380,14 @@ export default Vue.extend({
       }
 
       return title
+    },
+    switchGrade(grade: { label: string; value: string }) {
+      console.log('TCL: switchGrade -> grade', grade)
+      this.currentGrade = grade
+    },
+    inDeveloping() {
+      const that: any = this
+      that.showMessage('此功能正在开发中，敬请期待...')
     }
   }
 })
@@ -369,5 +450,9 @@ export default Vue.extend({
 
 .copper {
   color: #f0ae98;
+}
+
+.menu-text {
+  vertical-align: top;
 }
 </style>

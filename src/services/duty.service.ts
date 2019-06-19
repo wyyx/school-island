@@ -43,11 +43,10 @@ export class DutyService {
     )
   }
 
-  getDutyTop(schoolId: string, pageNo: number = 0, pageSize: number = 10) {
+  getDutyTop(pageNo: number = 0, pageSize: number = 10) {
     return this.httpConfigService.httpSercvice.post<DutyTopResponse>(
       this.baseUrl + '/w/score-week/list-page',
       {
-        schoolId,
         pageNo,
         pageSize
       }
