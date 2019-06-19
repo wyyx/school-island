@@ -27,6 +27,7 @@ export const mockUserInfo: UserInfo = {
   name: '王磊',
   nickname: '星空',
   province: '成都',
+  teacherId: 0,
   roleVoList: [
     {
       name: '家长',

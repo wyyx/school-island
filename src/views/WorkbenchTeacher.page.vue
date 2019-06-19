@@ -22,7 +22,7 @@
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 py-1 px-2">
                 <v-autocomplete
-                  @change="onAutocompleteChanged"
+                  @change="onClassChanged"
                   class="pa-0"
                   v-model="classId"
                   :items="classList"
@@ -33,6 +33,7 @@
                   hide-selected
                   placeholder="选择班级"
                   hide-details
+                  :clearable="false"
                 ></v-autocomplete>
                 <v-rating
                   class="py-1"
@@ -180,8 +181,13 @@
         </v-flex>
       </v-layout>
     </v-card>
+    <v-layout row wrap v-if="loadingMore" class="bottom-hint pa-2">
+      <v-flex class="h-center">
+        <v-progress-circular indeterminate color="accent"></v-progress-circular>
+      </v-flex>
+    </v-layout>
     <!-- bottom hint -->
-    <v-layout row wrap class="bottom-hint pa-2">
+    <v-layout v-if="!hasMore" row wrap class="bottom-hint pa-2">
       <v-flex class="grey--text text-xs-center">
         ~~~ 到底了 ~~~
       </v-flex>
@@ -223,6 +229,7 @@ interface Image {
   h: number
   title: string
 }
+const PER_PAGE_SIZE = 20
 
 export default Vue.extend({
   components: {
@@ -261,7 +268,9 @@ export default Vue.extend({
         }
       },
       showSwiper: false,
-      chart: {} as ECharts
+      chart: {} as ECharts,
+      loadingMore: false,
+      hasMore: true
     }
   },
   watch: {
@@ -297,12 +306,29 @@ export default Vue.extend({
   created() {
     this.loadDeducionList(this.classId)
     const that: any = this
-    this.loadClassList((that.user as UserInfo).id)
+    this.loadClassList((that.user as UserInfo).teacherId)
   },
   mounted() {
     this.loadDeducionWeekHistory(this.classId)
+    this.scroll()
   },
   methods: {
+    scroll() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop
+          ) +
+            window.innerHeight ===
+          document.documentElement.offsetHeight
+
+        if (bottomOfWindow) {
+          this.loadMore()
+        }
+      }
+    },
     onBack() {
       this.$router.push({
         name: 'home'
@@ -352,8 +378,9 @@ export default Vue.extend({
           })
         : []
     },
-    onAutocompleteChanged() {
-      console.log('autocomplete')
+    onClassChanged() {
+      console.log('autocomplete', this.classId)
+      this.hasMore = true
     },
     initEcharts() {
       let chart = echarts.init(document.getElementById(
@@ -378,10 +405,16 @@ export default Vue.extend({
       // use configuration item and data specified to show chart
       chart.setOption(option)
     },
-    loadDeducionList(classId: number) {
-      dutyService.getDeductionList(classId, 0, 100).then(res => {
-        this.deductionList = res.data.content || []
-      })
+    loadDeducionList(
+      classId: number,
+      pageNum: number = 0,
+      pageSize: number = 20
+    ) {
+      dutyService
+        .getDeductionList(classId, pageNum, PER_PAGE_SIZE)
+        .then(res => {
+          this.deductionList = res.data.content || []
+        })
     },
     loadClassList(teacherId: number) {
       dutyService.getClassList(teacherId).then(res => {
@@ -414,6 +447,53 @@ export default Vue.extend({
     },
     showThumbnail(imgUrls: string[]) {
       return imgUrls && imgUrls.length > 0
+    },
+    loadMore() {
+      console.log('loadMore')
+
+      // return when no more data
+      if (!this.hasMore) {
+        return
+      }
+
+      // return when is loading more
+      if (this.loadingMore) {
+        return
+      }
+
+      // loading more when reaching page bottom
+      this.showLoadingMore()
+
+      const currentPageIndex = Math.ceil(
+        this.deductionList.length / PER_PAGE_SIZE - 1
+      )
+
+      console.log('TCL: loadMore -> currentPageIndex', currentPageIndex)
+
+      setTimeout(() => {
+        dutyService
+          .getDeductionList(this.classId, currentPageIndex + 1, PER_PAGE_SIZE)
+          .then(res => {
+            const newDeductionList = res.data.content || []
+            console.log('TCL: loadMore -> newDeductionList', newDeductionList)
+            if (newDeductionList.length < 1) {
+              this.hasMore = false
+            }
+
+            this.deductionList = this.deductionList.concat(newDeductionList)
+
+            this.hideLoadingMore()
+          })
+          .catch(err => {
+            this.hideLoadingMore()
+          })
+      }, 2000)
+    },
+    showLoadingMore() {
+      this.loadingMore = true
+    },
+    hideLoadingMore() {
+      this.loadingMore = false
     }
   }
 })

@@ -1,18 +1,50 @@
 {
-  "address": "string",
-  "code": "string",
-  "description": "string",
-  "email": "string",
-  "history": "string",
-  "idea": "string",
-  "lat": 0,
-  "lng": 0,
-  "logo": ["string"],
-  "masterId": 0,
-  "masterName": "string",
-  "mobile": "string",
-  "name": "string",
-  "qrCode": "string",
-  "start": "string",
-  "tel": "string"
+  "content": {
+    "id": 25,
+    "name": "王琪",
+    "nickname": "瓦瓦",
+    "sex": 1,
+    "headImgUrl": "http://thirdwx.qlogo.cn/mmopen/vi_32/6e3KP6G2HPfL75QgCNNyDD5cpdIGqwXXiadI4QpiaM9Bof1uR8P5JSqibuOSngeypQnwzqIaIyBY04sT5oaSvicQhQ/132",
+    "language": "zh_CN",
+    "country": "中国",
+    "province": "四川",
+    "city": "成都",
+    "roleVoList": [
+      { "code": 300, "name": "家长" },
+      { "code": 500, "name": "老师" }
+    ],
+    "studentVoList": [
+      {
+        "id": 21,
+        "schoolId": 0,
+        "classId": 1,
+        "studentNumber": "32",
+        "name": "王子恒",
+        "userName": "",
+        "sex": "1",
+        "mobile": "18010669856",
+        "nickname": "",
+        "idcard": "511302201009096434",
+        "rainAmount": 0.0,
+        "parentType": 1
+      },
+      {
+        "id": 22,
+        "schoolId": 0,
+        "classId": 1,
+        "studentNumber": "8",
+        "name": "邓诗忆",
+        "userName": "",
+        "sex": "2",
+        "mobile": "13881950064",
+        "nickname": "",
+        "idcard": "510122201010190042",
+        "rainAmount": 0.0,
+        "parentType": 2
+      }
+    ],
+    "teacherId": 38
+  },
+  "status": "OK",
+  "errorCode": "0"
 }

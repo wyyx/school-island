@@ -31,6 +31,7 @@ export interface UserInfo {
   roleVoList: RoleVo[]
   sex: number
   studentVoList: Student[]
+  teacherId: number
 }
 
 export interface RoleVo {
