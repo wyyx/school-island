@@ -2,7 +2,7 @@
   <div class="container pa-0">
     <v-card color="primary" class="mb-2">
       <v-layout class="teachers py-3" row wrap>
-        <v-flex xs4>
+        <v-flex xs3>
           <v-layout row wrap fill-height justify-center align-center>
             <v-flex shrink>
               <v-avatar :tile="false" :size="64" color="grey lighten-4">
@@ -11,57 +11,70 @@
             </v-flex>
           </v-layout>
         </v-flex>
-        <v-flex class="white--text" xs8>
+        <v-flex class="white--text" xs9>
           <v-layout column wrap>
-            <v-flex class="pa-2 title">
-              <span v-if="currentRole.code === roleType.Teacher" class="pr-3">
-                {{ user.name }}{{ currentRole.name }}
-              </span>
-              <span v-if="currentRole.code === roleType.Parents" class="pr-3">
-                {{ currentStudent.name }}的{{ getRelationName(currentStudent) }}
-              </span>
-              <span v-if="currentRole.code === roleType.SchoolRun" class="pr-3">
-                {{ user.name }}{{ currentRole.name }}
-              </span>
-              <v-icon color="white">swap_horiz</v-icon>
-              <!-- switch role -->
-              <v-menu offset-y v-if="roleList.length > 0">
-                <template v-slot:activator="{ on }">
-                  <v-btn flat dark v-on="on">
-                    <span class="title">切换</span>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-tile
-                    :class="{
-                      'grey lighten-3': currentRole.code === role.code
-                    }"
-                    v-for="role in roleList || []"
-                    :key="role.code"
-                    @click="switchRole(role)"
-                  >
-                    {{ role.name }}
-                  </v-list-tile>
-                </v-list>
-              </v-menu>
-              <v-btn dark flat @click="goToBindingPage()">
-                <v-icon>add</v-icon> <span>添加绑定</span>
-              </v-btn>
-            </v-flex>
-            <v-flex class="pa-2">
+            <v-flex class="title">
               <v-layout row wrap>
+                <v-flex class="v-center shrink pr-3">
+                  <span
+                    v-if="currentRole.code === roleType.Teacher"
+                    class="pr-2"
+                  >
+                    {{ user.name }}{{ currentRole.name }}
+                  </span>
+                  <span
+                    v-if="currentRole.code === roleType.Parents"
+                    class="pr-2"
+                  >
+                    {{ currentStudent.name }}的{{
+                      getRelationName(currentStudent)
+                    }}
+                  </span>
+                  <span
+                    v-if="currentRole.code === roleType.SchoolRun"
+                    class="pr-2"
+                  >
+                    {{ user.name }}{{ currentRole.name }}
+                  </span>
+                </v-flex>
+                <v-flex class="shrink v-center">
+                  <v-icon color="white">swap_horiz</v-icon>
+                </v-flex>
+                <v-flex class="shrink">
+                  <!-- switch role -->
+                  <v-menu offset-y v-if="roleList.length > 0">
+                    <template v-slot:activator="{ on }">
+                      <v-btn flat dark v-on="on" class="ma-0">
+                        <span class="title">切换</span>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-tile
+                        :class="{
+                          'grey lighten-3': currentRole.code === role.code
+                        }"
+                        v-for="role in roleList || []"
+                        :key="role.code"
+                        @click="switchRole(role)"
+                      >
+                        {{ role.name }}
+                      </v-list-tile>
+                      <v-list-tile @click="goToBindingPage()">
+                        <v-icon>add</v-icon> <span>添加</span>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                </v-flex>
+              </v-layout>
+            </v-flex>
+            <v-flex>
+              <v-layout row wrap @click="goToUserSettingsPage">
                 <v-flex class="v-center">
                   <span class="pr-1">昵称：</span
                   ><span>{{ user.nickname }}</span>
                 </v-flex>
                 <v-flex shrink class="px-2">
-                  <v-btn
-                    large
-                    flat
-                    icon
-                    color="white"
-                    @click="goToUserSettingsPage"
-                  >
+                  <v-btn flat icon color="white">
                     <v-icon>keyboard_arrow_right</v-icon>
                   </v-btn>
                 </v-flex>

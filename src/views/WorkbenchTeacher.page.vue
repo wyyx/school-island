@@ -21,20 +21,36 @@
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 py-1 px-2">
-                <v-autocomplete
-                  @change="onClassChanged"
-                  class="pa-0"
-                  v-model="classId"
-                  :items="classList"
-                  color="primary"
-                  item-text="className"
-                  item-value="classId"
-                  hide-no-data
-                  hide-selected
-                  placeholder="选择班级"
-                  hide-details
-                  :clearable="false"
-                ></v-autocomplete>
+                <v-menu offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      light
+                      flat
+                      v-on="on"
+                      class="subheading"
+                      @click="showClassMenu = !showClassMenu"
+                    >
+                      <span class="pr-1">
+                        {{ currentClass.className }}
+                      </span>
+
+                      <v-icon v-if="showClassMenu">arrow_drop_up</v-icon>
+                      <v-icon v-else>arrow_drop_down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-tile
+                      v-for="(aclass, index) in classList"
+                      :key="index"
+                      @click="switchClass(aclass)"
+                    >
+                      <v-list-tile-title>{{
+                        aclass.className
+                      }}</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+
                 <v-rating
                   class="py-1"
                   color="accent"
@@ -181,13 +197,13 @@
         </v-flex>
       </v-layout>
     </v-card>
-    <v-layout row wrap v-if="loadingMore" class="bottom-hint pa-2">
+    <v-layout row wrap v-if="loadingMore" class="bottom-hint pa-3">
       <v-flex class="h-center">
         <v-progress-circular indeterminate color="accent"></v-progress-circular>
       </v-flex>
     </v-layout>
     <!-- bottom hint -->
-    <v-layout v-if="!hasMore" row wrap class="bottom-hint pa-2">
+    <v-layout v-if="!hasMore" row wrap class="bottom-hint pa-3">
       <v-flex class="grey--text text-xs-center">
         ~~~ 到底了 ~~~
       </v-flex>
@@ -238,7 +254,7 @@ export default Vue.extend({
   },
   data: function() {
     return {
-      classId: 0,
+      currentClass: {} as ClassModel,
       classList: [] as ClassModel[],
       rating: 4,
       model: 'tab-1',
@@ -270,13 +286,16 @@ export default Vue.extend({
       showSwiper: false,
       chart: {} as ECharts,
       loadingMore: false,
-      hasMore: true
+      hasMore: true,
+      showClassMenu: false
     }
   },
   watch: {
-    classId(newVal, oldVal) {
-      this.loadDeducionList(newVal)
-      this.loadDeducionWeekHistory(this.classId)
+    currentClass(newVal, oldVal) {
+      console.log('TCL: currentClass -> newVal', newVal)
+      const aclass = newVal as ClassModel
+      this.loadDeducionList(aclass.classId)
+      this.loadDeducionWeekHistory(aclass.classId)
     },
     showSwiper(newVal, oldVal) {
       // this.chart.resize()
@@ -304,15 +323,26 @@ export default Vue.extend({
     }
   },
   created() {
-    this.loadDeducionList(this.classId)
+    this.loadDeducionList(this.currentClass.classId)
     const that: any = this
     this.loadClassList((that.user as UserInfo).teacherId)
   },
   mounted() {
-    this.loadDeducionWeekHistory(this.classId)
+    console.log(
+      'TCL: mounted -> this.currentClass.classId',
+      this.currentClass.classId
+    )
+
     this.scroll()
   },
   methods: {
+    switchClass(aclass: ClassModel) {
+      console.log('TCL: aclass', aclass)
+      this.currentClass = aclass
+      this.hasMore = true
+
+      this.loadDeducionWeekHistory(this.currentClass.classId)
+    },
     scroll() {
       window.onscroll = () => {
         let bottomOfWindow =
@@ -378,10 +408,6 @@ export default Vue.extend({
           })
         : []
     },
-    onClassChanged() {
-      console.log('autocomplete', this.classId)
-      this.hasMore = true
-    },
     initEcharts() {
       let chart = echarts.init(document.getElementById(
         'chart'
@@ -421,14 +447,11 @@ export default Vue.extend({
         this.classList = res.data.content || []
 
         // show first class default
-        const firstClassId =
-          this.classList.length > 0 ? this.classList[0].classId : 0
+        const firstClass =
+          this.classList.length > 0 ? this.classList[0] : ({} as ClassModel)
 
-        this.setClassId(firstClassId)
+        this.switchClass(firstClass)
       })
-    },
-    setClassId(classId: number) {
-      this.classId = classId
     },
     loadDeducionWeekHistory(classId: number) {
       dutyService.getDeductionHistoryByWeek(classId).then(res => {
@@ -472,7 +495,11 @@ export default Vue.extend({
 
       setTimeout(() => {
         dutyService
-          .getDeductionList(this.classId, currentPageIndex + 1, PER_PAGE_SIZE)
+          .getDeductionList(
+            this.currentClass.classId,
+            currentPageIndex + 1,
+            PER_PAGE_SIZE
+          )
           .then(res => {
             const newDeductionList = res.data.content || []
             console.log('TCL: loadMore -> newDeductionList', newDeductionList)
