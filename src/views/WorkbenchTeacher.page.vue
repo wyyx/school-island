@@ -164,12 +164,13 @@
                 </v-card-title>
                 <v-data-table
                   :headers="headers"
-                  :items="deductionList"
+                  :items="currentDeductionList"
                   class="elevation-0"
                   hide-actions
                   :search="search"
                   no-data-text="暂无数据..."
                   no-results-text="没有匹配的数据..."
+                  :pagination.sync="pagination"
                 >
                   <template v-slot:items="props">
                     <td class="text-xs-right">
@@ -310,13 +311,15 @@ export default Vue.extend({
           text: '时间',
           align: 'right',
           sortable: true,
-          value: 'createTime'
+          value: 'createTime',
+          sort: 'asc'
         },
         { text: '类别', align: 'right', sortable: false, value: 'checkName' },
         { text: '扣分', align: 'right', sortable: true, value: 'changeScore' },
         { text: '备注', align: 'right', sortable: false, value: 'remarks' }
       ],
-      deductionList: [] as Deduction[],
+      pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
+      deductionListEntities: {} as { [classId: number]: Deduction[] },
       deductionWeekHistory: [] as DeductionHistoryByWeekItem[],
       search: '',
       imgs: [
@@ -367,6 +370,10 @@ export default Vue.extend({
     series() {
       const that: any = this
       return that.converToSeries(that.deductionWeekHistory)
+    },
+    currentDeductionList() {
+      const that: any = this
+      return that.deductionListEntities[that.currentClass.classId] || []
     }
   },
   created() {
@@ -387,6 +394,9 @@ export default Vue.extend({
       console.log('TCL: aclass', aclass)
       this.currentClass = aclass
       this.hasMore = true
+
+      // this.currentDeductionList =
+      //   this.deductionListEntities[aclass.classId] || []
 
       this.loadDeducionWeekHistory(this.currentClass.classId)
     },
@@ -480,13 +490,17 @@ export default Vue.extend({
     },
     loadDeducionList(
       classId: number,
-      pageNum: number = 0,
+      pageNum: number = 1,
       pageSize: number = 20
     ) {
       dutyService
         .getDeductionList(classId, pageNum, PER_PAGE_SIZE)
         .then(res => {
-          this.deductionList = res.data.content || []
+          const deductionList = res.data.content || []
+          this.deductionListEntities = {
+            ...this.deductionListEntities,
+            [classId]: deductionList
+          }
         })
     },
     loadClassList(teacherId: number) {
@@ -534,17 +548,18 @@ export default Vue.extend({
       // loading more when reaching page bottom
       this.showLoadingMore()
 
-      const currentPageIndex = Math.ceil(
-        this.deductionList.length / PER_PAGE_SIZE - 1
-      )
+      const that: any = this
 
-      console.log('TCL: loadMore -> currentPageIndex', currentPageIndex)
+      const currentPage = Math.ceil(
+        that.currentDeductionList.length / PER_PAGE_SIZE
+      )
+      console.log('TCL: loadMore -> currentPage', currentPage)
 
       setTimeout(() => {
         dutyService
           .getDeductionList(
             this.currentClass.classId,
-            currentPageIndex + 1,
+            currentPage + 1,
             PER_PAGE_SIZE
           )
           .then(res => {
@@ -554,14 +569,22 @@ export default Vue.extend({
               this.hasMore = false
             }
 
-            this.deductionList = this.deductionList.concat(newDeductionList)
+            let tempDeductionList = this.currentDeductionList
+            console.log(
+              'TCL: loadMore -> this.currentDeductionList',
+              this.currentDeductionList
+            )
+
+            this.deductionListEntities[
+              this.currentClass.classId
+            ] = tempDeductionList.concat(newDeductionList)
 
             this.hideLoadingMore()
           })
           .catch(err => {
             this.hideLoadingMore()
           })
-      }, 2000)
+      }, 0)
     },
     showLoadingMore() {
       this.loadingMore = true

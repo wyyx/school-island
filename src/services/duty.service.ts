@@ -10,7 +10,7 @@ export class DutyService {
 
   httpConfigService: HttpConfigService = httpConfigService
 
-  getDeductionList(classId: number, pageNo: number = 0, pageSize: number = 10) {
+  getDeductionList(classId: number, pageNo: number = 1, pageSize: number = 10) {
     console.log('TCL: DutyService -> getDeductionList -> classId', classId)
     return this.httpConfigService.httpSercvice.post<DeductionListResponse>(
       this.baseUrl + '/w/score/list-page',
