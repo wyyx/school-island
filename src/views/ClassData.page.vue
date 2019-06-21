@@ -2,7 +2,7 @@
   <div>
     <div class="box">
       <div class="Grade_entry">
-        <div @click="GoBack">
+        <div @click="goBack">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">班级数据</div>
@@ -27,51 +27,107 @@
           <v-card flat>
             <v-card-text>
               <div class="Grade_box">
-                <div>
-                  <v-flex xs11 sm6 d-flex>
-                    <v-select :items="itemsA" label="三年级下" solo></v-select>
+                <v-layout row wrap>
+                  <v-flex xs6 class="px-2">
+                    <v-select
+                      v-model="currentClass"
+                      :items="classList"
+                      item-text="className"
+                      item-value="classId"
+                      :return-object="true"
+                      :hide-details="true"
+                    ></v-select>
                   </v-flex>
-                </div>
-                <div>
-                  <v-flex xs11 sm6 d-flex>
-                    <v-select :items="itemsB" label="期末考评" solo></v-select>
+                  <v-flex xs6 class="px-2">
+                    <v-select :items="itemsB" v-model="semister"></v-select>
                   </v-flex>
-                </div>
-                <div>2019.5.27</div>
+                </v-layout>
               </div>
-              <div>
-                <!-- <ClassDataClassGrade></ClassDataClassGrade> -->
-              </div>
+              <div></div>
               <div class="Grade">
-                <div class="Grade_text">个人成绩</div>
-                <div class="Conversion_box">
-                  <div class="Conversion">
-                    <span>
-                      学号
-                      <img class="_img" src="../assets/ConversionA.svg" alt />
-                    </span>
-                    <span>
-                      综合
-                      <img class="_img" src="../assets/ConversionB.svg" alt />
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div class="Grouping_box">
-                <div class="Grouping git_style">
-                  <span>学号</span>
-                  <span>姓名</span>
-                  <span>小组</span>
-                  <span>详情</span>
-                </div>
-                <div class="Grouping _top">
-                  <span>1</span>
-                  <span>李小龙</span>
-                  <span>一组</span>
-                  <span @click="DetailsA">
-                    <img class="_img" src="../assets/View.svg" alt />
-                  </span>
-                </div>
+                <v-card flat>
+                  <h3>
+                    个人成绩
+                  </h3>
+                  <v-card-title class="pa-1">
+                    <v-text-field
+                      v-model="search"
+                      append-icon="search"
+                      label="搜索"
+                      single-line
+                      hide-details
+                    ></v-text-field>
+                  </v-card-title>
+                  <v-data-table
+                    :headers="headers"
+                    :items="[]"
+                    class="elevation-0"
+                    hide-actions
+                    :search="search"
+                    no-data-text="暂无数据..."
+                    no-results-text="没有匹配的数据..."
+                    :pagination.sync="pagination"
+                  >
+                    <template v-slot:items="props">
+                      <td class="text-xs-right">
+                        {{ formatDate(props.item.createTime) }}
+                      </td>
+                      <td class="text-xs-right">{{ props.item.checkName }}</td>
+                      <td class="text-xs-right">
+                        {{ props.item.changeScore }}分
+                      </td>
+                      <td class="text-xs-right">
+                        <div>
+                          {{ props.item.remarks }}
+                          <v-card
+                            v-if="showThumbnail(props.item.imageUrls)"
+                            class="pa-0 mt-1 elevation-0"
+                            @click="toShowSwiper(props.item.imageUrls)"
+                          >
+                            <v-container grid-list-sm class="pa-0" fluid>
+                              <v-layout
+                                v-if="props.item.imageUrls"
+                                class="images-wrapper"
+                                row
+                                wrap
+                              >
+                                <v-flex
+                                  v-for="img in props.item.imageUrls"
+                                  :key="img"
+                                  xs6
+                                  d-flex
+                                >
+                                  <v-card flat tile class="d-flex pa-0">
+                                    <v-img
+                                      :src="img"
+                                      :lazy-src="img"
+                                      aspect-ratio="1"
+                                      class="grey lighten-2"
+                                    >
+                                      <template v-slot:placeholder>
+                                        <v-layout
+                                          fill-height
+                                          align-center
+                                          justify-center
+                                          ma-0
+                                        >
+                                          <v-progress-circular
+                                            indeterminate
+                                            color="grey lighten-5"
+                                          ></v-progress-circular>
+                                        </v-layout>
+                                      </template>
+                                    </v-img>
+                                  </v-card>
+                                </v-flex>
+                              </v-layout>
+                            </v-container>
+                          </v-card>
+                        </div>
+                      </td>
+                    </template>
+                  </v-data-table>
+                </v-card>
               </div>
             </v-card-text>
           </v-card>
@@ -88,6 +144,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { classesModulePath, classList } from '../store/classes/classes.paths'
+import { ClassModel } from '../models/class.model'
+import { get } from 'vuex-pathify'
+import { authModulePath, user } from '../store/auth/auth.paths'
 
 export default Vue.extend({
   name: 'ClassData',
@@ -102,27 +162,52 @@ export default Vue.extend({
         { title: '班级成绩' },
         { title: '基础数据' }
       ],
-      itemsA: ['三年级下', '二年级上', '二年级下', '一年级上', '一年级下'],
-      itemsB: ['期末考评', '期中考评', '月度考评']
+      itemsB: ['上学期期末考评', '下学期期末考评'],
+      currentClass: {} as ClassModel,
+      semister: '上学期期末考评',
+      headers: [
+        {
+          text: '时间',
+          align: 'right',
+          sortable: true,
+          value: 'createTime',
+          sort: 'asc'
+        },
+        { text: '类别', align: 'right', sortable: false, value: 'checkName' },
+        { text: '扣分', align: 'right', sortable: true, value: 'changeScore' },
+        { text: '备注', align: 'right', sortable: false, value: 'remarks' }
+      ],
+      pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
+      search: ''
     }
   },
   methods: {
-    GoBack() {
+    goBack() {
       this.$router.push({
         name: 'my-classes'
       })
     },
     //详情
-    DetailsA() {
+    goToStudentGradeDetailPage() {
       this.$router.push({ name: 'student-grade-detail' })
+    },
+    setInitClass() {
+      const that: any = this
+      this.currentClass = that.classList[0]
     }
   },
+  computed: {
+    ...get(classesModulePath, {
+      classList
+    }),
+    ...get(authModulePath, {
+      user
+    })
+  },
   mounted() {},
-  created() {},
-  filters: {},
-  computed: {},
-  watch: {},
-  directives: {}
+  created() {
+    this.setInitClass()
+  }
 })
 </script>
 

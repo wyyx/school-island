@@ -338,9 +338,7 @@ export default Vue.extend({
       this.loadDeducionList(aclass.classId)
       this.loadDeducionWeekHistory(aclass.classId)
     },
-    showSwiper(newVal, oldVal) {
-      // this.chart.resize()
-    }
+    showSwiper(newVal, oldVal) {}
   },
   computed: {
     ...get(authModulePath, {

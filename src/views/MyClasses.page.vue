@@ -64,10 +64,9 @@
       </div>
     </div>
     <div class="Class_transcript">
-      <div class="Grade_text" @click="goToClassDataPage">
-        <div>班级成绩</div>
-        <div>2019.5.27</div>
-        <div>
+      <div class="flex pa-2" @click="goToClassDataPage">
+        <div class="grow">班级成绩</div>
+        <div class="shrink">
           <img class="_img" src="../assets/right.svg" alt />
         </div>
       </div>

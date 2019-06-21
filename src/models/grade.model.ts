@@ -1,3 +1,5 @@
+import { Student } from './user.model'
+
 // brief grade
 export interface BriefGradeResponse {
   content: BriefGrade
@@ -61,4 +63,11 @@ export interface LatestSubjectGradeVo {
   star: number
   subject: string
   teacherName: string
+}
+
+export interface StudentListResponse {
+  content: Student[]
+  errorCode: string
+  errorMsg: string
+  status: string
 }

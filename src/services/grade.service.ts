@@ -1,5 +1,5 @@
 import { HttpConfigService, httpConfigService } from './http-config.service'
-import { BriefGradeResponse } from '@/models/grade.model'
+import { BriefGradeResponse, StudentListResponse } from '@/models/grade.model'
 
 export class GradeService {
   baseUrl: string = ''
@@ -8,6 +8,15 @@ export class GradeService {
   getBriefGrade(classId: number) {
     return this.httpConfigService.httpSercvice.post<BriefGradeResponse>(
       this.baseUrl + '/w/achievement/teacher-grade-brief',
+      {
+        classId
+      }
+    )
+  }
+
+  getStudentList(classId: number) {
+    return this.httpConfigService.httpSercvice.post<StudentListResponse>(
+      this.baseUrl + '/w/student-list',
       {
         classId
       }
