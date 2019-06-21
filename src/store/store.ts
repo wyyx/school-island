@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import pathify from './pathify'
 import { auth } from './auth/auth.module'
+import { classes } from './classes/classes.module'
 
 Vue.use(Vuex)
 
@@ -16,7 +17,8 @@ const initGlobalState: GlobalState = {
 export default new Vuex.Store({
   plugins: [pathify.plugin],
   modules: {
-    auth
+    auth,
+    classes
   },
   mutations: {},
   state: initGlobalState

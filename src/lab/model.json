@@ -1,24 +1,19 @@
 {
-  "content": [
-    {
-      "createTime": "2019-06-19T19:08:36.000+0800",
-      "checkName": "两操",
-      "changeScore": -0.8,
-      "imageUrls": []
-    },
-    {
-      "createTime": "2019-06-19T19:08:23.000+0800",
-      "checkName": "礼仪",
-      "changeScore": -0.6,
-      "imageUrls": []
-    },
-    {
-      "createTime": "2019-06-19T19:08:14.000+0800",
-      "checkName": "礼仪",
-      "changeScore": -5.5,
-      "imageUrls": []
-    }
-  ],
-  "status": "OK",
-  "errorCode": "0"
+  "content": {
+    "currentSemester": "string",
+    "examTime": "2019-06-21T02:04:19.065Z",
+    "latestGradeVos": [
+      {
+        "achievement": 0,
+        "comment": "string",
+        "star": 0,
+        "subject": "string",
+        "teacherName": "string"
+      }
+    ],
+    "semesters": ["string"]
+  },
+  "errorCode": "string",
+  "errorMsg": "string",
+  "status": "string"
 }

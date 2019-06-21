@@ -17,7 +17,7 @@
 
       <v-layout column wrap>
         <!-- header -->
-        <v-flex class="class-selector">
+        <v-flex v-if="hasClasses" class="class-selector">
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 py-1 px-2">
@@ -100,7 +100,7 @@
                         </v-list-tile-title>
                       </v-list-tile>
                       <v-list-tile>
-                        <v-list-tile-title>
+                        <v-list-tile-title @click="goToMyClassesPage">
                           <v-icon>vertical_split</v-icon>
                           <span class="menu-text pl-2">任教班级</span>
                         </v-list-tile-title>
@@ -115,6 +115,16 @@
                   </v-menu>
                 </v-flex>
               </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+
+        <v-flex v-else class="no-classes">
+          <v-layout row wrap class="primary lighten-3 pa-2">
+            <v-flex xs6>
+              <div class="class-selection-box primary lighten-4 py-1 px-2">
+                暂无任教班级
+              </div>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -137,7 +147,7 @@
         <v-flex>
           <v-tabs-items v-model="model" class="pt-3">
             <v-tab-item value="tab-1">
-              <v-card flat>
+              <v-card v-if="hasClasses" flat>
                 <h3>
                   上周综合得分
                   <span class="accent--text text--darken-2">8.5分</span>
@@ -232,6 +242,9 @@
                   </template>
                 </v-data-table>
               </v-card>
+              <div v-else class="both-center no-data-wrapper">
+                <img src="../assets/images/no_data.jpg" alt="" />
+              </div>
             </v-tab-item>
           </v-tabs-items>
         </v-flex>
@@ -281,8 +294,10 @@ import { httpConfigService } from '../services/http-config.service'
 import { userService } from '../services/user.service'
 import { get } from 'vuex-pathify'
 import { authModulePath, user, currentRole } from '../store/auth/auth.paths'
+import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { UserInfo } from '../models/user.model'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
+import { storeService } from '../services/store.service'
 moment.locale('zh-CN')
 
 interface Image {
@@ -374,6 +389,10 @@ export default Vue.extend({
     currentDeductionList() {
       const that: any = this
       return that.deductionListEntities[that.currentClass.classId] || []
+    },
+    hasClasses() {
+      const that: any = this
+      return that.classList.length > 0
     }
   },
   created() {
@@ -390,6 +409,15 @@ export default Vue.extend({
     this.scroll()
   },
   methods: {
+    goToMyClassesPage() {
+      console.log('TCL: goToMyClassesPage -> goToMyClassesPage')
+      this.$router.push({
+        name: 'my-classes',
+        params: {
+          currentClassId: this.currentClass.classId.toString()
+        }
+      })
+    },
     switchClass(aclass: ClassModel) {
       console.log('TCL: aclass', aclass)
       this.currentClass = aclass
@@ -425,6 +453,7 @@ export default Vue.extend({
       return moment(date).format('M月D日 kk:mm')
     },
     converToSeries(weekHistory: DeductionHistoryByWeekItem[]) {
+      console.log('TCL: converToSeries -> weekHistory', weekHistory)
       const series = weekHistory.map((e: DeductionHistoryByWeekItem) => {
         return {
           name: e.checkName,
@@ -473,6 +502,8 @@ export default Vue.extend({
       // specify chart configuration item and data
       const that: any = this
 
+      console.log('TCL: initEcharts -> that.series', that.series)
+
       var option: EChartOption = {
         tooltip: {},
         legend: {
@@ -506,6 +537,9 @@ export default Vue.extend({
     loadClassList(teacherId: number) {
       dutyService.getClassList(teacherId).then(res => {
         this.classList = res.data.content || []
+
+        // save classList to store
+        storeService.store.set(classesModulePath + classList, this.classList)
 
         // show first class default
         const firstClass =

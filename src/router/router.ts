@@ -19,6 +19,10 @@ export default new Router({
       path: '/workbench',
       name: 'workbench',
       beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "workbench" */ '../views/Workbench.page.vue'
+        ),
       children: [
         {
           path: 'teacher',
@@ -47,10 +51,26 @@ export default new Router({
               /* webpackChunkName: "workbench-parents" */ '../views/WorkbenchParents.page.vue'
             )
         }
-      ],
+      ]
+    },
+    {
+      path: 'my-classes',
+      name: 'my-classes',
+      props: true,
+      beforeEnter: authGuard,
       component: () =>
         import(
-          /* webpackChunkName: "workbench" */ '../views/Workbench.page.vue'
+          /* webpackChunkName: "my-classes" */ '../views/MyClasses.page.vue'
+        )
+    },
+    {
+      path: 'class-grade',
+      name: 'class-grade',
+      beforeEnter: authGuard,
+      props: true,
+      component: () =>
+        import(
+          /* webpackChunkName: "class-grade" */ '../views/ClassGrade.page.vue'
         )
     },
     {

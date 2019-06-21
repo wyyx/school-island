@@ -51,13 +51,24 @@
                     <v-list>
                       <v-list-tile
                         :class="{
-                          'grey lighten-3': currentRole.code === role.code
+                          'grey lighten-3': currentRole.code === role.code,
+                          'accent--text': currentRole.code === role.code
                         }"
                         v-for="role in roleList || []"
                         :key="role.code"
                         @click="switchRole(role)"
                       >
-                        {{ role.name }}
+                        <span class="pr-1">{{ role.name }} </span>
+                        <v-icon
+                          v-if="currentRole.code === role.code"
+                          :color="
+                            currentRole.code === role.code
+                              ? 'accent'
+                              : 'grey lighten-3'
+                          "
+                        >
+                          check
+                        </v-icon>
                       </v-list-tile>
                       <v-list-tile @click="goToBindingPage()">
                         <v-icon>add</v-icon> <span>添加</span>
