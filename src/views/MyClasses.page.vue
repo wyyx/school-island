@@ -2,7 +2,7 @@
   <div>
     <div class="box">
       <div class="Grade_entry">
-        <div @click="GoBack">
+        <div @click="goBack">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">班级事务</div>
@@ -79,7 +79,12 @@
       </v-tabs>
 
       <div class="class-grade">
-        <div id="chart"></div>
+        <Chart
+          v-if="chartOption"
+          width="100%"
+          height="300px"
+          :option="chartOption"
+        ></Chart>
       </div>
     </div>
   </div>
@@ -93,29 +98,28 @@ import { gradeService } from '../services/grade.service'
 import { ClassModel } from '../models/class.model'
 import { authModulePath, user } from '../store/auth/auth.paths'
 import { BriefGrade, BriefSubjectGrade } from '../models/grade.model'
-import echarts, {
-  EChartsResponsiveOption,
-  EChartOption,
-  ECharts
-} from 'echarts'
+import echarts, { EChartOption, ECharts } from 'echarts'
+import Chart from '@/components/Chart.component.vue'
 
 export default Vue.extend({
   name: 'MyClasses',
-  components: {},
+  components: {
+    Chart
+  },
   props: {
     initClassId: {
       type: String,
       required: false
     }
   },
-
   data() {
     return {
       tab: 0,
       rating: 2,
       currentClass: {} as ClassModel,
       briefGrade: {} as BriefGrade,
-      chart: {} as ECharts
+      chart: {} as ECharts,
+      chartOption: null as EChartOption
     }
   },
   computed: {
@@ -135,7 +139,7 @@ export default Vue.extend({
   },
   watch: {
     tab() {
-      this.initEcharts()
+      this.updateChart()
     },
     currentClass(newVal, oldVal) {
       const aclass = newVal as ClassModel
@@ -143,7 +147,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    GoBack() {
+    goBack() {
       this.$router.push({
         name: 'teacher'
       })
@@ -162,14 +166,8 @@ export default Vue.extend({
         )[0]
       }
     },
-    initEcharts() {
-      this.chart = echarts.init(document.getElementById(
-        'chart'
-      ) as HTMLDivElement)
-      // specify chart configuration item and data
-      const that: any = this
-
-      var option: EChartOption = {
+    updateChart() {
+      this.chartOption = {
         color: ['#3398DB'],
         tooltip: {
           trigger: 'axis',
@@ -224,21 +222,16 @@ export default Vue.extend({
           }
         ]
       }
-
-      this.chart.setOption(option)
     },
     loadBriefGrade(classId: number) {
       gradeService.getBriefGrade(classId).then(res => {
         this.briefGrade = res.data.content
-        console.log('TCL: created -> this.briefGrade', this.briefGrade)
-
-        this.initEcharts()
+        this.updateChart()
       })
     }
   },
   mounted() {},
   created() {
-    console.log('xxxxxxxxxxxxxxxx')
     this.setInitClass()
     this.loadBriefGrade(this.currentClass.classId)
   }
