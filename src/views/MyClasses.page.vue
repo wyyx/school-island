@@ -16,23 +16,14 @@
           </v-avatar>
         </div>
         <div class="class_Rating">
-          <v-menu offset-y>
-            <template v-slot:activator="{ on }">
-              <v-btn outline light flat v-on="on" class="subheading">
-                <span>{{ currentClass.className }}</span>
-                <v-icon>arrow_drop_down</v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-tile
-                v-for="(aclass, index) in classList"
-                :key="index"
-                @click="switchClass(aclass)"
-              >
-                <v-list-tile-title>{{ aclass.className }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
+          <v-select
+            v-model="currentClass"
+            :items="classList"
+            item-text="className"
+            item-value="classId"
+            :return-object="true"
+            :hide-details="true"
+          ></v-select>
 
           <div>
             <v-rating
@@ -80,13 +71,15 @@
           <img class="_img" src="../assets/right.svg" alt />
         </div>
       </div>
-      <div class="Number_box">
-        <span v-for="(item, index) in textA" :key="index">{{
-          item.title
-        }}</span>
-      </div>
-      <div class="total_ranking">
-        <ClassWorkClass-Transcript></ClassWorkClass-Transcript>
+
+      <v-tabs v-model="tab" slider-color="primary">
+        <v-tab v-for="subject in subjectList" :key="subject.subject" ripple>
+          {{ subject.subject }}
+        </v-tab>
+      </v-tabs>
+
+      <div class="class-grade">
+        <div id="chart"></div>
       </div>
     </div>
   </div>
@@ -94,23 +87,35 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import ClassWorkClassTranscript from '../components/ClassWorkClassTranscript.component.vue'
 import { get } from 'vuex-pathify'
 import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
 import { ClassModel } from '../models/class.model'
 import { authModulePath, user } from '../store/auth/auth.paths'
-import { BriefGrade } from '../models/grade.model'
+import { BriefGrade, BriefSubjectGrade } from '../models/grade.model'
+import echarts, {
+  EChartsResponsiveOption,
+  EChartOption,
+  ECharts
+} from 'echarts'
 
 export default Vue.extend({
   name: 'MyClasses',
-  components: {
-    ClassWorkClassTranscript
-  },
+  components: {},
   props: {
-    currentClassId: {
+    initClassId: {
       type: String,
       required: false
+    }
+  },
+
+  data() {
+    return {
+      tab: 0,
+      rating: 2,
+      currentClass: {} as ClassModel,
+      briefGrade: {} as BriefGrade,
+      chart: {} as ECharts
     }
   },
   computed: {
@@ -119,45 +124,123 @@ export default Vue.extend({
     }),
     ...get(authModulePath, {
       user
-    })
+    }),
+    subjectList(): BriefSubjectGrade[] {
+      const that: any = this
+      return (that.briefGrade && that.briefGrade.list) || []
+    },
+    currentSubject(): BriefSubjectGrade {
+      return this.subjectList[this.tab]
+    }
   },
-  data() {
-    return {
-      rating: 2,
-      textA: [
-        { title: '语文' },
-        { title: '数学' },
-        { title: '英语' },
-        { title: '美术' },
-        { title: '美术' }
-      ],
-      currentClass: {} as ClassModel,
-      briefGrade: {} as BriefGrade
+  watch: {
+    tab() {
+      this.initEcharts()
+    },
+    currentClass(newVal, oldVal) {
+      const aclass = newVal as ClassModel
+      this.loadBriefGrade(aclass.classId)
     }
   },
   methods: {
     GoBack() {
-      this.$router.back()
+      this.$router.push({
+        name: 'teacher'
+      })
     },
     goToClassDataPage() {
-      this.$router.push({ name: 'class-grade' })
-    },
-    switchClass(aclass: ClassModel) {
-      this.currentClass = aclass
+      this.$router.push({ name: 'class-data' })
     },
     setInitClass() {
       const that: any = this
 
-      this.currentClass = (that.classList as ClassModel[]).filter(
-        aclass => aclass.classId === parseInt(this.currentClassId)
-      )[0]
+      if (!this.initClassId) {
+        this.currentClass = that.classList[0]
+      } else {
+        this.currentClass = (that.classList as ClassModel[]).filter(
+          aclass => aclass.classId === parseInt(this.initClassId)
+        )[0]
+      }
+    },
+    initEcharts() {
+      this.chart = echarts.init(document.getElementById(
+        'chart'
+      ) as HTMLDivElement)
+      // specify chart configuration item and data
+      const that: any = this
+
+      var option: EChartOption = {
+        color: ['#3398DB'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            show: false,
+            type: 'category',
+            data: ['缺考', '待合格', '合格', '良好', '优秀'],
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            }
+          }
+        ],
+        series: [
+          {
+            name: '直接访问',
+            type: 'bar',
+            barWidth: '70%',
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+                formatter: '{c} 人\n{b}'
+              }
+            },
+            data: this.currentSubject.achievements || []
+          }
+        ]
+      }
+
+      this.chart.setOption(option)
+    },
+    loadBriefGrade(classId: number) {
+      gradeService.getBriefGrade(classId).then(res => {
+        this.briefGrade = res.data.content
+        console.log('TCL: created -> this.briefGrade', this.briefGrade)
+
+        this.initEcharts()
+      })
     }
   },
+  mounted() {},
   created() {
+    console.log('xxxxxxxxxxxxxxxx')
     this.setInitClass()
-    gradeService.getBriefGrade(this.currentClass.classId).then(res => {
-      this.briefGrade = res.data.content
-    })
+    this.loadBriefGrade(this.currentClass.classId)
   }
 })
 </script>
@@ -252,5 +335,10 @@ export default Vue.extend({
       padding-top: 10px;
     }
   }
+}
+
+#chart {
+  height: 300px;
+  width: 100%;
 }
 </style>

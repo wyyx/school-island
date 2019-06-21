@@ -64,13 +64,23 @@ export default new Router({
         )
     },
     {
-      path: 'class-grade',
-      name: 'class-grade',
-      beforeEnter: authGuard,
+      path: 'class-data',
+      name: 'class-data',
       props: true,
+      beforeEnter: authGuard,
       component: () =>
         import(
-          /* webpackChunkName: "class-grade" */ '../views/ClassGrade.page.vue'
+          /* webpackChunkName: "class-data" */ '../views/ClassData.page.vue'
+        )
+    },
+    {
+      path: 'student-grade-detail',
+      name: 'student-grade-detail',
+      props: true,
+      beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "student-grade-detail" */ '../views/StudentGradeDetail.page.vue'
         )
     },
     {

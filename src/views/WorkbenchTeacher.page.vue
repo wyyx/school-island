@@ -21,38 +21,14 @@
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 py-1 px-2">
-                <v-menu offset-y>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      light
-                      flat
-                      v-on="on"
-                      class="subheading"
-                      @click="showClassMenu = !showClassMenu"
-                    >
-                      <span class="pr-1">
-                        {{ currentClass.className }}
-                      </span>
-
-                      <v-icon v-if="showClassMenu">arrow_drop_up</v-icon>
-                      <v-icon v-else>arrow_drop_down</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-tile
-                      v-for="(aclass, index) in classList"
-                      :key="index"
-                      @click="
-                        switchClass(aclass), (showClassMenu = !showClassMenu)
-                      "
-                    >
-                      <v-list-tile-title>{{
-                        aclass.className
-                      }}</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu>
-
+                <v-select
+                  v-model="currentClass"
+                  :items="classList"
+                  item-text="className"
+                  item-value="classId"
+                  :return-object="true"
+                  :hide-details="true"
+                ></v-select>
                 <v-rating
                   class="py-1"
                   color="accent"
@@ -414,17 +390,14 @@ export default Vue.extend({
       this.$router.push({
         name: 'my-classes',
         params: {
-          currentClassId: this.currentClass.classId.toString()
+          initClassId: this.currentClass.classId.toString()
         }
       })
     },
-    switchClass(aclass: ClassModel) {
+    setClass(aclass: ClassModel) {
       console.log('TCL: aclass', aclass)
       this.currentClass = aclass
       this.hasMore = true
-
-      // this.currentDeductionList =
-      //   this.deductionListEntities[aclass.classId] || []
 
       this.loadDeducionWeekHistory(this.currentClass.classId)
     },
@@ -545,7 +518,7 @@ export default Vue.extend({
         const firstClass =
           this.classList.length > 0 ? this.classList[0] : ({} as ClassModel)
 
-        this.switchClass(firstClass)
+        this.setClass(firstClass)
       })
     },
     loadDeducionWeekHistory(classId: number) {

@@ -21,35 +21,15 @@
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
               <div class="class-selection-box primary lighten-4 pa-2">
-                <v-menu offset-y>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      light
-                      flat
-                      v-on="on"
-                      class="subheading"
-                      @click="showGradeMenu = !showGradeMenu"
-                    >
-                      <span class="pr-1">
-                        {{ currentGrade.label }}
-                      </span>
-
-                      <v-icon v-if="showGradeMenu">arrow_drop_up</v-icon>
-                      <v-icon v-else>arrow_drop_down</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-tile
-                      v-for="(grade, index) in gradeItems"
-                      :key="index"
-                      @click="
-                        switchGrade(grade), (showGradeMenu = !showGradeMenu)
-                      "
-                    >
-                      <v-list-tile-title>{{ grade.label }}</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu>
+                <v-select
+                  v-model="currentGrade"
+                  :items="gradeItems"
+                  item-text="label"
+                  item-value="value"
+                  :return-object="true"
+                  :hide-details="true"
+                  :single-line="true"
+                ></v-select>
               </div>
             </v-flex>
             <v-spacer></v-spacer>
