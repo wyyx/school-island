@@ -9,31 +9,31 @@
       </div>
     </div>
     <div>
-      <v-tabs v-model="active" fixed-tabs>
+      <v-tabs v-model="active" fixed-tabs slider-color="primary">
         <v-tab v-for="(item, index) in text" :key="index">{{
           item.title
         }}</v-tab>
         <v-tab-item>
           <v-card flat>
-            <v-card-text>能量表现</v-card-text>
+            <v-card-text><Developing></Developing></v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item>
           <v-card flat>
-            <v-card-text>值周数据</v-card-text>
+            <v-card-text><Developing></Developing></v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-              <div class="Grade_box">
+              <div>
                 <v-layout row wrap>
                   <v-flex xs6 class="px-2">
                     <v-select
-                      v-model="currentClass"
-                      :items="classList"
-                      item-text="className"
-                      item-value="classId"
+                      v-model="currentGrade"
+                      :items="gradeList"
+                      item-text="name"
+                      item-value="name"
                       :return-object="true"
                       :hide-details="true"
                     ></v-select>
@@ -46,9 +46,6 @@
               <div></div>
               <div class="Grade">
                 <v-card flat>
-                  <h3>
-                    个人成绩
-                  </h3>
                   <v-card-title class="pa-1">
                     <v-text-field
                       v-model="search"
@@ -60,7 +57,7 @@
                   </v-card-title>
                   <v-data-table
                     :headers="headers"
-                    :items="[]"
+                    :items="studentList"
                     class="elevation-0"
                     hide-actions
                     :search="search"
@@ -70,60 +67,17 @@
                   >
                     <template v-slot:items="props">
                       <td class="text-xs-right">
-                        {{ formatDate(props.item.createTime) }}
-                      </td>
-                      <td class="text-xs-right">{{ props.item.checkName }}</td>
-                      <td class="text-xs-right">
-                        {{ props.item.changeScore }}分
+                        {{ props.item.studentNumber }}
                       </td>
                       <td class="text-xs-right">
-                        <div>
-                          {{ props.item.remarks }}
-                          <v-card
-                            v-if="showThumbnail(props.item.imageUrls)"
-                            class="pa-0 mt-1 elevation-0"
-                            @click="toShowSwiper(props.item.imageUrls)"
-                          >
-                            <v-container grid-list-sm class="pa-0" fluid>
-                              <v-layout
-                                v-if="props.item.imageUrls"
-                                class="images-wrapper"
-                                row
-                                wrap
-                              >
-                                <v-flex
-                                  v-for="img in props.item.imageUrls"
-                                  :key="img"
-                                  xs6
-                                  d-flex
-                                >
-                                  <v-card flat tile class="d-flex pa-0">
-                                    <v-img
-                                      :src="img"
-                                      :lazy-src="img"
-                                      aspect-ratio="1"
-                                      class="grey lighten-2"
-                                    >
-                                      <template v-slot:placeholder>
-                                        <v-layout
-                                          fill-height
-                                          align-center
-                                          justify-center
-                                          ma-0
-                                        >
-                                          <v-progress-circular
-                                            indeterminate
-                                            color="grey lighten-5"
-                                          ></v-progress-circular>
-                                        </v-layout>
-                                      </template>
-                                    </v-img>
-                                  </v-card>
-                                </v-flex>
-                              </v-layout>
-                            </v-container>
-                          </v-card>
-                        </div>
+                        {{ props.item.name }}
+                      </td>
+                      <td
+                        v-ripple
+                        class="text-xs-right"
+                        @click="goToStudentGradeDetailPage"
+                      >
+                        <v-icon>search</v-icon>
                       </td>
                     </template>
                   </v-data-table>
@@ -134,7 +88,7 @@
         </v-tab-item>
         <v-tab-item>
           <v-card flat>
-            <v-card-text>基础数据</v-card-text>
+            <v-card-text><Developing></Developing></v-card-text>
           </v-card>
         </v-tab-item>
       </v-tabs>
@@ -148,10 +102,11 @@ import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { ClassModel } from '../models/class.model'
 import { get } from 'vuex-pathify'
 import { authModulePath, user } from '../store/auth/auth.paths'
+import Developing from '@/components/Developing.component.vue'
 
 export default Vue.extend({
   name: 'ClassData',
-  components: {},
+  components: { Developing },
   props: {},
   data() {
     return {
@@ -164,21 +119,32 @@ export default Vue.extend({
       ],
       itemsB: ['上学期期末考评', '下学期期末考评'],
       currentClass: {} as ClassModel,
+      currentGrade: '一年级',
+      gradeList: ['一年级', '二年级', '三年级', '四年级'],
       semister: '上学期期末考评',
       headers: [
         {
-          text: '时间',
+          text: '学号',
           align: 'right',
           sortable: true,
-          value: 'createTime',
+          value: 'studentNumber',
           sort: 'asc'
         },
-        { text: '类别', align: 'right', sortable: false, value: 'checkName' },
-        { text: '扣分', align: 'right', sortable: true, value: 'changeScore' },
-        { text: '备注', align: 'right', sortable: false, value: 'remarks' }
+        { text: '姓名', align: 'right', sortable: false, value: 'name' },
+        { text: '详情', align: 'right', sortable: true, value: '' }
       ],
       pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
-      search: ''
+      search: '',
+      studentList: [
+        {
+          studentNumber: 23523456,
+          name: '王小强'
+        },
+        {
+          studentNumber: 54657677,
+          name: '李大宝'
+        }
+      ]
     }
   },
   methods: {
@@ -236,7 +202,6 @@ export default Vue.extend({
   padding: 10px 0 15px 0;
 }
 .Grade {
-  border-top: 17px solid #f2f2f2;
   .Grade_text {
     font-size: 18px;
     padding: 10px 0 20px 5px;

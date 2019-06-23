@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="Class_transcript">
-      <div class="flex pa-2" @click="goToClassDataPage">
+      <div class="flex pa-2" @click="goToClassDataPage" v-ripple>
         <div class="grow">班级成绩</div>
         <div class="shrink">
           <img class="_img" src="../assets/right.svg" alt />

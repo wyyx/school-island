@@ -16,3 +16,7 @@ table.v-table tbody td:first-child {
   background: transparent;
   height: unset !important;
 }
+
+.v-item-group.v-bottom-nav .v-btn {
+  padding-top: 6px !important;
+}
