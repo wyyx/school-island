@@ -99,7 +99,7 @@ import { authModulePath, user } from '../store/auth/auth.paths'
 import {
   BriefGrade,
   BriefSubjectGrade,
-  GRADE_LEVELS
+  GRADE_LEVEL_TEXTS
 } from '../models/grade.model'
 import echarts, { EChartOption, ECharts } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
@@ -197,7 +197,7 @@ export default Vue.extend({
           {
             show: false,
             type: 'category',
-            data: GRADE_LEVELS,
+            data: GRADE_LEVEL_TEXTS,
             axisTick: {
               alignWithLabel: true
             }
@@ -219,14 +219,15 @@ export default Vue.extend({
         ],
         series: [
           {
-            name: '直接访问',
+            name: '班级成绩',
             type: 'bar',
             barWidth: '70%',
             label: {
               normal: {
                 show: true,
                 position: 'top',
-                formatter: '{c} 人\n{b}'
+                formatter: '{c} 人\n{b}',
+                lineHeight: 18
               }
             },
             data: this.currentSubject.achievements || [],

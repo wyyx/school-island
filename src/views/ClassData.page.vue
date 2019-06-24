@@ -28,7 +28,7 @@
             <v-card-text>
               <div>
                 <v-layout row wrap>
-                  <v-flex xs4 class="px-2">
+                  <v-flex xs5 class="px-2">
                     <v-select
                       v-model="currentGrade"
                       :items="gradeList"
@@ -36,7 +36,7 @@
                       solo
                     ></v-select>
                   </v-flex>
-                  <v-flex xs8 class="px-2">
+                  <v-flex xs7 class="px-2">
                     <v-select
                       :items="semisterlist"
                       item-text="name"
@@ -134,8 +134,8 @@ export default Vue.extend({
       ],
       currentClass: {} as ClassModel,
       semisterlist: [
-        { name: '上学期期末考评', value: 1 },
-        { name: '下学期期末考评', value: 2 }
+        { name: '上学期期末考评', value: 2 },
+        { name: '下学期期末考评', value: 4 }
       ],
       currentSemister: { name: '下学期期末考评', value: 2 },
       currentGrade: '',
@@ -265,6 +265,7 @@ export default Vue.extend({
   created() {
     this.setInitClass()
     this.loadHistoryGradeStudentList(parseInt(this.classId))
+    console.log('TCL: created -> this.classId', this.classId)
   }
 })
 </script>

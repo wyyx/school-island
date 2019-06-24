@@ -23,9 +23,7 @@
         v-for="achievement in achievementList"
         :key="achievement.subject"
       >
-        <h4 class="subheading mb-2 primary--text">
-          {{ achievement.teacherName }}老师
-        </h4>
+        <h4 class="mb-2 primary--text">{{ achievement.teacherName }}老师</h4>
         <p>
           {{ achievement.comment }}
         </p>
@@ -41,7 +39,8 @@ import { EChartOption } from 'echarts'
 import {
   GradeLevel,
   StudentInfoForDetail,
-  StudentGradeDetail
+  StudentGradeDetail,
+  GRADE_LEVELS
 } from '../models/grade.model'
 import { get } from 'vuex-pathify'
 import {
@@ -110,9 +109,11 @@ export default Vue.extend({
         })
     },
     updateChart() {
+      const that: any = this
       const subjectList = this.studentGradeDetail.achievementVos || []
       const xAxisData = subjectList.map(subject => subject.subject)
-      const seriesData1 = subjectList.map(subject => subject.achievement)
+      // reverse grade level to code map
+      const seriesData1 = subjectList.map(subject => 6 - subject.achievement)
 
       this.chartOption = {
         color: ['rgb(229, 145, 229)', '#3398DB'],
@@ -155,14 +156,15 @@ export default Vue.extend({
         ],
         series: [
           {
-            name: '直接访问',
+            name: '成绩',
             type: 'bar',
             barWidth: '70%',
             label: {
               normal: {
+                lineHeight: 18,
                 show: true,
                 position: 'top',
-                formatter: function({
+                formatter: ({
                   componentType,
                   seriesType,
                   seriesIndex,
@@ -172,16 +174,46 @@ export default Vue.extend({
                   data,
                   value,
                   color
-                }) {
-                  return data[dataIndex]
+                }) => {
+                  // get level name
+
+                  const studentGradeDetail = that.studentGradeDetail as StudentGradeDetail
+
+                  const star = studentGradeDetail.achievementVos[dataIndex].star
+
+                  const startText = star === 0 ? '' : `\n${star}🟊`
+
+                  console.log('TCL: updateChart -> startText', startText)
+                  return (
+                    Object.keys(GRADE_LEVELS)
+                      .map(key => GRADE_LEVELS[key])
+                      .filter(
+                        (e: { name: string; code: number }) => e.code === data
+                      )[0].name + startText
+                  )
                 }
               }
             },
             data: seriesData1,
             itemStyle: {
               color: function(params) {
-                var colorList = ['#F86E6E', '#E591E5', '#33CCFF']
-                return colorList[params.dataIndex]
+                let absentColor = '#909090'
+                let prequalified = '#F86E6E'
+                let qualified = '#E591E5'
+                let normal = '#33CCFF'
+
+                console.log('TCL: updateChart -> params.data', params.data)
+
+                switch (params.data) {
+                  case GRADE_LEVELS.absent.code:
+                    return absentColor
+                  case GRADE_LEVELS.prequalified.code:
+                    return prequalified
+                  case GRADE_LEVELS.qualified.code:
+                    return qualified
+                  default:
+                    return normal
+                }
               }
             }
           }

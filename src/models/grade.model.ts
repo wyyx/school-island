@@ -62,7 +62,7 @@ export enum GradeLevel {
   Prequalified = '待合格',
   Qualified = '合格',
   Good = '良好',
-  Excellent = '优秀的'
+  Excellent = '优秀'
 }
 
 export interface StudentInfoForDetail {
@@ -97,14 +97,37 @@ export interface AchievementVo {
   teacherName: string
 }
 
-export const GRADE_LEVELS = [
+export const GRADE_LEVEL_TEXTS = [
   '缺考',
   '待合格',
   '合格',
-  '良好1星',
-  '良好2星',
-  '良好3星',
-  '优秀1星',
-  '优秀2星',
-  '优秀3星'
+  '良好1🟊',
+  '良好2🟊',
+  '良好3🟊',
+  '优秀1🟊',
+  '优秀2🟊',
+  '优秀3🟊'
 ]
+
+export const GRADE_LEVELS = {
+  absent: {
+    name: '缺考',
+    code: 1
+  },
+  prequalified: {
+    name: '待合格',
+    code: 2
+  },
+  qualified: {
+    name: '合格',
+    code: 3
+  },
+  good: {
+    name: '良好',
+    code: 4
+  },
+  excellent: {
+    name: '优秀',
+    code: 5
+  }
+}
