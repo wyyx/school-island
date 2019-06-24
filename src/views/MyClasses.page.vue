@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <div class="box">
       <div class="Grade_entry">
         <div @click="goBack">
@@ -96,7 +96,11 @@ import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
 import { ClassModel } from '../models/class.model'
 import { authModulePath, user } from '../store/auth/auth.paths'
-import { BriefGrade, BriefSubjectGrade } from '../models/grade.model'
+import {
+  BriefGrade,
+  BriefSubjectGrade,
+  GRADE_LEVELS
+} from '../models/grade.model'
 import echarts, { EChartOption, ECharts } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
 
@@ -130,9 +134,12 @@ export default Vue.extend({
     }),
     subjectList(): BriefSubjectGrade[] {
       const that: any = this
-      return (that.briefGrade && that.briefGrade.list) || []
+      const briefGrade: BriefGrade = that.briefGrade
+      return (briefGrade && briefGrade.achievementVos) || []
     },
     currentSubject(): BriefSubjectGrade {
+      console.log('TCL: this.subjectList', this.subjectList)
+
       return this.subjectList[this.tab]
     }
   },
@@ -152,7 +159,12 @@ export default Vue.extend({
       })
     },
     goToClassDataPage() {
-      this.$router.push({ name: 'class-data' })
+      this.$router.push({
+        name: 'class-data',
+        params: {
+          classId: this.currentClass.classId.toString()
+        }
+      })
     },
     setInitClass() {
       const that: any = this
@@ -185,7 +197,7 @@ export default Vue.extend({
           {
             show: false,
             type: 'category',
-            data: ['缺考', '待合格', '合格', '良好', '优秀'],
+            data: GRADE_LEVELS,
             axisTick: {
               alignWithLabel: true
             }
@@ -217,13 +229,35 @@ export default Vue.extend({
                 formatter: '{c} 人\n{b}'
               }
             },
-            data: this.currentSubject.achievements || []
+            data: this.currentSubject.achievements || [],
+            itemStyle: {
+              color: function(params) {
+                var colorList = [
+                  '#909090',
+                  '#F86E6E',
+                  '#E591E5',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF',
+                  '#33CCFF'
+                ]
+                return colorList[params.dataIndex]
+              }
+            }
           }
         ]
       }
     },
     loadBriefGrade(classId: number) {
       gradeService.getBriefGrade(classId).then(res => {
+        console.log('TCL: loadBriefGrade -> res', res)
         this.briefGrade = res.data.content
         this.updateChart()
       })
@@ -238,6 +272,10 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+.wrapper {
+  margin-bottom: 76px;
+}
+
 ._img {
   width: 20px;
   height: 20px;

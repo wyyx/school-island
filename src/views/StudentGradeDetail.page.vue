@@ -1,222 +1,224 @@
 <template>
-  <div>
+  <div class="wrapper">
     <div class="box">
       <div class="Grade_entry">
-        <div @click="GoBack">
+        <div @click="goBack">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
-        <div class="Grade_entry_text">成长档案</div>
+        <div class="Grade_entry_text">{{ title }}</div>
       </div>
     </div>
-    <div class="file_box">
-      <div class="file_ion">
-        <span></span>
+    <v-card class="mb-3">
+      <Chart
+        v-if="chartOption"
+        width="100%"
+        height="300px"
+        :option="chartOption"
+      ></Chart>
+    </v-card>
+    <v-card class="pa-3">
+      <h3 class="mb-3">老师评语</h3>
+      <div
+        class="comment"
+        v-for="achievement in achievementList"
+        :key="achievement.subject"
+      >
+        <h4 class="subheading mb-2 primary--text">
+          {{ achievement.teacherName }}老师
+        </h4>
+        <p>
+          {{ achievement.comment }}
+        </p>
       </div>
-      <div class="file_class">
-        <span>22号 王二娃子</span>
-        <div>
-          <v-rating
-            v-model="rating"
-            full-icon="local_florist"
-            empty-icon="local_florist"
-            background-color="purple lighten-3"
-            color="purple"
-            small
-          ></v-rating>
-        </div>
-        <span class="Born">出生2011.11.11</span>
-      </div>
-      <div class="file_honor">
-        <span>2017级3班</span>
-      </div>
-      <div class="file_recommend">
-        <div class="recommend">
-          <span>推荐为</span>
-          <div>
-            <span class="group pa-2">
-              <v-icon>chevron_right</v-icon>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="contribution_box">
-      <div class="contribution_star">
-        <div>8988</div>
-        <span>星星</span>
-      </div>
-      <div class="contribution_energy">
-        <div>8988</div>
-        <span>星星</span>
-      </div>
-      <div class="contribution_raye"></div>
-    </div>
-    <div class="My_grades_box">
-      <v-tabs v-model="active">
-        <v-tab v-for="(item, index) in text" :key="index">{{
-          item.title
-        }}</v-tab>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <div class="MyGrades">
-                <div>我的成绩</div>
-                <div>2019.5.27</div>
-                <div @click="GradeDetails">
-                  <span>详情</span>
-                  <span class="group pa-2">
-                    <v-icon>chevron_right</v-icon>
-                  </span>
-                </div>
-              </div>
-              <!-- <GrowthFile-MyGrades></GrowthFile-MyGrades> -->
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>值周数据</v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>我的荣誉</v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
-    </div>
+    </v-card>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import Chart from '@/components/Chart.component.vue'
+import { EChartOption } from 'echarts'
+import {
+  GradeLevel,
+  StudentInfoForDetail,
+  StudentGradeDetail
+} from '../models/grade.model'
+import { get } from 'vuex-pathify'
+import {
+  classesModulePath,
+  currentStudent
+} from '../store/classes/classes.paths'
+import { gradeService } from '../services/grade.service'
+
 export default Vue.extend({
-  name: 'StudentGrade',
-  components: {},
+  name: 'StudentGradeDetail',
+  components: { Chart },
   props: {},
   data() {
     return {
-      rating: 2,
-      active: 0,
-      text: [
-        { title: '成长数据' },
-        { title: '我的作品' },
-        { title: '我的荣誉' }
-      ]
+      chartOption: null as EChartOption,
+      studentGradeDetail: {} as StudentGradeDetail
+    }
+  },
+  computed: {
+    ...get(classesModulePath, {
+      currentStudent
+    }),
+    title() {
+      const that: any = this
+      const student = that.currentStudent as StudentInfoForDetail
+      return student.name + student.grade + student.semister
+    },
+    achievementList() {
+      const that: any = this
+      const studentGradeDetail = that.studentGradeDetail as StudentGradeDetail
+      return (studentGradeDetail && studentGradeDetail.achievementVos) || []
     }
   },
   methods: {
-    GoBack() {
+    goBack() {
+      const that: any = this
+      const student = that.currentStudent as StudentInfoForDetail
+
       this.$router.push({
-        name: 'class-data'
+        name: 'class-data',
+        params: {
+          classId: student.classId.toString()
+        }
       })
     },
-    //详情
-    GradeDetails() {}
+    loadStudentGrade() {
+      const that: any = this
+      const student = that.currentStudent as StudentInfoForDetail
+
+      gradeService
+        .getStudentGradetDetail({
+          grade: student.grade,
+          studentId: student.studentId,
+          type: student.type
+        })
+        .then(res => {
+          console.log('TCL: loadStudentGrade -> res', res)
+          this.studentGradeDetail =
+            res.data.content || ({} as StudentGradeDetail)
+          this.studentGradeDetail = {
+            ...this.studentGradeDetail,
+            achievementVos: this.studentGradeDetail.achievementVos.reverse()
+          }
+
+          this.updateChart()
+        })
+    },
+    updateChart() {
+      const subjectList = this.studentGradeDetail.achievementVos || []
+      const xAxisData = subjectList.map(subject => subject.subject)
+      const seriesData1 = subjectList.map(subject => subject.achievement)
+
+      this.chartOption = {
+        color: ['rgb(229, 145, 229)', '#3398DB'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            show: true,
+            type: 'category',
+            data: subjectList.map(subject => subject.subject),
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            }
+          }
+        ],
+        series: [
+          {
+            name: '直接访问',
+            type: 'bar',
+            barWidth: '70%',
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+                formatter: function({
+                  componentType,
+                  seriesType,
+                  seriesIndex,
+                  seriesName,
+                  name,
+                  dataIndex,
+                  data,
+                  value,
+                  color
+                }) {
+                  return data[dataIndex]
+                }
+              }
+            },
+            data: seriesData1,
+            itemStyle: {
+              color: function(params) {
+                var colorList = ['#F86E6E', '#E591E5', '#33CCFF']
+                return colorList[params.dataIndex]
+              }
+            }
+          }
+        ]
+      }
+    }
   },
-  mounted() {},
-  created() {},
-  filters: {},
-  computed: {},
-  watch: {},
-  directives: {}
+  created() {
+    const that: any = this
+    console.log('this.currentStudent', that.currentStudent)
+    this.loadStudentGrade()
+  },
+  mounted() {}
 })
 </script>
 
 <style scoped lang="scss">
+.wrapper {
+  margin-bottom: 76px;
+}
+
 ._img {
   width: 20px;
   height: 20px;
 }
-.Grade_entry {
-  display: flex;
-}
-.Grade_entry_text {
-  font-size: 18px;
-  margin-left: 20px;
-}
+
 .box {
   padding: 15px 15px 7px 15px;
   border-bottom: 1px solid #cccccc;
 }
-.file_box {
-  padding: 10px 0;
+
+.Grade_entry {
   display: flex;
-  border-bottom: 5px solid #f2f2f2;
-  .file_ion {
-    width: 23%;
-    padding: 12px;
-    > span {
-      display: block;
-      height: 80px;
-      border: 1px solid seagreen;
-    }
-  }
-  .file_class {
-    width: 35%;
-    span:nth-child(1) {
-      font-size: 20px;
-      font-weight: 900;
-    }
-    .Born {
-      display: block;
-      color: #cccccc;
-      padding: 5px 0;
-    }
-  }
-  .file_honor {
-    width: 22%;
-    > span {
-      display: block;
-      color: #cccccc;
-      padding-left: 10px;
-    }
-  }
-  .file_recommend {
-    width: 20%;
-    display: flex;
-    justify-content: flex-end;
-    .recommend {
-      padding-right: 2px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-end;
-      > span {
-        display: block;
-        padding: 2px 10px;
-        background-color: #68cdff;
-      }
-    }
-  }
 }
-.contribution_box {
-  padding: 30px;
-  display: flex;
-  border-bottom: 5px solid #f2f2f2;
-  .contribution_star {
-    width: 20%;
-  }
-  .contribution_energy {
-    width: 20%;
-  }
-  .contribution_raye {
-    width: 60%;
-  }
-}
-.My_grades_box {
-  .MyGrades {
-    display: flex;
-    div:nth-child(1) {
-      width: 30%;
-    }
-    div:nth-child(2) {
-      width: 55%;
-      color: #cccccc;
-    }
-    div:nth-child(3) {
-      width: 25%;
-    }
-  }
+
+.Grade_entry_text {
+  font-size: 18px;
+  margin-left: 20px;
 }
 </style>

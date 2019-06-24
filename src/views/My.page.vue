@@ -95,17 +95,17 @@
         </v-flex>
       </v-layout>
       <v-layout class="scores white pa-1" row wrap>
-        <v-flex>
+        <v-flex class="flex column">
           <div><v-icon color="accent">flare</v-icon></div>
           <h3>2180</h3>
           <div class="text--secondary">积分</div>
         </v-flex>
-        <v-flex>
+        <v-flex class="flex column">
           <div><v-icon color="accent">whatshot</v-icon></div>
           <h3>1566</h3>
           <div class="text--secondary">学分</div></v-flex
         >
-        <v-flex>
+        <v-flex class="flex column">
           <div><v-icon color="accent">people_outline</v-icon></div>
           <h3>358</h3>
           <div class="text--secondary">粉丝</div>

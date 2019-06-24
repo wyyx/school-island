@@ -6,4 +6,5 @@ export interface ClasslistResponse {
 export interface ClassModel {
   classId: number
   className: string
+  grade: string
 }

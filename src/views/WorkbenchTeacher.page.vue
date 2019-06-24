@@ -234,7 +234,9 @@
     <!-- bottom hint -->
     <v-layout v-if="!hasMore" row wrap class="bottom-hint pa-3">
       <v-flex class="grey--text text-xs-center">
-        ~~~ 到底了 ~~~
+        <div class="text-xs-center">
+          ~~~ 到底了 ~~~
+        </div>
       </v-flex>
     </v-layout>
     <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
@@ -508,6 +510,7 @@ export default Vue.extend({
     loadClassList(teacherId: number) {
       dutyService.getClassList(teacherId).then(res => {
         this.classList = res.data.content || []
+        console.log('TCL: loadClassList -> res.data.content', res.data.content)
 
         // save classList to store
         storeService.store.set(classesModulePath + classList, this.classList)
@@ -606,6 +609,10 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.container {
+  margin-bottom: 56px;
+}
+
 .class-selection-box {
   border-radius: 2px;
 }

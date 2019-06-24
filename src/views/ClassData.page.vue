@@ -24,22 +24,27 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <v-card flat>
+          <v-card class="content">
             <v-card-text>
               <div>
                 <v-layout row wrap>
-                  <v-flex xs6 class="px-2">
+                  <v-flex xs4 class="px-2">
                     <v-select
                       v-model="currentGrade"
                       :items="gradeList"
-                      item-text="name"
-                      item-value="name"
-                      :return-object="true"
                       :hide-details="true"
+                      solo
                     ></v-select>
                   </v-flex>
-                  <v-flex xs6 class="px-2">
-                    <v-select :items="itemsB" v-model="semister"></v-select>
+                  <v-flex xs8 class="px-2">
+                    <v-select
+                      :items="semisterlist"
+                      item-text="name"
+                      item-value="value"
+                      :return-object="true"
+                      v-model="currentSemister"
+                      solo
+                    ></v-select>
                   </v-flex>
                 </v-layout>
               </div>
@@ -70,14 +75,15 @@
                         {{ props.item.studentNumber }}
                       </td>
                       <td class="text-xs-right">
-                        {{ props.item.name }}
+                        {{ props.item.studentName }}
                       </td>
                       <td
-                        v-ripple
                         class="text-xs-right"
-                        @click="goToStudentGradeDetailPage"
+                        @click="goToStudentGradeDetailPage(props.item)"
                       >
-                        <v-icon>search</v-icon>
+                        <div class="search-btn-wrapper" v-ripple>
+                          <v-icon>search</v-icon>
+                        </div>
                       </td>
                     </template>
                   </v-data-table>
@@ -101,13 +107,22 @@ import Vue from 'vue'
 import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { ClassModel } from '../models/class.model'
 import { get } from 'vuex-pathify'
-import { authModulePath, user } from '../store/auth/auth.paths'
+import { authModulePath, user, currentStudent } from '../store/auth/auth.paths'
 import Developing from '@/components/Developing.component.vue'
+import { gradeService } from '../services/grade.service'
+import { BriefGrade, StudentInfoForDetail } from '../models/grade.model'
+import { StudentVo } from '../models/user.model'
+import { storeService } from '../services/store.service'
 
 export default Vue.extend({
   name: 'ClassData',
   components: { Developing },
-  props: {},
+  props: {
+    classId: {
+      type: String,
+      required: false
+    }
+  },
   data() {
     return {
       active: 2,
@@ -117,11 +132,14 @@ export default Vue.extend({
         { title: '班级成绩' },
         { title: '基础数据' }
       ],
-      itemsB: ['上学期期末考评', '下学期期末考评'],
       currentClass: {} as ClassModel,
-      currentGrade: '一年级',
-      gradeList: ['一年级', '二年级', '三年级', '四年级'],
-      semister: '上学期期末考评',
+      semisterlist: [
+        { name: '上学期期末考评', value: 1 },
+        { name: '下学期期末考评', value: 2 }
+      ],
+      currentSemister: { name: '下学期期末考评', value: 2 },
+      currentGrade: '',
+      briefGrade: {} as BriefGrade,
       headers: [
         {
           text: '学号',
@@ -135,31 +153,7 @@ export default Vue.extend({
       ],
       pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
       search: '',
-      studentList: [
-        {
-          studentNumber: 23523456,
-          name: '王小强'
-        },
-        {
-          studentNumber: 54657677,
-          name: '李大宝'
-        }
-      ]
-    }
-  },
-  methods: {
-    goBack() {
-      this.$router.push({
-        name: 'my-classes'
-      })
-    },
-    //详情
-    goToStudentGradeDetailPage() {
-      this.$router.push({ name: 'student-grade-detail' })
-    },
-    setInitClass() {
-      const that: any = this
-      this.currentClass = that.classList[0]
+      studentList: [] as StudentVo[]
     }
   },
   computed: {
@@ -168,11 +162,109 @@ export default Vue.extend({
     }),
     ...get(authModulePath, {
       user
-    })
+    }),
+    gradeList() {
+      const that: any = this
+      //  const studentList = ( that.briefGrade as BriefGrade ).students
+      console.log(
+        'TCL: gradeList -> (that.briefGrade as BriefGrade).grades',
+        (that.briefGrade as BriefGrade).grades
+      )
+
+      return (that.briefGrade as BriefGrade).grades || []
+    }
+  },
+  watch: {
+    currentGrade(newVal, oldVal) {
+      const that: any = this
+
+      console.log(
+        'TCL: currentGrade -> that.currentSemister.value',
+        that.currentSemister.value
+      )
+
+      const condition = {
+        classId: that.currentClass.classId,
+        grade: that.currentGrade,
+        type: that.currentSemister.value
+      } as any
+
+      console.log('TCL: currentGrade -> condition', condition)
+      this.loadHistoryGradeStudentListByConditon(condition)
+    },
+    currentSemister(newVal, oldVal) {
+      const that: any = this
+
+      const condition = {
+        classId: that.currentClass.classId,
+        grade: that.currentGrade,
+        type: that.currentSemister.value
+      } as any
+
+      console.log('TCL: condition', condition)
+      this.loadHistoryGradeStudentListByConditon(condition)
+    }
+  },
+  methods: {
+    goBack() {
+      this.$router.push({
+        name: 'my-classes'
+      })
+    },
+    goToStudentGradeDetailPage(student: StudentVo) {
+      console.log('TCL: goToStudentGradeDetailPage -> student', student)
+      storeService.store.set(classesModulePath + currentStudent, {
+        name: student.studentName,
+        grade: this.currentGrade,
+        classId: parseInt(this.classId),
+        semister: this.currentSemister.name,
+        studentId: student.studentId,
+        type: this.currentSemister.value
+      } as StudentInfoForDetail)
+      this.$router.push({
+        name: 'student-grade-detail'
+      })
+    },
+    loadHistoryGradeStudentList(classId: number) {
+      gradeService.getHistoryGradeStudentList(classId).then(res => {
+        console.log(
+          'TCL: loadHistoryGradeStudentList -> res xxxxxxxxxxxxx',
+          res
+        )
+
+        this.briefGrade = res.data.content || ({} as BriefGrade)
+
+        this.studentList = this.briefGrade.students
+        // set current grade
+        this.currentGrade = this.briefGrade.currentGrade
+        // set current semister
+        this.currentSemister = {
+          name: '上学期期末考评',
+          value: this.briefGrade.examType
+        }
+      })
+    },
+    loadHistoryGradeStudentListByConditon(classId: number) {
+      gradeService
+        .getHistoryGradeStudentListByCondition({
+          classId: this.currentClass.classId,
+          grade: this.currentGrade,
+          type: this.currentSemister.value
+        })
+        .then(res => {
+          this.briefGrade = res.data.content || ({} as BriefGrade)
+          this.studentList = this.briefGrade.students
+        })
+    },
+    setInitClass() {
+      const that: any = this
+      this.currentClass = that.classList[0]
+    }
   },
   mounted() {},
   created() {
     this.setInitClass()
+    this.loadHistoryGradeStudentList(parseInt(this.classId))
   }
 })
 </script>
@@ -252,5 +344,14 @@ export default Vue.extend({
       width: 20%;
     }
   }
+}
+
+.search-btn-wrapper {
+  width: 25px;
+  margin-left: auto;
+}
+
+.content {
+  margin-bottom: 76px;
 }
 </style>

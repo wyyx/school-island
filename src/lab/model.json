@@ -1,8 +1,6 @@
 {
   "content": {
-    "currentSemester": "string",
-    "examTime": "2019-06-21T02:04:19.065Z",
-    "latestGradeVos": [
+    "achievementVos": [
       {
         "achievement": 0,
         "comment": "string",
@@ -11,7 +9,9 @@
         "teacherName": "string"
       }
     ],
-    "semesters": ["string"]
+    "currentGrade": "string",
+    "grades": ["string"],
+    "type": 0
   },
   "errorCode": "string",
   "errorMsg": "string",

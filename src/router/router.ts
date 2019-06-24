@@ -54,7 +54,7 @@ export default new Router({
       ]
     },
     {
-      path: 'my-classes',
+      path: '/my-classes',
       name: 'my-classes',
       props: true,
       beforeEnter: authGuard,
@@ -64,7 +64,7 @@ export default new Router({
         )
     },
     {
-      path: 'class-data',
+      path: '/class-data',
       name: 'class-data',
       props: true,
       beforeEnter: authGuard,
@@ -74,7 +74,7 @@ export default new Router({
         )
     },
     {
-      path: 'student-grade-detail',
+      path: '/student-grade-detail',
       name: 'student-grade-detail',
       props: true,
       beforeEnter: authGuard,

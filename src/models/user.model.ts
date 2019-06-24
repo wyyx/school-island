@@ -55,6 +55,12 @@ export interface Student {
   userName: string
 }
 
+export interface StudentVo {
+  studentId: number
+  studentName: string
+  studentNumber: number
+}
+
 export enum Role {
   Teacher = 'teacher',
   SchoolRun = 'school-run',
