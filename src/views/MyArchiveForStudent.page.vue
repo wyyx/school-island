@@ -13,7 +13,7 @@
         <span></span>
       </div>
       <div class="file_class">
-        <span>22号 王二娃子</span>
+        <span>{{ studentInfo.name }}</span>
         <div>
           <v-rating
             v-model="rating"
@@ -24,10 +24,10 @@
             small
           ></v-rating>
         </div>
-        <span class="Born">出生2011.11.11</span>
+        <span class="Born">{{ studentInfo.birthday }}</span>
       </div>
       <div class="file_honor">
-        <span>2017级3班</span>
+        <span>{{ studentInfo.className }}</span>
       </div>
       <div class="file_recommend">
         <div class="recommend">
@@ -78,16 +78,6 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
-        <!-- <v-tab-item>
-          <v-card flat>
-            <v-card-text>值周数据</v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>我的荣誉</v-card-text>
-          </v-card>
-        </v-tab-item> -->
       </v-tabs>
     </div>
   </div>
@@ -102,6 +92,9 @@ import { GRADE_LEVELS, StudentGradeDetail } from '../models/grade.model'
 import { BriefStudentGradeForParents } from '../models/parents-grade.model'
 import { EChartOption } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
+import { studentService } from '@/services/student.service'
+import { Student } from '../models/user.model'
+import { StudentInfo } from '../models/student.model'
 
 export default Vue.extend({
   name: 'MyArchiveForStudent',
@@ -118,7 +111,8 @@ export default Vue.extend({
       active: 0,
       tabTexts: [{ title: '成长数据' }],
       studentGrade: {} as BriefStudentGradeForParents,
-      chartOption: null as EChartOption
+      chartOption: null as EChartOption,
+      studentInfo: {} as StudentInfo
     }
   },
   methods: {
@@ -253,11 +247,26 @@ export default Vue.extend({
           }
         ]
       }
+    },
+    loadStudentInfo() {
+      const that: any = this
+      const currentStudent = that.currentStudent as Student
+
+      studentService.getStudentInfo(currentStudent.id).then(res => {
+        console.log('TCL: loadStudentInfo -> res', res)
+        this.studentInfo = res.data.content || ({} as StudentInfo)
+
+        console.log(
+          'TCL: loadStudentInfo -> this.studentInfo',
+          this.studentInfo
+        )
+      })
     }
   },
   mounted() {},
   created() {
     this.loadStudentGrade()
+    this.loadStudentInfo()
   }
 })
 </script>

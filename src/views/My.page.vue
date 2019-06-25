@@ -16,12 +16,17 @@
             <v-flex class="title">
               <v-layout row wrap>
                 <v-flex class="v-center shrink pr-3">
+                  <!-- when teache -->
                   <span
-                    v-if="currentRole.code === roleType.Teacher"
+                    v-if="
+                      currentRole.code ===
+                        (roleType.Teacher || roleType.HeadTeacher)
+                    "
                     class="pr-2"
                   >
                     {{ user.name }}{{ currentRole.name }}
                   </span>
+                  <!-- when parents -->
                   <span
                     v-if="currentRole.code === roleType.Parents"
                     class="pr-2"
@@ -30,6 +35,7 @@
                       getRelationName(currentStudent)
                     }}
                   </span>
+                  <!-- when schoolRun -->
                   <span
                     v-if="currentRole.code === roleType.SchoolRun"
                     class="pr-2"

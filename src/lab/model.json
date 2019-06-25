@@ -1,17 +1,15 @@
 {
   "content": {
-    "achievementVos": [
-      {
-        "achievement": 0,
-        "comment": "string",
-        "star": 0,
-        "subject": "string",
-        "teacherName": "string"
-      }
-    ],
-    "currentGrade": "string",
-    "grades": ["string"],
-    "type": 0
+    "birthday": "string",
+    "className": "string",
+    "homeAddress": "string",
+    "idcard": "string",
+    "name": "string",
+    "nation": "string",
+    "nativePlace": "string",
+    "schoolName": "string",
+    "selfIntroduction": "string",
+    "studentNumber": "string"
   },
   "errorCode": "string",
   "errorMsg": "string",
