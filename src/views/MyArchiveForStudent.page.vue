@@ -2,15 +2,18 @@
   <div>
     <div class="box">
       <div class="Grade_entry">
-        <div @click="GoBack">
+        <div @click="goBack">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">成长档案</div>
       </div>
     </div>
     <div class="file_box">
-      <div class="file_ion">
-        <span></span>
+      <div class="avatar-wrapper pl-3">
+        <v-avatar :size="64" :tile="true">
+          <img v-if="avatarUrl" src="" alt="头像" />
+          <v-icon :size="64">account_box</v-icon>
+        </v-avatar>
       </div>
       <div class="file_class">
         <span>{{ studentInfo.name }}</span>
@@ -40,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="contribution_box">
+    <!-- <div class="contribution_box">
       <div class="contribution_star">
         <div>8988</div>
         <span>星星</span>
@@ -50,7 +53,7 @@
         <span>星星</span>
       </div>
       <div class="contribution_raye"></div>
-    </div>
+    </div> -->
     <div class="My_grades_box">
       <v-tabs v-model="active">
         <v-tab v-for="(item, index) in tabTexts" :key="index">{{
@@ -61,7 +64,6 @@
             <v-card-text>
               <div class="MyGrades">
                 <div>我的成绩</div>
-                <div>2019.5.27</div>
                 <div @click="goToStudentGradeDetailForParentsPage">
                   <span>详情</span>
                   <span class="group pa-2">
@@ -112,11 +114,12 @@ export default Vue.extend({
       tabTexts: [{ title: '成长数据' }],
       studentGrade: {} as BriefStudentGradeForParents,
       chartOption: null as EChartOption,
-      studentInfo: {} as StudentInfo
+      studentInfo: {} as StudentInfo,
+      avatarUrl: ''
     }
   },
   methods: {
-    GoBack() {
+    goBack() {
       this.$router.push({
         name: 'parents'
       })

@@ -77,6 +77,39 @@
         </v-flex>
       </v-layout>
     </v-card>
+
+    <v-card class="grade-wrapper pa-2">
+      <v-tabs v-model="active">
+        <v-tab v-for="(item, index) in tabTexts" :key="index">{{
+          item.title
+        }}</v-tab>
+        <v-tab-item>
+          <v-card flat>
+            <v-card-text>
+              <div class="MyGrades flex">
+                <div class="grow">我的成绩</div>
+                <div
+                  class="shrink"
+                  @click="goToStudentGradeDetailForParentsPage"
+                >
+                  <span>详情</span>
+                  <span class="group pa-2">
+                    <v-icon>chevron_right</v-icon>
+                  </span>
+                </div>
+              </div>
+              <Chart
+                v-if="chartOption"
+                width="100%"
+                height="300px"
+                :option="chartOption"
+              ></Chart>
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs>
+    </v-card>
+
     <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
       {{ message }}
       <v-btn dark flat @click="showSnackbar = false">
@@ -94,12 +127,23 @@ import Developing from '../components/Developing.component.vue'
 import { developing } from '../store/global.paths'
 import { Student, UserInfo } from '../models/user.model'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
+import { BriefStudentGradeForParents } from '../models/parents-grade.model'
+import { EChartOption } from 'echarts'
+import Chart from '@/components/Chart.component.vue'
+import { studentService } from '../services/student.service'
+import { GRADE_LEVELS, StudentGradeDetail } from '../models/grade.model'
+import { gradeService } from '../services/grade.service'
 
 export default Vue.extend({
   mixins: [snackbarMixin],
   data: function() {
     return {
-      student: {} as Student
+      student: {} as Student,
+      rating: 2,
+      active: 0,
+      tabTexts: [{ title: '成长数据' }],
+      studentGrade: {} as BriefStudentGradeForParents,
+      chartOption: null as EChartOption
     }
   },
   computed: {
@@ -113,13 +157,17 @@ export default Vue.extend({
       return (that.user as UserInfo).studentVoList || []
     }
   },
-  components: {},
+  components: { Chart },
   created() {
     const that: any = this
     // that.currentStudent
     console.log('TCL: created -> that.currentStudent', that.currentStudent)
+    this.loadStudentGrade()
   },
   methods: {
+    goToStudentGradeDetailForParentsPage() {
+      this.$router.push({ name: 'student-grade-detail-for-parents' })
+    },
     onAutocompleteChanged() {
       console.log('this.student', this.student)
       this.switchStudent(this.student)
@@ -138,6 +186,130 @@ export default Vue.extend({
     inDeveloping() {
       const that: any = this
       that.showMessage('此功能正在开发中，敬请期待...')
+    },
+    loadStudentGrade() {
+      const that: any = this
+      gradeService
+        .getBriefStudentGradeForParents(that.currentStudent.id)
+        .then(res => {
+          console.log('TCL: created -> res', res)
+
+          this.studentGrade =
+            res.data.content || ({} as BriefStudentGradeForParents)
+          this.updateChart()
+        })
+    },
+    updateChart() {
+      const that: any = this
+      const subjectList = this.studentGrade.achievementVos || []
+      const xAxisData = subjectList.map(subject => subject.subject)
+      // reverse grade level to code map
+      const seriesData1 = subjectList.map(subject => 6 - subject.achievement)
+
+      this.chartOption = {
+        color: ['rgb(229, 145, 229)', '#3398DB'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+          }
+        },
+        grid: {
+          left: '3%',
+          right: '4%',
+          bottom: '3%',
+          containLabel: true
+        },
+        xAxis: [
+          {
+            show: true,
+            type: 'category',
+            data: subjectList.map(subject => subject.subject),
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            }
+          }
+        ],
+        series: [
+          {
+            name: '成绩',
+            type: 'bar',
+            barWidth: '70%',
+            label: {
+              normal: {
+                lineHeight: 18,
+                show: true,
+                position: 'top',
+                formatter: ({
+                  componentType,
+                  seriesType,
+                  seriesIndex,
+                  seriesName,
+                  name,
+                  dataIndex,
+                  data,
+                  value,
+                  color
+                }) => {
+                  // get level name
+
+                  const studentGrade = that.studentGrade as StudentGradeDetail
+
+                  const star = studentGrade.achievementVos[dataIndex].star
+
+                  const startText = star === 0 ? '' : `\n${star}星`
+
+                  console.log('TCL: updateChart -> startText', startText)
+                  return (
+                    Object.keys(GRADE_LEVELS)
+                      .map(key => GRADE_LEVELS[key])
+                      .filter(
+                        (e: { name: string; code: number }) => e.code === data
+                      )[0].name + startText
+                  )
+                }
+              }
+            },
+            data: seriesData1,
+            itemStyle: {
+              color: function(params) {
+                let absentColor = '#909090'
+                let prequalified = '#F86E6E'
+                let qualified = '#E591E5'
+                let normal = '#33CCFF'
+
+                console.log('TCL: updateChart -> params.data', params.data)
+
+                switch (params.data) {
+                  case GRADE_LEVELS.absent.code:
+                    return absentColor
+                  case GRADE_LEVELS.prequalified.code:
+                    return prequalified
+                  case GRADE_LEVELS.qualified.code:
+                    return qualified
+                  default:
+                    return normal
+                }
+              }
+            }
+          }
+        ]
+      }
     }
   }
 })
