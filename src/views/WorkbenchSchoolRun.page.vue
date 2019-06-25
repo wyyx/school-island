@@ -93,7 +93,7 @@
     <v-card class="pa-3">
       <v-layout column>
         <v-flex>
-          <v-tabs-items v-model="model">
+          <v-tabs-items v-model="model" class="school-run-tabs">
             <v-tab-item value="tab-1">
               <v-card flat>
                 <h3>
@@ -434,5 +434,9 @@ export default Vue.extend({
 
 .menu-text {
   vertical-align: top;
+}
+
+.school-run-tabs.v-window {
+  width: 100% !important;
 }
 </style>
