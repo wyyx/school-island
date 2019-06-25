@@ -2,13 +2,22 @@
   <div>
     <v-card color="primary" class="mb-2">
       <v-layout column wrap class="pa-3">
-        <v-flex class="text-xs-center">
-          <v-avatar size="64">
-            <img :src="schoolLogo" alt="alt" />
+        <v-flex class="h-center">
+          <v-avatar size="64" class="text-xs-center">
+            <img v-if="schoolLogo" :src="schoolLogo" alt="alt" />
+            <v-icon v-else :size="64">help_outline</v-icon>
           </v-avatar>
         </v-flex>
-        <v-flex class="text-xs-center pa-2">
-          <h2 class="title white--text">{{ schoolName }}</h2>
+        <v-flex class="text-center pa-2">
+          <h2
+            v-if="schoolName"
+            class="title white--text text-xs-center fill-width"
+          >
+            {{ schoolName }}
+          </h2>
+          <h2 v-else class="title white--text text-xs-center fill-width">
+            未知学校名称
+          </h2>
         </v-flex>
       </v-layout>
     </v-card>
@@ -166,7 +175,8 @@ import {
   showTabs,
   isTourist,
   school,
-  isBinded
+  isBinded,
+  roleRoute
 } from '../store/auth/auth.paths'
 import { loadUserInfoAction } from '../store/auth/auth.actions'
 import { get } from 'vuex-pathify'
@@ -174,11 +184,11 @@ import { get } from 'vuex-pathify'
 export default Vue.extend({
   data: function() {
     return {
-      tab: 2,
+      tab: 1,
       name: '',
       idCard: '',
       relation: 0,
-      userType: 3,
+      userType: 1,
       name2: '',
       idCard2: '',
       showSnackbar: false,
@@ -186,7 +196,7 @@ export default Vue.extend({
       validated: false,
       color: 'success',
       showLoading: false,
-      tabs: 'teacher',
+      tabs: 'parents',
       model: null,
       showTab1Input: true,
       showTab2Input: true,
@@ -221,7 +231,8 @@ export default Vue.extend({
   computed: {
     ...get(authModulePath, {
       school,
-      isBinded
+      isBinded,
+      roleRoute
     }),
     schoolName() {
       const that: any = this
@@ -230,6 +241,7 @@ export default Vue.extend({
     schoolLogo() {
       const that: any = this
       const logos = that.school && that.school.logo
+      console.log('TCL: schoolLogo -> logos', logos)
       return logos ? logos[0] : ''
     },
     store() {
@@ -326,7 +338,7 @@ export default Vue.extend({
         .bind(data)
         .then(res => {
           if (res.data.content) {
-            console.log('绑定成功！跳转到首页')
+            console.log('绑定成功！重新加载用户信息')
 
             this.showSuccessMessage('绑定成功！')
             this.reloadUserInfo()
@@ -351,10 +363,9 @@ export default Vue.extend({
         .then(() => {
           this.showLoading = false
 
+          const that: any = this
           setTimeout(() => {
-            this.$router.push({
-              name: 'home'
-            })
+            this.$router.push({ path: `/workbench/${that.roleRoute}` })
           }, 1000)
         })
         .catch(error => {})

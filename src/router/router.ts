@@ -84,6 +84,16 @@ export default new Router({
         )
     },
     {
+      path: '/data-center',
+      name: 'data-center',
+      props: true,
+      beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "data-center" */ '../views/DataCenter.page.vue'
+        )
+    },
+    {
       path: '/explore',
       name: 'explore',
       beforeEnter: authGuard,

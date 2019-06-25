@@ -82,36 +82,54 @@ export default Vue.extend({
         s
       })
 
-      // open when build
-      this.$router.push({ name: 'home' })
+      // // open when build
+      // this.$router.push({ name: 'home' })
     },
     checkBinding() {
-      userService.getUserInfo().then(res => {
-        const userInfo = res.data.content
-        console.log('TCL: checkBinding -> userInfo', userInfo)
+      userService
+        .getUserInfo()
+        .then(res => {
+          const userInfo = res.data.content
+          console.log('TCL: checkBinding -> userInfo', userInfo)
 
-        if (userInfo) {
-          this.$store.dispatch(
-            authModulePath + loadUserInfoSuccessAction,
-            userInfo
-          )
-        } else {
-          this.$store.dispatch(authModulePath + loadUserInfoFailAction)
-        }
+          if (userInfo) {
+            this.$store.dispatch(
+              authModulePath + loadUserInfoSuccessAction,
+              userInfo
+            )
+          } else {
+            this.$store.dispatch(authModulePath + loadUserInfoFailAction)
+          }
 
-        if (userInfo && userInfo.roleVoList && userInfo.roleVoList.length > 0) {
-          // show tabs if binded
-          storeService.store.set(authModulePath + showTabs, true)
+          if (
+            userInfo &&
+            userInfo.roleVoList &&
+            userInfo.roleVoList.length > 0
+          ) {
+            // show tabs if binded
+            storeService.store.set(authModulePath + showTabs, true)
 
-          this.$router.push({
-            name: 'home'
-          })
-        } else {
+            const that: any = this
+
+            // go to workbench page, setTimeout for waiting roleRoute to be ready
+            setTimeout(() => {
+              if (that.roleRoute) {
+                this.$router.push({ path: `/workbench/${that.roleRoute}` })
+              } else {
+                this.$router.push({ name: 'home' })
+              }
+            }, 10)
+          } else {
+            this.$router.push({
+              name: 'binding'
+            })
+          }
+        })
+        .catch(error => {
           this.$router.push({
             name: 'binding'
           })
-        }
-      })
+        })
     },
     loadUserInfo() {
       this.$store

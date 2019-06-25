@@ -55,7 +55,7 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-tile @click="inDeveloping">
+                      <v-list-tile @click="goToDataCenterPage">
                         <v-list-tile-title>
                           <v-icon>equalizer</v-icon>
                           <span class="menu-text pl-2">数据中心</span>
@@ -65,12 +65,6 @@
                         <v-list-tile-title>
                           <v-icon>assignment</v-icon>
                           <span class="menu-text pl-2">任务中心</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile>
-                        <v-list-tile-title>
-                          <v-icon>school</v-icon>
-                          <span class="menu-text pl-2">校园展示</span>
                         </v-list-tile-title>
                       </v-list-tile>
                       <v-list-tile @click="inDeveloping">
@@ -283,6 +277,11 @@ export default Vue.extend({
     onBack() {
       this.$router.push({
         name: 'home'
+      })
+    },
+    goToDataCenterPage() {
+      this.$router.push({
+        name: 'data-center'
       })
     },
     loadTop() {
