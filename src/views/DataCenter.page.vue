@@ -32,16 +32,19 @@
               <v-flex xs6 class="px-1">
                 <v-select
                   v-model="currentGrade"
-                  :items="[]"
+                  :items="gradeList"
+                  item-text="grade"
+                  item-value="grade"
+                  :return-object="true"
                   :hide-details="true"
                   solo
                 ></v-select>
               </v-flex>
               <v-flex xs6 class="px-1">
                 <v-select
-                  :items="[]"
-                  item-text="name"
-                  item-value="value"
+                  :items="classListVo"
+                  item-text="className"
+                  item-value="classId"
                   :return-object="true"
                   v-model="currentClass"
                   :hide-details="true"
@@ -98,7 +101,11 @@ import { gradeService } from '../services/grade.service'
 import {
   BriefGrade,
   StudentInfoForDetail,
-  ClassModelForSchoolRun
+  ClassModelForSchoolRun,
+  BriefStudentGradeForSchoolRun,
+  GradeVo,
+  SubjectAchievement,
+  GRADE_LEVEL_TEXTS
 } from '../models/grade.model'
 import { StudentVo } from '../models/user.model'
 import { storeService } from '../services/store.service'
@@ -118,26 +125,17 @@ export default Vue.extend({
     return {
       categoryTab: 1,
       subjectTab: 1,
-      subjectList: [
-        {
-          subject: '语文'
-        },
-        {
-          subject: '数学'
-        },
-        {
-          subject: '英语'
-        }
-      ],
       tabTextList: [
         { title: '值周数据' },
         { title: '学生数据' },
         { title: '老师数据' },
         { title: '校园数据' }
       ],
+      gradeList: [] as GradeVo[],
+      classListVo: [] as ClassModelForSchoolRun[],
       currentClass: {} as ClassModelForSchoolRun,
-      currentGrade: '',
-      briefGrade: {} as BriefGrade,
+      currentGrade: {} as GradeVo,
+      briefGrade: {} as BriefStudentGradeForSchoolRun,
       studentList: [] as StudentVo[],
       chartOption: null as EChartOption
     }
@@ -148,9 +146,33 @@ export default Vue.extend({
     }),
     ...get(authModulePath, {
       user
-    })
+    }),
+    subjectList(): SubjectAchievement[] {
+      const that: any = this
+      const briefGrade: BriefStudentGradeForSchoolRun = that.briefGrade
+      return (briefGrade && briefGrade.achievements) || []
+    },
+    currentSubject(): SubjectAchievement {
+      return this.subjectList[this.subjectTab]
+    }
   },
-  watch: {},
+  watch: {
+    currentGrade(newVal, oldVal) {
+      const grade = newVal as GradeVo
+      const that: any = this
+
+      that.classListVo = grade.classes
+      that.currentClass = grade.classes && grade.classes[0]
+      this.loadStudentGradeByCondition()
+    },
+    subjectTab() {
+      this.updateChart()
+    },
+    currentClass(newVal, oldVal) {
+      this.loadStudentGradeByCondition()
+      this.updateChart()
+    }
+  },
   methods: {
     goBack() {
       this.$router.push({
@@ -177,7 +199,7 @@ export default Vue.extend({
           {
             show: false,
             type: 'category',
-            data: ['a', 'b', 'c'],
+            data: GRADE_LEVEL_TEXTS,
             axisTick: {
               alignWithLabel: true
             }
@@ -210,7 +232,10 @@ export default Vue.extend({
                 lineHeight: 18
               }
             },
-            data: [3, 4, 5],
+            data: this.currentSubject
+              ? this.currentSubject.achievements || []
+              : [],
+
             itemStyle: {
               color: function(params) {
                 var colorList = [
@@ -239,7 +264,28 @@ export default Vue.extend({
     loadStudentGrade() {
       gradeService.getBriefStudentGradeForSchoolRun().then(res => {
         console.log('TCL: res', res)
+
+        // set init data
+        this.briefGrade = res.data.content
+        this.gradeList = this.briefGrade.gradeVos || []
+        this.currentGrade = this.gradeList[0]
+        this.updateChart()
       })
+    },
+    loadStudentGradeByCondition() {
+      gradeService
+        .getBriefStudentGradeForSchoolRunByCondition({
+          classId: this.currentClass.classId,
+          className: this.currentClass.className,
+          grade: this.currentGrade.grade
+        })
+        .then(res => {
+          console.log('TCL: res', res)
+
+          // set init data
+          this.briefGrade = res.data.content
+          this.updateChart()
+        })
     }
   },
   mounted() {},

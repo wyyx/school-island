@@ -141,13 +141,13 @@ export interface BriefStudentGradeForSchoolRunResponse {
 }
 
 export interface BriefStudentGradeForSchoolRun {
-  achievements: Achievement[]
+  achievements: SubjectAchievement[]
   className: string
   currentChineseGrade: string
   gradeVos: GradeVo[]
 }
 
-export interface Achievement {
+export interface SubjectAchievement {
   achievements: number[]
   subject: string
 }

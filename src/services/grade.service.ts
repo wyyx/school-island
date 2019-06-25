@@ -57,6 +57,16 @@ export class GradeService {
     >(this.baseUrl + '/w/achievement/school-latest-achievement')
   }
 
+  getBriefStudentGradeForSchoolRunByCondition(condition: {
+    classId: number
+    className: string
+    grade: string
+  }) {
+    return this.httpConfigService.httpSercvice.post<
+      BriefStudentGradeForSchoolRunResponse
+    >(this.baseUrl + '/w/achievement/school-condition-achievement', condition)
+  }
+
   getBriefStudentGradeForParents(studentId: number) {
     return this.httpConfigService.httpSercvice.post<
       BriefStudentGradeForParentsResponse
