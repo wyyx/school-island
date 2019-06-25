@@ -84,6 +84,26 @@ export default new Router({
         )
     },
     {
+      path: '/my-archieve-for-student',
+      name: 'my-archieve-for-student',
+      props: true,
+      beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "my-archieve-for-student" */ '../views/MyArchiveForStudent.page.vue'
+        )
+    },
+    {
+      path: '/student-grade-detail-for-parents',
+      name: 'student-grade-detail-for-parents',
+      props: true,
+      beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "student-grade-detail-for-parents" */ '../views/StudentGradeDetailForParents.page.vue'
+        )
+    },
+    {
       path: '/data-center',
       name: 'data-center',
       props: true,

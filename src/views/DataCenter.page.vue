@@ -5,11 +5,12 @@
         <div @click="goBack">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
-        <div class="Grade_entry_text">班级数据</div>
+        <div class="Grade_entry_text">数据中心</div>
       </div>
     </div>
     <div>
-      <v-tabs v-model="active" fixed-tabs slider-color="primary">
+      <!-- categoryTab -->
+      <v-tabs v-model="categoryTab" fixed-tabs slider-color="primary">
         <v-tab v-for="(item, index) in tabTextList" :key="index">{{
           item.title
         }}</v-tab>
@@ -22,46 +23,44 @@
 
         <!-- studnet grade tab content -->
         <v-tab-item>
-          <v-card class="content">
+          <v-card class="content pa-2">
             <v-card-title primary-title>
               <h3>学生成绩</h3>
             </v-card-title>
-            <v-card-text>
-              <div>
-                <v-layout row>
-                  <v-flex xs5 class="px-1">
-                    <v-select
-                      v-model="currentGrade"
-                      :items="[]"
-                      :hide-details="true"
-                      solo
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs7 class="px-1">
-                    <v-select
-                      :items="[]"
-                      item-text="name"
-                      item-value="value"
-                      :return-object="true"
-                      v-model="currentSemister"
-                      solo
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs7 class="px-1">
-                    <v-select
-                      :items="[]"
-                      item-text="name"
-                      item-value="value"
-                      :return-object="true"
-                      v-model="currentSemister"
-                      solo
-                    ></v-select>
-                  </v-flex>
-                </v-layout>
-              </div>
-              <div></div>
-            </v-card-text>
-            <div class="class-grade">
+            <!-- conditions select -->
+            <v-layout row class="py-1">
+              <v-flex xs6 class="px-1">
+                <v-select
+                  v-model="currentGrade"
+                  :items="[]"
+                  :hide-details="true"
+                  solo
+                ></v-select>
+              </v-flex>
+              <v-flex xs6 class="px-1">
+                <v-select
+                  :items="[]"
+                  item-text="name"
+                  item-value="value"
+                  :return-object="true"
+                  v-model="currentClass"
+                  :hide-details="true"
+                  solo
+                ></v-select>
+              </v-flex>
+            </v-layout>
+
+            <!-- subject tabs -->
+            <v-tabs v-model="subjectTab" slider-color="primary">
+              <v-tab
+                v-for="subject in subjectList"
+                :key="subject.subject"
+                ripple
+              >
+                {{ subject.subject }}
+              </v-tab>
+            </v-tabs>
+            <div class="student-grade-wrapper">
               <Chart
                 v-if="chartOption"
                 width="100%"
@@ -96,7 +95,11 @@ import { get } from 'vuex-pathify'
 import { authModulePath, user, currentStudent } from '../store/auth/auth.paths'
 import Developing from '@/components/Developing.component.vue'
 import { gradeService } from '../services/grade.service'
-import { BriefGrade, StudentInfoForDetail } from '../models/grade.model'
+import {
+  BriefGrade,
+  StudentInfoForDetail,
+  ClassModelForSchoolRun
+} from '../models/grade.model'
 import { StudentVo } from '../models/user.model'
 import { storeService } from '../services/store.service'
 import { EChartOption } from 'echarts'
@@ -113,34 +116,28 @@ export default Vue.extend({
   },
   data() {
     return {
-      active: 1,
+      categoryTab: 1,
+      subjectTab: 1,
+      subjectList: [
+        {
+          subject: '语文'
+        },
+        {
+          subject: '数学'
+        },
+        {
+          subject: '英语'
+        }
+      ],
       tabTextList: [
         { title: '值周数据' },
         { title: '学生数据' },
         { title: '老师数据' },
         { title: '校园数据' }
       ],
-      currentClass: {} as ClassModel,
-      semisterlist: [
-        { name: '上学期期末考评', value: 2 },
-        { name: '下学期期末考评', value: 4 }
-      ],
-      currentSemister: { name: '下学期期末考评', value: 2 },
+      currentClass: {} as ClassModelForSchoolRun,
       currentGrade: '',
       briefGrade: {} as BriefGrade,
-      headers: [
-        {
-          text: '学号',
-          align: 'right',
-          sortable: true,
-          value: 'studentNumber',
-          sort: 'asc'
-        },
-        { text: '姓名', align: 'right', sortable: false, value: 'name' },
-        { text: '详情', align: 'right', sortable: true, value: '' }
-      ],
-      pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
-      search: '',
       studentList: [] as StudentVo[],
       chartOption: null as EChartOption
     }
@@ -180,7 +177,7 @@ export default Vue.extend({
           {
             show: false,
             type: 'category',
-            data: [],
+            data: ['a', 'b', 'c'],
             axisTick: {
               alignWithLabel: true
             }
@@ -213,7 +210,7 @@ export default Vue.extend({
                 lineHeight: 18
               }
             },
-            data: [],
+            data: [3, 4, 5],
             itemStyle: {
               color: function(params) {
                 var colorList = [
@@ -238,10 +235,16 @@ export default Vue.extend({
           }
         ]
       }
+    },
+    loadStudentGrade() {
+      gradeService.getBriefStudentGradeForSchoolRun().then(res => {
+        console.log('TCL: res', res)
+      })
     }
   },
   mounted() {},
   created() {
+    this.loadStudentGrade()
     this.updateChart()
   }
 })

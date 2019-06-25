@@ -1,9 +1,11 @@
-import { HttpConfigService, httpConfigService } from './http-config.service'
 import {
   BriefGradeResponse,
-  StudentListResponse,
-  StudentGradeDetailResponse
+  BriefStudentGradeForSchoolRunResponse,
+  StudentGradeDetailResponse,
+  StudentListResponse
 } from '@/models/grade.model'
+import { HttpConfigService, httpConfigService } from './http-config.service'
+import { BriefStudentGradeForParentsResponse } from '@/models/parents-grade.model'
 
 export class GradeService {
   baseUrl: string = ''
@@ -38,7 +40,7 @@ export class GradeService {
     )
   }
 
-  getStudentGradetDetail(condition: {
+  getStudentGradeDetail(condition: {
     grade: string
     studentId: number
     type: number
@@ -47,6 +49,38 @@ export class GradeService {
       this.baseUrl + '/w/achievement/teacher-one-student-achievement',
       condition
     )
+  }
+
+  getBriefStudentGradeForSchoolRun() {
+    return this.httpConfigService.httpSercvice.post<
+      BriefStudentGradeForSchoolRunResponse
+    >(this.baseUrl + '/w/achievement/school-latest-achievement')
+  }
+
+  getBriefStudentGradeForParents(studentId: number) {
+    return this.httpConfigService.httpSercvice.post<
+      BriefStudentGradeForParentsResponse
+    >(this.baseUrl + '/w/achievement/parent-achievement-brief', {
+      studentId
+    })
+  }
+
+  getBriefStudentGradeDetailForParents(studentId: number) {
+    return this.httpConfigService.httpSercvice.post<
+      BriefStudentGradeForParentsResponse
+    >(this.baseUrl + '/w/achievement/parent-achievement-detail', {
+      studentId
+    })
+  }
+
+  getBriefStudentGradeDetailForParentsByCondition(condition: {
+    grade: string
+    studentId: number
+    type: number
+  }) {
+    return this.httpConfigService.httpSercvice.post<
+      BriefStudentGradeForParentsResponse
+    >(this.baseUrl + '/w/achievement/parent-condition-achievement', condition)
   }
 }
 

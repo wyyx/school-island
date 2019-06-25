@@ -38,7 +38,7 @@
           <img class="_img" src="../assets/Setting.svg" alt />
         </div>
       </div>
-      <div class="member_box">
+      <div class="member_box pb-2">
         <div>老师</div>
         <div>学生</div>
         <div>家长</div>
@@ -80,7 +80,7 @@
       <div class="class-grade">
         <Chart
           v-if="chartOption"
-          width="100%"
+          width="150%"
           height="300px"
           :option="chartOption"
         ></Chart>
@@ -275,6 +275,11 @@ export default Vue.extend({
 <style scoped lang="scss">
 .wrapper {
   margin-bottom: 76px;
+}
+
+.class-grade {
+  width: 100%;
+  overflow-x: scroll;
 }
 
 ._img {

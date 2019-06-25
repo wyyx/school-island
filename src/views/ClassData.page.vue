@@ -104,7 +104,11 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { classesModulePath, classList } from '../store/classes/classes.paths'
+import {
+  classesModulePath,
+  classList,
+  currentStudentForTeacher
+} from '../store/classes/classes.paths'
 import { ClassModel } from '../models/class.model'
 import { get } from 'vuex-pathify'
 import { authModulePath, user, currentStudent } from '../store/auth/auth.paths'
@@ -213,7 +217,7 @@ export default Vue.extend({
     },
     goToStudentGradeDetailPage(student: StudentVo) {
       console.log('TCL: goToStudentGradeDetailPage -> student', student)
-      storeService.store.set(classesModulePath + currentStudent, {
+      storeService.store.set(classesModulePath + currentStudentForTeacher, {
         name: student.studentName,
         grade: this.currentGrade,
         classId: parseInt(this.classId),

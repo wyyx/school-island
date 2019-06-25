@@ -8,25 +8,60 @@
         <div class="Grade_entry_text">{{ title }}</div>
       </div>
     </div>
+
     <v-card class="mb-3">
-      <Chart
-        v-if="chartOption"
-        width="100%"
-        height="300px"
-        :option="chartOption"
-      ></Chart>
+      <v-layout class="pa-3">
+        <v-flex class="pr-1">
+          <v-select
+            v-model="currentGrade"
+            :items="gradeList"
+            item-text="name"
+            item-value="name"
+            :return-object="true"
+            :hide-details="true"
+            solo
+          ></v-select>
+        </v-flex>
+        <v-flex class="pl-1">
+          <v-select
+            v-model="currentSemister"
+            :items="semisterList"
+            item-text="text"
+            item-value="value"
+            :return-object="true"
+            :hide-details="true"
+            solo
+          ></v-select>
+        </v-flex>
+      </v-layout>
+      <div v-if="achievementList.length > 0">
+        <Chart
+          v-if="chartOption"
+          width="100%"
+          height="300px"
+          :option="chartOption"
+        ></Chart>
+      </div>
+      <div v-else class="no-data-wrapper both-center">
+        <h3 class="grey--text">暂无数据</h3>
+      </div>
     </v-card>
     <v-card class="pa-3">
       <h3 class="mb-3">老师评语</h3>
-      <div
-        class="comment"
-        v-for="achievement in achievementList"
-        :key="achievement.subject"
-      >
-        <h4 class="mb-2 primary--text">{{ achievement.teacherName }}老师</h4>
-        <p>
-          {{ achievement.comment }}
-        </p>
+      <div v-if="achievementList.length > 0">
+        <div
+          class="comment"
+          v-for="achievement in achievementList"
+          :key="achievement.subject"
+        >
+          <h4 class="mb-2 primary--text">{{ achievement.teacherName }}老师</h4>
+          <p>
+            {{ achievement.comment }}
+          </p>
+        </div>
+      </div>
+      <div v-else class="no-data-wrapper both-center">
+        <h3 class="grey--text">暂无数据</h3>
       </div>
     </v-card>
   </div>
@@ -43,67 +78,149 @@ import {
   GRADE_LEVELS
 } from '../models/grade.model'
 import { get } from 'vuex-pathify'
-import {
-  classesModulePath,
-  currentStudentForTeacher
-} from '../store/classes/classes.paths'
+
 import { gradeService } from '../services/grade.service'
+import { authModulePath, currentStudent } from '../store/auth/auth.paths'
+import { BriefStudentGradeForParents } from '../models/parents-grade.model'
+import { Student } from '../models/user.model'
+
+interface Semister {
+  value: number
+  text: string
+}
 
 export default Vue.extend({
-  name: 'StudentGradeDetail',
+  name: 'StudentGradeDetailForParents',
   components: { Chart },
   props: {},
   data() {
     return {
       chartOption: null as EChartOption,
-      studentGradeDetail: {} as StudentGradeDetail
+      studentGradeDetail: {} as BriefStudentGradeForParents,
+      gradeList: [],
+      semisterList: [
+        {
+          value: 2,
+          text: '上学期期末考评'
+        },
+        {
+          value: 4,
+          text: '下学期期末考评'
+        }
+      ] as Semister[],
+      currentGrade: '',
+      currentSemister: {
+        value: 4,
+        text: '下学期期末考评'
+      } as Semister
+    }
+  },
+  watch: {
+    currentGrade() {
+      this.loadStudentGradeByCondition()
+    },
+    currentSemister() {
+      this.loadStudentGradeByCondition()
     }
   },
   computed: {
-    ...get(classesModulePath, {
-      currentStudentForTeacher
+    ...get(authModulePath, {
+      currentStudent
     }),
     title() {
       const that: any = this
-      const student = that.currentStudentForTeacher as StudentInfoForDetail
-      return student.name + student.grade + student.semister
+      const student = that.currentStudent as Student
+      console.log('TCL: title -> that.currentSemister', that.currentSemister)
+
+      return student.name + that.currentGrade + that.currentSemister.text
     },
     achievementList() {
       const that: any = this
-      const studentGradeDetail = that.studentGradeDetail as StudentGradeDetail
+      const studentGradeDetail = that.studentGradeDetail as BriefStudentGradeForParents
       return (studentGradeDetail && studentGradeDetail.achievementVos) || []
     }
   },
   methods: {
     goBack() {
       const that: any = this
-      const student = that.currentStudentForTeacher as StudentInfoForDetail
+      const student = that.currentStudent as Student
 
       this.$router.push({
-        name: 'class-data',
-        params: {
-          classId: student.classId.toString()
-        }
+        name: 'my-archieve-for-student'
       })
     },
     loadStudentGrade() {
       const that: any = this
-      const student = that.currentStudentForTeacher as StudentInfoForDetail
+      const student = that.currentStudent
+
+      console.log('TCL: loadStudentGrade -> student', student)
 
       gradeService
-        .getStudentGradeDetail({
-          grade: student.grade,
-          studentId: student.studentId,
-          type: student.type
-        })
+        .getBriefStudentGradeDetailForParents(student.id)
         .then(res => {
           console.log('TCL: loadStudentGrade -> res', res)
           this.studentGradeDetail =
-            res.data.content || ({} as StudentGradeDetail)
+            res.data.content || ({} as BriefStudentGradeForParents)
+
           this.studentGradeDetail = {
             ...this.studentGradeDetail,
             achievementVos: this.studentGradeDetail.achievementVos.reverse()
           }
+
+          // set init data
+          this.gradeList = this.studentGradeDetail.grades
+          this.currentGrade = this.studentGradeDetail.currentGrade
+
+          switch (this.studentGradeDetail.type) {
+            case 2:
+              this.currentSemister = {
+                value: 2,
+                text: '上学期期末考评'
+              }
+              break
+            case 4:
+              this.currentSemister = {
+                value: 4,
+                text: '下学期期末考评'
+              }
+              break
+            default:
+              break
+          }
+
+          this.currentSemister.value = this.studentGradeDetail.type
+
+          this.updateChart()
+        })
+    },
+    loadStudentGradeByCondition() {
+      const that: any = this
+      const student = that.currentStudent
+
+      console.log('TCL: loadStudentGrade -> student', student)
+
+      const condition = {
+        grade: this.currentGrade,
+        studentId: student.id,
+        type: this.currentSemister.value
+      }
+      console.log('TCL: loadStudentGradeByCondition -> condition', condition)
+
+      gradeService
+        .getBriefStudentGradeDetailForParentsByCondition(condition)
+        .then(res => {
+          console.log('TCL: loadStudentGrade -> res', res)
+          this.studentGradeDetail =
+            res.data.content || ({} as BriefStudentGradeForParents)
+
+          this.studentGradeDetail = {
+            ...this.studentGradeDetail,
+            achievementVos: this.studentGradeDetail.achievementVos.reverse()
+          }
+
+          // set init data
+          this.gradeList = this.studentGradeDetail.grades
+          this.currentGrade = this.studentGradeDetail.currentGrade
 
           this.updateChart()
         })
@@ -177,13 +294,12 @@ export default Vue.extend({
                 }) => {
                   // get level name
 
-                  const studentGradeDetail = that.studentGradeDetail as StudentGradeDetail
+                  const studentGradeDetail = that.studentGradeDetail as BriefStudentGradeForParents
 
                   const star = studentGradeDetail.achievementVos[dataIndex].star
 
                   const startText = star === 0 ? '' : `\n${star}星`
 
-                  console.log('TCL: updateChart -> startText', startText)
                   return (
                     Object.keys(GRADE_LEVELS)
                       .map(key => GRADE_LEVELS[key])
@@ -201,8 +317,6 @@ export default Vue.extend({
                 let prequalified = '#F86E6E'
                 let qualified = '#E591E5'
                 let normal = '#33CCFF'
-
-                console.log('TCL: updateChart -> params.data', params.data)
 
                 switch (params.data) {
                   case GRADE_LEVELS.absent.code:
@@ -223,7 +337,7 @@ export default Vue.extend({
   },
   created() {
     const that: any = this
-    console.log('this.currentStudentForTeacher', that.currentStudentForTeacher)
+    console.log('this.currentStudent', that.currentStudent)
     this.loadStudentGrade()
   },
   mounted() {}
@@ -252,5 +366,10 @@ export default Vue.extend({
 .Grade_entry_text {
   font-size: 18px;
   margin-left: 20px;
+}
+
+.no-data-wrapper {
+  width: 100%;
+  height: 150px;
 }
 </style>

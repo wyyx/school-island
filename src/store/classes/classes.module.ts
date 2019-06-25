@@ -7,12 +7,12 @@ import { StudentInfoForDetail } from '@/models/grade.model'
 export interface classesState {
   classList: ClassModel[]
   currentClass: ClassModel
-  currentStudent: StudentInfoForDetail
+  currentStudentForTeacher: StudentInfoForDetail
 }
 
 const initialClassesState: classesState = {
   classList: [],
-  currentStudent: {} as StudentInfoForDetail,
+  currentStudentForTeacher: {} as StudentInfoForDetail,
   currentClass: {} as ClassModel
 }
 

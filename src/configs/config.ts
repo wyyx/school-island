@@ -83,3 +83,32 @@ export const mockSchoolInfo: SchoolInfo = {
   tel: 'string',
   schoolId: '1'
 }
+
+export const mockStudentGradeListForStudent = [
+  {
+    grade: '一年级',
+    classList: [
+      {
+        classId: 1,
+        className: '一年级1班'
+      },
+      {
+        classId: 2,
+        className: '一年级2班'
+      }
+    ]
+  },
+  {
+    grade: '二年级',
+    classList: [
+      {
+        classId: 5,
+        className: '二年级5班'
+      },
+      {
+        classId: 6,
+        className: '二年级6班'
+      }
+    ]
+  }
+]

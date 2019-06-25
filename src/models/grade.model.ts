@@ -101,12 +101,12 @@ export const GRADE_LEVEL_TEXTS = [
   '缺考',
   '待合格',
   '合格',
-  '良好1🟊',
-  '良好2🟊',
-  '良好3🟊',
-  '优秀1🟊',
-  '优秀2🟊',
-  '优秀3🟊'
+  '良好1星',
+  '良好2星',
+  '良好3星',
+  '优秀1星',
+  '优秀2星',
+  '优秀3星'
 ]
 
 export const GRADE_LEVELS = {
@@ -130,4 +130,35 @@ export const GRADE_LEVELS = {
     name: '优秀',
     code: 5
   }
+}
+
+// student grade for school run
+export interface BriefStudentGradeForSchoolRunResponse {
+  content: BriefStudentGradeForSchoolRun
+  errorCode: string
+  errorMsg: string
+  status: string
+}
+
+export interface BriefStudentGradeForSchoolRun {
+  achievements: Achievement[]
+  className: string
+  currentChineseGrade: string
+  gradeVos: GradeVo[]
+}
+
+export interface Achievement {
+  achievements: number[]
+  subject: string
+}
+
+export interface GradeVo {
+  classes: ClassModelForSchoolRun[]
+  grade: string
+}
+
+export interface ClassModelForSchoolRun {
+  classId: number
+  className: string
+  grade: string
 }
