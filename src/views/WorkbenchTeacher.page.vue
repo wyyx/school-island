@@ -124,13 +124,20 @@
           <v-tabs-items v-model="model" class="pt-3">
             <v-tab-item value="tab-1">
               <v-card v-if="hasClasses" flat>
-                <h3>
+                <h3 class="mb-2">
                   上周综合得分
                   <span class="accent--text text--darken-2">8.5分</span>
                 </h3>
-                <h5 class="grey--text">超过 72% 的班级</h5>
+                <!-- <h5 class="grey--text">超过 72% 的班级</h5> -->
                 <!-- deduction week history graph -->
-                <div v-if="hasHistory" id="chart" class="pt-3"></div>
+                <div v-if="hasHistory" class="chart-wrapper fill-width">
+                  <Chart
+                    v-if="chartOption"
+                    width="100%"
+                    height="300px"
+                    :option="chartOption"
+                  ></Chart>
+                </div>
                 <div v-if="!hasHistory" class="loading-wrapper">
                   <v-progress-circular
                     indeterminate
@@ -276,6 +283,8 @@ import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { UserInfo } from '../models/user.model'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
 import { storeService } from '../services/store.service'
+import Chart from '@/components/Chart.component.vue'
+
 moment.locale('zh-CN')
 
 interface Image {
@@ -291,7 +300,8 @@ export default Vue.extend({
   mixins: [snackbarMixin],
   components: {
     swiper,
-    swiperSlide
+    swiperSlide,
+    Chart
   },
   data: function() {
     return {
@@ -327,10 +337,11 @@ export default Vue.extend({
         }
       },
       showSwiper: false,
-      chart: {} as ECharts,
       loadingMore: false,
       hasMore: true,
-      showClassMenu: false
+      showClassMenu: false,
+      chart: {} as ECharts,
+      chartOption: null as EChartOption
     }
   },
   watch: {
@@ -467,17 +478,13 @@ export default Vue.extend({
           })
         : []
     },
-    initEcharts() {
-      let chart = echarts.init(document.getElementById(
-        'chart'
-      ) as HTMLDivElement)
-      this.chart = chart
-      // specify chart configuration item and data
+    updateChart() {
       const that: any = this
 
       console.log('TCL: initEcharts -> that.series', that.series)
+      console.log('TCL: updateChart -> that.legend', that.legend)
 
-      var option: EChartOption = {
+      this.chartOption = {
         tooltip: {},
         legend: {
           data: that.legend
@@ -488,9 +495,6 @@ export default Vue.extend({
         yAxis: {},
         series: that.series
       }
-
-      // use configuration item and data specified to show chart
-      chart.setOption(option)
     },
     loadDeducionList(
       classId: number,
@@ -526,7 +530,7 @@ export default Vue.extend({
       dutyService.getDeductionHistoryByWeek(classId).then(res => {
         this.deductionWeekHistory = res.data.content
 
-        this.initEcharts()
+        this.updateChart()
       })
     },
     toShowSwiper(imgUrls: string[]) {

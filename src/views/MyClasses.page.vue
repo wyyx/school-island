@@ -121,7 +121,6 @@ export default Vue.extend({
       rating: 2,
       currentClass: {} as ClassModel,
       briefGrade: {} as BriefGrade,
-      chart: {} as ECharts,
       chartOption: null as EChartOption
     }
   },

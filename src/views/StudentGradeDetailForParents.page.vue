@@ -168,7 +168,7 @@ export default Vue.extend({
 
           this.studentGradeDetail = {
             ...this.studentGradeDetail,
-            achievementVos: this.studentGradeDetail.achievementVos.reverse()
+            achievementVos: this.studentGradeDetail.achievementVos
           }
 
           // set init data
@@ -219,7 +219,7 @@ export default Vue.extend({
 
           this.studentGradeDetail = {
             ...this.studentGradeDetail,
-            achievementVos: this.studentGradeDetail.achievementVos.reverse()
+            achievementVos: this.studentGradeDetail.achievementVos
           }
 
           // set init data

@@ -26,7 +26,12 @@ import Url from 'url-parse'
 import { dutyService } from './services/duty.service'
 import { httpConfigService } from './services/http-config.service'
 import { userService } from './services/user.service'
-import { BASE_URL, YANG_BASE_URL, GUO_BASE_URL } from './configs/config'
+import {
+  BASE_URL,
+  YANG_BASE_URL,
+  GUO_BASE_URL,
+  LOCAL_STORAGE_KEYS
+} from './configs/config'
 import { get } from 'vuex-pathify'
 import {
   authModulePath,
@@ -86,18 +91,29 @@ export default Vue.extend({
       console.log('TCL: resolveInitUrl -> url', url)
 
       // get query params
-      const s = url.query['s']
+      let s = url.query['s']
       console.log('TCL: resolveInitUrl -> s', s)
-      const xyd = url.query['xyd']
+      let xyd = url.query['xyd']
+      console.log('TCL: resolveInitUrl -> xyd', xyd)
+
+      // save or fetch s and xyd from localStorage
+      if (s) {
+        localStorage.setItem(LOCAL_STORAGE_KEYS.schoolId, s)
+      } else {
+        s = localStorage.getItem(LOCAL_STORAGE_KEYS.schoolId)
+      }
+
+      if (xyd) {
+        localStorage.setItem(LOCAL_STORAGE_KEYS.xyd, xyd)
+      } else {
+        xyd = localStorage.getItem(LOCAL_STORAGE_KEYS.xyd)
+      }
 
       // set global headers
       httpConfigService.setHeaders({
-        xyd,
-        s
+        s,
+        xyd
       })
-
-      // // open when build
-      // this.$router.push({ name: 'home' })
     },
     checkBinding() {
       userService
