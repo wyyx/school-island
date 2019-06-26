@@ -71,7 +71,7 @@ export default Vue.extend({
   },
   data: function() {
     return {
-      bottomNav: 'home',
+      bottomNav: '',
       teacher: Role.Teacher,
       schoolRun: Role.SchoolRun,
       parents: Role.Parents

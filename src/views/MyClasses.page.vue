@@ -178,6 +178,20 @@ export default Vue.extend({
       }
     },
     updateChart() {
+      const data = this.currentSubject.achievements || []
+
+      const filterdGradeLevelTexts = []
+      let filterdData = []
+
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index]
+
+        if (element !== 0) {
+          filterdData.push(element)
+          filterdGradeLevelTexts.push(GRADE_LEVEL_TEXTS[index])
+        }
+      }
+
       this.chartOption = {
         color: ['#3398DB'],
         tooltip: {
@@ -197,7 +211,7 @@ export default Vue.extend({
           {
             show: false,
             type: 'category',
-            data: GRADE_LEVEL_TEXTS,
+            data: filterdGradeLevelTexts,
             axisTick: {
               alignWithLabel: true
             }
@@ -230,7 +244,7 @@ export default Vue.extend({
                 lineHeight: 18
               }
             },
-            data: this.currentSubject.achievements || [],
+            data: filterdData || [],
             itemStyle: {
               color: function(params) {
                 var colorList = [

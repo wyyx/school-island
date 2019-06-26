@@ -139,12 +139,6 @@
           </v-layout>
         </v-card-actions>
       </v-card>
-
-      <!-- slogan -->
-      <div class="text-xs-center subheading pa-4 grey--text">
-        <p class="mb-1">校园岛</p>
-        <p>好习惯 好未来</p>
-      </div>
     </div>
 
     <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">

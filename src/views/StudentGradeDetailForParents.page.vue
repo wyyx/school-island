@@ -54,10 +54,14 @@
           v-for="achievement in achievementList"
           :key="achievement.subject"
         >
-          <h4 class="mb-2 primary--text">{{ achievement.teacherName }}老师</h4>
-          <p>
-            {{ achievement.comment }}
-          </p>
+          <div v-if="achievement.comment">
+            <h4 class="mb-2 primary--text">
+              {{ achievement.teacherName }}老师
+            </h4>
+            <p>
+              {{ achievement.comment }}
+            </p>
+          </div>
         </div>
       </div>
       <div v-else class="no-data-wrapper both-center">

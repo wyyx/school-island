@@ -8,6 +8,7 @@ export const isTourist = 'isTourist'
 export const roleList = 'user@roleVoList'
 export const currentRole = 'currentRole'
 export const currentStudent = 'currentStudent'
+export const appIsLoading = 'appIsLoading'
 
 // custom paths
 export const showTabs = 'showTabs'

@@ -1,11 +1,11 @@
-import { mockUserInfo, mockSchoolInfo } from '@/configs/config'
 import { SchoolInfo } from '@/models/school.model'
-import { UserInfo, RoleVo, Student } from '@/models/user.model'
+import { RoleVo, Student, UserInfo } from '@/models/user.model'
 import { make } from 'vuex-pathify'
 import { authActions } from './auth.actions'
 import { authGetters } from './auth.getters'
 
 export interface AuthState {
+  appIsLoading: boolean
   user: UserInfo
   school: SchoolInfo
   showTabs: boolean
@@ -15,6 +15,7 @@ export interface AuthState {
 }
 
 const initialAuthState: AuthState = {
+  appIsLoading: true,
   // user: mockUserInfo,
   user: {} as UserInfo,
   // school: mockSchoolInfo,

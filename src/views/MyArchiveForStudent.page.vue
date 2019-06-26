@@ -214,7 +214,6 @@ export default Vue.extend({
 
                   const startText = star === 0 ? '' : `\n${star}星`
 
-                  console.log('TCL: updateChart -> startText', startText)
                   return (
                     Object.keys(GRADE_LEVELS)
                       .map(key => GRADE_LEVELS[key])

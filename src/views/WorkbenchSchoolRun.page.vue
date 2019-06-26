@@ -357,7 +357,6 @@ export default Vue.extend({
           title = ranking
           break
       }
-
       return title
     },
     switchGrade(grade: { label: string; value: string }) {

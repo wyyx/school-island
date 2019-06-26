@@ -160,8 +160,17 @@ export default Vue.extend({
     currentGrade(newVal, oldVal) {
       const grade = newVal as GradeVo
       const that: any = this
+      const allClassesItem = {
+        classId: 0,
+        className: '全部班级',
+        grade: grade.grade
+      } as ClassModelForSchoolRun
 
-      that.classListVo = grade.classes
+      that.classListVo = grade.classes || []
+      const classListVo = that.classListVo as ClassModelForSchoolRun[]
+      classListVo.unshift(allClassesItem)
+
+      console.log('TCL: currentGrade -> classListVo', classListVo)
       that.currentClass = grade.classes && grade.classes[0]
       this.loadStudentGradeByCondition()
     },

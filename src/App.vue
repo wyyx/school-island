@@ -1,6 +1,13 @@
 <template>
   <v-app>
-    <v-content>
+    <div
+      v-if="appIsLoading"
+      class="loading-wrapper fill-height fill-width both-center column"
+    >
+      <v-progress-circular indeterminate color="accent"></v-progress-circular>
+      <h3 class="subheading mt-1">正在加载数据...</h3>
+    </div>
+    <v-content v-else>
       <ul v-if="false">
         <li>isBinded:{{ isBinded }}</li>
         <li>isTourist:{{ isTourist }}</li>
@@ -27,8 +34,10 @@ import {
   user,
   roleRoute,
   isTourist,
-  isBinded
+  isBinded,
+  appIsLoading
 } from './store/auth/auth.paths'
+import { developing } from '@/store/global.paths'
 import {
   loadUserInfoAction,
   loadSchoolInfoAction,
@@ -46,6 +55,8 @@ export default Vue.extend({
     return {}
   },
   created() {
+    this.showAppLoading()
+
     this.resolveInitUrl()
     this.logBaseStatus()
 
@@ -62,6 +73,9 @@ export default Vue.extend({
       roleRoute,
       isTourist,
       isBinded
+    }),
+    ...get(authModulePath, {
+      appIsLoading
     })
   },
   methods: {
@@ -92,6 +106,7 @@ export default Vue.extend({
           const userInfo = res.data.content
           console.log('TCL: checkBinding -> userInfo', userInfo)
 
+          // save user info
           if (userInfo) {
             this.$store.dispatch(
               authModulePath + loadUserInfoSuccessAction,
@@ -114,22 +129,39 @@ export default Vue.extend({
             // go to workbench page, setTimeout for waiting roleRoute to be ready
             setTimeout(() => {
               if (that.roleRoute) {
-                this.$router.push({ path: `/workbench/${that.roleRoute}` })
+                this.$router.push(
+                  { path: `/workbench/${that.roleRoute}` },
+                  () => {
+                    this.hideAppLoading()
+                  }
+                )
               } else {
                 this.$router.push({ name: 'home' })
+                this.hideAppLoading()
               }
             }, 10)
           } else {
+            // if not binded
             this.$router.push({
               name: 'binding'
             })
+            this.hideAppLoading()
           }
         })
         .catch(error => {
           this.$router.push({
             name: 'binding'
           })
+          this.hideAppLoading()
         })
+    },
+    showAppLoading() {
+      const store: any = this.$store
+      store.set(authModulePath + appIsLoading, true)
+    },
+    hideAppLoading() {
+      const store: any = this.$store
+      store.set(authModulePath + appIsLoading, false)
     },
     loadUserInfo() {
       this.$store

@@ -23,10 +23,12 @@
         v-for="achievement in achievementList"
         :key="achievement.subject"
       >
-        <h4 class="mb-2 primary--text">{{ achievement.teacherName }}老师</h4>
-        <p>
-          {{ achievement.comment }}
-        </p>
+        <div v-if="achievement.comment">
+          <h4 class="mb-2 primary--text">{{ achievement.teacherName }}老师</h4>
+          <p>
+            {{ achievement.comment }}
+          </p>
+        </div>
       </div>
     </v-card>
   </div>
@@ -102,7 +104,7 @@ export default Vue.extend({
             res.data.content || ({} as StudentGradeDetail)
           this.studentGradeDetail = {
             ...this.studentGradeDetail,
-            achievementVos: this.studentGradeDetail.achievementVos.reverse()
+            achievementVos: this.studentGradeDetail.achievementVos
           }
 
           this.updateChart()
@@ -183,7 +185,6 @@ export default Vue.extend({
 
                   const startText = star === 0 ? '' : `\n${star}星`
 
-                  console.log('TCL: updateChart -> startText', startText)
                   return (
                     Object.keys(GRADE_LEVELS)
                       .map(key => GRADE_LEVELS[key])
