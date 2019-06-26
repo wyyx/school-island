@@ -5,6 +5,8 @@ import store from './store/store'
 import './plugins'
 import './fontawesome'
 import './ttt.js'
+// import filters
+import '@/filters'
 
 // styles
 import './styles/main.scss'

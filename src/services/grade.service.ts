@@ -6,6 +6,7 @@ import {
 } from '@/models/grade.model'
 import { HttpConfigService, httpConfigService } from './http-config.service'
 import { BriefStudentGradeForParentsResponse } from '@/models/parents-grade.model'
+import { GradeInputStudentListResponse } from '@/models/grade-input.model'
 
 export class GradeService {
   baseUrl: string = ''
@@ -91,6 +92,17 @@ export class GradeService {
     return this.httpConfigService.httpSercvice.post<
       BriefStudentGradeForParentsResponse
     >(this.baseUrl + '/w/achievement/parent-condition-achievement', condition)
+  }
+
+  getGradeInputStudentListResponse(params: {
+    classId: number
+    pageNo: number
+    pageSize: number
+    teacherId: number
+  }) {
+    return this.httpConfigService.httpSercvice.post<
+      GradeInputStudentListResponse
+    >(this.baseUrl + '/w/exam-submit-record/list', params)
   }
 }
 

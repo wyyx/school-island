@@ -114,6 +114,26 @@ export default new Router({
         )
     },
     {
+      path: '/grade-input',
+      name: 'grade-input',
+      props: true,
+      beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "grade-input" */ '../views/GradeInput.page.vue'
+        )
+    },
+    {
+      path: '/grade-input-edit',
+      name: 'grade-input-edit',
+      props: true,
+      beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "grade-input-edit" */ '../views/GradeInputEdit.page.vue'
+        )
+    },
+    {
       path: '/explore',
       name: 'explore',
       beforeEnter: authGuard,

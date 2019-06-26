@@ -1,6 +1,37 @@
 <template>
   <div class="container pa-0">
     <!-- <Header :showBack="true" title="工作台" @back="onBack"></Header> -->
+    <!-- <v-btn
+      class="grade-input-btn"
+      style="z-index: 5000"
+      color="accent"
+      fab
+      dark
+      fixed
+      large
+      bottom
+      right
+    >
+      录入成绩
+    </v-btn> -->
+
+    <v-speed-dial
+      class="teacher-helper"
+      fixed
+      bottom
+      right
+      direction="left"
+      transition="slide-y-reverse-transition"
+    >
+      <template v-slot:activator>
+        <v-btn color="accent" dark fab>
+          <v-icon>add</v-icon>
+          <!-- <v-icon>close</v-icon> -->
+        </v-btn>
+      </template>
+      <v-btn @click="goToGradeInputPage" color="accent"> 录入成绩 </v-btn>
+    </v-speed-dial>
+
     <v-card class="mb-2">
       <transition name="scale">
         <swiper
@@ -341,7 +372,8 @@ export default Vue.extend({
       hasMore: true,
       showClassMenu: false,
       chart: {} as ECharts,
-      chartOption: null as EChartOption
+      chartOption: null as EChartOption,
+      fab: false
     }
   },
   watch: {
@@ -396,6 +428,12 @@ export default Vue.extend({
     this.scroll()
   },
   methods: {
+    goToGradeInputPage() {
+      this.$router.push({
+        name: 'grade-input'
+      })
+    },
+
     goToMyClassesPage() {
       console.log('TCL: goToMyClassesPage -> goToMyClassesPage')
       this.$router.push({
@@ -613,6 +651,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.teacher-helper {
+  z-index: 5000;
+  bottom: 72px;
+}
+
 .container {
   margin-bottom: 56px;
 }
