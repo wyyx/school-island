@@ -6,7 +6,11 @@ import {
 } from '@/models/grade.model'
 import { HttpConfigService, httpConfigService } from './http-config.service'
 import { BriefStudentGradeForParentsResponse } from '@/models/parents-grade.model'
-import { GradeInputStudentListResponse } from '@/models/grade-input.model'
+import {
+  GradeInputGradeSubjectListResponse,
+  GetAvaliableSubjectListResponse,
+  AddGradeSubjectResponse
+} from '@/models/grade-input.model'
 
 export class GradeService {
   baseUrl: string = ''
@@ -94,15 +98,34 @@ export class GradeService {
     >(this.baseUrl + '/w/achievement/parent-condition-achievement', condition)
   }
 
-  getGradeInputStudentListResponse(params: {
+  getGradeInputGradeSubjectList(params: {
     classId: number
     pageNo: number
     pageSize: number
     teacherId: number
   }) {
     return this.httpConfigService.httpSercvice.post<
-      GradeInputStudentListResponse
+      GradeInputGradeSubjectListResponse
     >(this.baseUrl + '/w/exam-submit-record/list', params)
+  }
+
+  addGradeSubject(params: {
+    classId: number
+    grade: string
+    subject: string
+    type: number
+    year: string
+  }) {
+    return this.httpConfigService.httpSercvice.post<AddGradeSubjectResponse>(
+      this.baseUrl + '/w/exam-submit-record/add-subject',
+      params
+    )
+  }
+
+  getAvaliableSubjectList(params: { classId: number; teacherId: number }) {
+    return this.httpConfigService.httpSercvice.post<
+      GetAvaliableSubjectListResponse
+    >(this.baseUrl + '/w/course/select_by_teacher_id', params)
   }
 }
 

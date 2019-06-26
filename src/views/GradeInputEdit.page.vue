@@ -63,7 +63,7 @@ import { get } from 'vuex-pathify'
 import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
 import { authModulePath, user } from '../store/auth/auth.paths'
-import { Student, EXAM_TYPES } from '../models/grade-input.model'
+import { EXAM_TYPES } from '../models/grade-input.model'
 
 export default Vue.extend({
   data: function() {
@@ -80,7 +80,6 @@ export default Vue.extend({
         { text: '状态', align: 'left', sortable: true, value: 'state' }
       ],
       search: '',
-      studentList: [] as Student[],
       examTypes: EXAM_TYPES,
       items: [
         {
@@ -152,9 +151,7 @@ export default Vue.extend({
     }
   },
   watch: {
-    currentClass(newVal, oldVal) {
-      this.loadStudentList()
-    }
+    currentClass(newVal, oldVal) {}
   },
   computed: {
     ...get(authModulePath, {
@@ -166,7 +163,6 @@ export default Vue.extend({
   },
   created() {
     this.setInitClass()
-    this.loadStudentList()
   },
   methods: {
     goBack() {
@@ -176,21 +172,6 @@ export default Vue.extend({
       const that: any = this
       this.currentClass = that.classList[0]
       console.log('TCL: setInitClass -> that.classList', that.classList)
-    },
-    loadStudentList() {
-      const that: any = this
-      gradeService
-        .getGradeInputStudentListResponse({
-          classId: this.currentClass.classId,
-          pageNo: 1,
-          pageSize: 1000,
-          teacherId: that.user.teacherId
-        })
-        .then(res => {
-          console.log('TCL: res', res)
-
-          this.studentList = res.data.content || []
-        })
     }
   }
 })

@@ -1,16 +1,17 @@
-export interface GradeInputStudentListResponse {
-  content: Student[]
+export interface GradeInputGradeSubjectListResponse {
+  content: GradeSubject[]
   errorCode: string
   errorMsg: string
   status: string
 }
 
-export interface Student {
+export interface GradeSubject {
   grade: string
   id: number
   state: number
   subject: string
   type: number
+  year: string
 }
 
 export const EXAM_TYPES = [
@@ -24,6 +25,11 @@ export const EXAM_TYPES = [
   }
 ]
 
+export enum GradeStateTypes {
+  unfinished = 0,
+  finished = 1
+}
+
 export const GRADE_STATE = [
   {
     code: 0,
@@ -35,17 +41,21 @@ export const GRADE_STATE = [
   }
 ]
 
-// export interface AddGradeSubjectResponse {
-//   classId: 0
-//   grade: string
-//   subject: string
-//   type: number
-//   year: string
-// }
-
 export interface AddGradeSubjectResponse {
   content: number
   errorCode: string
   errorMsg: string
   status: string
+}
+
+export interface GetAvaliableSubjectListResponse {
+  content: Subject[]
+  errorCode: string
+  errorMsg: string
+  status: string
+}
+
+export interface Subject {
+  code: number
+  name: string
 }
