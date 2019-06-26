@@ -1,33 +1,22 @@
 {
   "content": {
-    "id": 9,
-    "name": "毛红梅",
-    "nickname": "瓦瓦",
-    "sex": 1,
-    "headImgUrl": "http://thirdwx.qlogo.cn/mmopen/vi_32/udXNCHM5f4K6bksbVyXL2iax66j9MpBYvG8fy5RqXph7jn4nd1truw7VRMA7DZFNrWrO5DesCmfKdhFQ3841ic6Q/132",
-    "language": "zh_CN",
-    "country": "中国",
-    "province": "四川",
-    "city": "成都",
-    "roleVoList": [],
-    "studentVoList": [
+    "classId": 0,
+    "className": "string",
+    "studentExamAchievementVoList": [
       {
-        "id": 31,
-        "schoolId": 1,
-        "classId": 1,
-        "studentNumber": "21",
-        "name": "刘一辰",
-        "userName": "",
-        "sex": "1",
-        "mobile": "18980624840",
-        "nickname": "",
-        "idcard": "510106201105080030",
-        "rainAmount": 0.0,
-        "parentType": 1
+        "achievement": 0,
+        "comment": "string",
+        "star": 0,
+        "studentId": 0,
+        "studentName": "string",
+        "studentNumber": "string"
       }
     ],
-    "teacherId": 36
+    "subject": "string",
+    "type": 0,
+    "year": "string"
   },
-  "status": "OK",
-  "errorCode": "0"
+  "errorCode": "string",
+  "errorMsg": "string",
+  "status": "string"
 }

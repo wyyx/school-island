@@ -9,7 +9,8 @@ import { BriefStudentGradeForParentsResponse } from '@/models/parents-grade.mode
 import {
   GradeInputGradeSubjectListResponse,
   GetAvaliableSubjectListResponse,
-  AddGradeSubjectResponse
+  AddGradeSubjectResponse,
+  GetStudentListResponse
 } from '@/models/grade-input.model'
 
 export class GradeService {
@@ -126,6 +127,13 @@ export class GradeService {
     return this.httpConfigService.httpSercvice.post<
       GetAvaliableSubjectListResponse
     >(this.baseUrl + '/w/course/select_by_teacher_id', params)
+  }
+
+  getStudentList(gradeSubjectId: number) {
+    return this.httpConfigService.httpSercvice.post<GetStudentListResponse>(
+      this.baseUrl + '/w/exam-submit-record/detailed',
+      gradeSubjectId
+    )
   }
 }
 

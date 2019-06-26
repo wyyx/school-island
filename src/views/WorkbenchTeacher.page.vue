@@ -162,12 +162,12 @@
                 <!-- <h5 class="grey--text">超过 72% 的班级</h5> -->
                 <!-- deduction week history graph -->
                 <div v-if="hasHistory" class="chart-wrapper fill-width">
-                  <Chart
+                  <!-- <Chart
                     v-if="chartOption"
                     width="100%"
                     height="300px"
                     :option="chartOption"
-                  ></Chart>
+                  ></Chart> -->
                 </div>
                 <div v-if="!hasHistory" class="loading-wrapper">
                   <v-progress-circular
@@ -331,8 +331,8 @@ export default Vue.extend({
   mixins: [snackbarMixin],
   components: {
     swiper,
-    swiperSlide,
-    Chart
+    swiperSlide
+    // Chart
   },
   data: function() {
     return {

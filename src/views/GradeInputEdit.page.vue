@@ -26,10 +26,10 @@
       <v-layout row wrap>
         <v-flex xs4>
           <v-list>
-            <div v-for="item in items" :key="item.title">
+            <div v-for="student in studentList" :key="student.name">
               <v-list-tile class="pa-0">
                 <v-list-tile-content>
-                  <v-list-tile-title v-text="item.title"></v-list-tile-title>
+                  <v-list-tile-title v-text="student.name"></v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
               <v-divider></v-divider>
@@ -60,10 +60,18 @@ import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import { ClassModel } from '../models/class.model'
 import { get } from 'vuex-pathify'
-import { classesModulePath, classList } from '../store/classes/classes.paths'
+import {
+  classesModulePath,
+  classList,
+  currentGradeSubject
+} from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
 import { authModulePath, user } from '../store/auth/auth.paths'
-import { EXAM_TYPES } from '../models/grade-input.model'
+import {
+  EXAM_TYPES,
+  StudentListContent,
+  Student
+} from '../models/grade-input.model'
 
 export default Vue.extend({
   data: function() {
@@ -81,73 +89,8 @@ export default Vue.extend({
       ],
       search: '',
       examTypes: EXAM_TYPES,
-      items: [
-        {
-          icon: true,
-          title: '李一',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
-        },
-        {
-          title: '李二',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg'
-        },
-        {
-          title: '王三三',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
-        },
-        {
-          icon: true,
-          title: '李一1',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
-        },
-        {
-          title: '李二2',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg'
-        },
-        {
-          title: '王三三3',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
-        },
-        {
-          icon: true,
-          title: '李一4',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
-        },
-        {
-          title: '李二5',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg'
-        },
-        {
-          title: '王三三6',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
-        },
-        {
-          icon: true,
-          title: '李一7',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
-        },
-        {
-          title: '李二8',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg'
-        },
-        {
-          title: '王三三9',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
-        },
-        {
-          icon: true,
-          title: '李一10',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg'
-        },
-        {
-          title: '李二11',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg'
-        },
-        {
-          title: '王三三12',
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
-        }
-      ]
+      studentListContent: {} as StudentListContent,
+      studentList: [] as Student[]
     }
   },
   watch: {
@@ -158,11 +101,20 @@ export default Vue.extend({
       user
     }),
     ...get(classesModulePath, {
-      classList
+      classList,
+      currentGradeSubject
     })
   },
   created() {
+    console.log('yyyyyyyyyyyyyyyyyyyyy')
     this.setInitClass()
+    const that: any = this
+
+    that.currentGradeSubject
+    console.log(
+      'TCL: created ->  that.currentGradeSubject',
+      that.currentGradeSubject
+    )
   },
   methods: {
     goBack() {
@@ -172,6 +124,9 @@ export default Vue.extend({
       const that: any = this
       this.currentClass = that.classList[0]
       console.log('TCL: setInitClass -> that.classList', that.classList)
+    },
+    loadStudentList() {
+      // gradeService.getStudentList()
     }
   }
 })

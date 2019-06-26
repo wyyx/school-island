@@ -59,3 +59,28 @@ export interface Subject {
   code: number
   name: string
 }
+
+export interface GetStudentListResponse {
+  content: StudentListContent
+  errorCode: string
+  errorMsg: string
+  status: string
+}
+
+export interface StudentListContent {
+  classId: number
+  className: string
+  studentExamAchievementVoList: Student[]
+  subject: string
+  type: number
+  year: string
+}
+
+export interface Student {
+  achievement: number
+  comment: string
+  star: number
+  studentId: number
+  studentName: string
+  studentNumber: string
+}

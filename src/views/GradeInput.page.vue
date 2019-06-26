@@ -1,8 +1,5 @@
 <template>
   <div class="content-wrapper">
-    <v-btn color="white" @click="goToGradeInputEditPage"
-      >go to grade-input-edit-page</v-btn
-    >
     <v-card class="pa-3">
       <div class="header-wrapper">
         <v-toolbar app height="48" class="px-0">
@@ -123,7 +120,12 @@
               <v-icon v-else color="grey">cloud_off</v-icon>
               {{ props.item.state | gradeStateFilter }}
 
-              <v-btn fab small color="white" @click="goToGradeInputEditPage">
+              <v-btn
+                fab
+                small
+                color="white"
+                @click="goToGradeInputEditPage(props.item)"
+              >
                 <v-icon>edit</v-icon></v-btn
               >
             </div>
@@ -145,7 +147,11 @@ import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import { ClassModel } from '../models/class.model'
 import { get } from 'vuex-pathify'
-import { classesModulePath, classList } from '../store/classes/classes.paths'
+import {
+  classesModulePath,
+  classList,
+  currentGradeSubject
+} from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
 import { authModulePath, user } from '../store/auth/auth.paths'
 import {
@@ -226,7 +232,10 @@ export default Vue.extend({
     goBack() {
       this.$router.back()
     },
-    goToGradeInputEditPage() {
+    goToGradeInputEditPage(gradeSubject: GradeSubject) {
+      const store: any = this.$store
+      store.set(classesModulePath + currentGradeSubject, gradeSubject)
+
       this.$router.push({
         name: 'grade-input-edit'
       })
