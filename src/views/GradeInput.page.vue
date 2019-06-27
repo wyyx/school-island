@@ -88,9 +88,10 @@
         ></v-text-field>
       </v-card-title>
       <v-data-table
+        :disable-initial-sort="true"
         :headers="headers"
         :items="gradeSubjectList"
-        class="elevation-0"
+        class="elevation-0 grade-subject-table"
         hide-actions
         :search="search"
         no-data-text="暂无数据..."
@@ -106,11 +107,10 @@
           </td>
           <td class="text-xs-right">
             <div>
+              {{ props.item.state | gradeStateFilter }}
               <v-icon v-if="props.item.state === 1" color="primary">
                 cloud_done
               </v-icon>
-              {{ props.item.state | gradeStateFilter }}
-
               <v-btn
                 fab
                 small
@@ -158,11 +158,11 @@ import { snackbarMixin } from '../mixins/snackbar.mixin'
 const EXAM_LIST = [
   {
     code: 2,
-    name: '上学期期末评估'
+    name: '上学期'
   },
   {
     code: 4,
-    name: '下学期期末评估'
+    name: '下学期'
   }
 ]
 
@@ -179,11 +179,30 @@ export default Vue.extend({
         {
           text: '年级',
           align: 'left',
-          value: 'grade'
+          value: 'grade',
+          width: '20%'
         },
-        { text: '科目', align: 'left', sortable: true, value: 'subject' },
-        { text: '名称', align: 'left', sortable: true, value: 'type' },
-        { text: '状态', align: 'left', sortable: true, value: 'state' }
+        {
+          text: '科目',
+          align: 'left',
+          sortable: true,
+          value: 'subject',
+          width: '20%'
+        },
+        {
+          text: '名称',
+          align: 'left',
+          sortable: true,
+          value: 'type',
+          width: '20%'
+        },
+        {
+          text: '状态',
+          align: 'left',
+          sortable: true,
+          value: 'state',
+          width: '40%'
+        }
       ],
       search: '',
       gradeSubjectList: [] as GradeSubject[],
@@ -231,6 +250,8 @@ export default Vue.extend({
       })
     },
     addGradeSuject() {
+      const that: any = this
+
       this.dialog = false
 
       gradeService
@@ -244,9 +265,9 @@ export default Vue.extend({
           console.log('TCL: addGradeSuject -> res', res)
 
           if (!res.data.content) {
-            const that: any = this
             that.showFailMessage(res.data.errorMsg)
           } else {
+            that.showSuccessMessage('添加成功!')
             const newGradeSubject: GradeSubject = {
               grade: this.currentClass.grade,
               id: res.data.content,
@@ -307,5 +328,16 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .content-wrapper {
   margin-bottom: 76px;
+}
+
+.grade-subject-table {
+  table-layout: fixed;
+}
+
+.box {
+  background: #2db34a;
+  transition-property: background;
+  transition-duration: 0.3s;
+  transition-timing-function: linear;
 }
 </style>

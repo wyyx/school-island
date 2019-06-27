@@ -87,7 +87,7 @@
             </v-flex>
           </v-layout>
           <!-- grade select -->
-          <div class="py-3">
+          <div class="pt-3">
             <v-select
               v-model="currentGradeLevel"
               :items="gradeLevels"
@@ -106,15 +106,16 @@
             <v-layout row nowrap>
               <v-flex>
                 <v-rating
+                  class="grade-input-edit-rating"
+                  x-large
+                  clearable
                   color="accent"
                   background-color="grey darken-1"
                   v-model="rating"
                   :length="3"
+                  size="128px"
                   medium
                 ></v-rating>
-              </v-flex>
-              <v-flex>
-                <v-btn color="white" @click="rating = 0">清空</v-btn>
               </v-flex>
             </v-layout>
           </div>
@@ -192,7 +193,7 @@ export default Vue.extend({
       studentListContent: {} as StudentListContent,
       studentList: [] as Student[],
       currentGradeLevel: null as GradeLevelModel,
-      gradeLevels: GRADE_LEVELS_ARR.reverse(),
+      gradeLevels: GRADE_LEVELS_ARR,
       currentStudent: {} as Student,
       rating: 0,
       comment: '',
@@ -299,6 +300,7 @@ export default Vue.extend({
               console.log('TCL: submit -> res', res)
 
               if (res.data.content) {
+                that.showSuccessMessage('保存成功！')
                 this.updateStudent(this.currentStudent)
               } else {
                 const that: any = this
@@ -348,7 +350,7 @@ export default Vue.extend({
 }
 
 .left {
-  flex: 0 1 auto !important;
+  flex: 1 1 auto !important;
   background: #f5f5f5 !important;
 }
 
@@ -358,5 +360,9 @@ export default Vue.extend({
 
 .v-list {
   background: #f5f5f5 !important;
+}
+
+.v-rating {
+  font-size: 48px !important;
 }
 </style>

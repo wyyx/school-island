@@ -138,10 +138,10 @@ export default Vue.extend({
       ],
       currentClass: {} as ClassModel,
       semisterlist: [
-        { name: '上学期期末考评', value: 2 },
-        { name: '下学期期末考评', value: 4 }
+        { name: '上学期', value: 2 },
+        { name: '下学期', value: 4 }
       ],
-      currentSemister: { name: '下学期期末考评', value: 2 },
+      currentSemister: { name: '下学期', value: 2 },
       currentGrade: '',
       briefGrade: {} as BriefGrade,
       headers: [
@@ -243,7 +243,7 @@ export default Vue.extend({
         this.currentGrade = this.briefGrade.currentGrade
         // set current semister
         this.currentSemister = {
-          name: '上学期期末考评',
+          name: '上学期',
           value: this.briefGrade.examType
         }
       })

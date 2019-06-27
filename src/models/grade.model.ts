@@ -164,24 +164,25 @@ export const GRADE_LEVELS = {
 
 export const GRADE_LEVELS_ARR: GradeLevelModel[] = [
   {
-    name: '缺考',
-    code: 5
-  },
-  {
-    name: '待合格',
-    code: 4
-  },
-  {
-    name: '合格',
-    code: 3
+    name: '优秀',
+    code: 1
   },
   {
     name: '良好',
     code: 2
   },
   {
-    name: '优秀',
-    code: 1
+    name: '合格',
+    code: 3
+  },
+  {
+    name: '待合格',
+    code: 4
+  },
+
+  {
+    name: '缺考',
+    code: 5
   }
 ]
 

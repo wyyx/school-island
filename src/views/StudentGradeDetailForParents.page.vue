@@ -105,17 +105,17 @@ export default Vue.extend({
       semisterList: [
         {
           value: 2,
-          text: '上学期期末考评'
+          text: '上学期'
         },
         {
           value: 4,
-          text: '下学期期末考评'
+          text: '下学期'
         }
       ] as Semister[],
       currentGrade: '',
       currentSemister: {
         value: 4,
-        text: '下学期期末考评'
+        text: '下学期'
       } as Semister
     }
   },
@@ -179,13 +179,13 @@ export default Vue.extend({
             case 2:
               this.currentSemister = {
                 value: 2,
-                text: '上学期期末考评'
+                text: '上学期'
               }
               break
             case 4:
               this.currentSemister = {
                 value: 4,
-                text: '下学期期末考评'
+                text: '下学期'
               }
               break
             default:
