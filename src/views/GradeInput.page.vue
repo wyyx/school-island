@@ -98,27 +98,22 @@
         no-results-text="没有匹配的数据..."
       >
         <template v-slot:items="props">
-          <td>
+          <td @click="goToGradeInputEditPage(props.item)">
             {{ props.item.grade }}
           </td>
-          <td>{{ props.item.subject }}</td>
-          <td>
+          <td @click="goToGradeInputEditPage(props.item)">
+            {{ props.item.subject }}
+          </td>
+          <td @click="goToGradeInputEditPage(props.item)">
             {{ props.item.type | gradeTypeFilter }}
           </td>
-          <td class="text-xs-right">
+          <td class="text-xs-right" @click="goToGradeInputEditPage(props.item)">
             <div>
               {{ props.item.state | gradeStateFilter }}
               <v-icon v-if="props.item.state === 1" color="primary">
                 cloud_done
               </v-icon>
-              <v-btn
-                fab
-                small
-                color="white"
-                @click="goToGradeInputEditPage(props.item)"
-              >
-                <v-icon>edit</v-icon></v-btn
-              >
+              <v-icon>edit</v-icon>
             </div>
           </td>
         </template>

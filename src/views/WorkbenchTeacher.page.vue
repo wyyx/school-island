@@ -1,20 +1,6 @@
 <template>
   <div class="container pa-0">
     <!-- <Header :showBack="true" title="工作台" @back="onBack"></Header> -->
-    <!-- <v-btn
-      class="grade-input-btn"
-      style="z-index: 5000"
-      color="accent"
-      fab
-      dark
-      fixed
-      large
-      bottom
-      right
-    >
-      录入成绩
-    </v-btn> -->
-
     <v-speed-dial
       class="teacher-helper"
       fixed

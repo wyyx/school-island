@@ -249,6 +249,10 @@ export default Vue.extend({
       })
     },
     loadHistoryGradeStudentListByConditon(classId: number) {
+      console.log(
+        'TCL: loadHistoryGradeStudentListByConditon -> classId',
+        classId
+      )
       gradeService
         .getHistoryGradeStudentListByCondition({
           classId: this.currentClass.classId,
@@ -262,7 +266,14 @@ export default Vue.extend({
     },
     setInitClass() {
       const that: any = this
-      this.currentClass = that.classList[0]
+
+      if (!this.classId) {
+        this.currentClass = that.classList[0]
+      } else {
+        this.currentClass = (that.classList as ClassModel[]).filter(
+          aclass => aclass.classId === parseInt(this.classId)
+        )[0]
+      }
     }
   },
   mounted() {},

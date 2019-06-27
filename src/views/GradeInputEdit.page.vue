@@ -19,13 +19,16 @@
     </div>
     <v-card class="primary lighten-3 pa-3 grade-title">
       <h3 class="title text-xs-center">
-        一年级3班，语文，上学期成绩考评
+        {{ title }}
       </h3>
     </v-card>
     <v-card class=" lighten-3">
-      <div class="content">
+      <v-layout class="content">
         <!-- left -->
-        <div
+        <v-flex
+          md4
+          lg3
+          xl2
           class="left student-list-wrapper pa-2"
           :style="{
             height: studentListWrapperHeight - 150 + 'px',
@@ -75,9 +78,9 @@
               <v-divider></v-divider>
             </div>
           </v-list>
-        </div>
+        </v-flex>
         <!-- right -->
-        <div class="right pa-2">
+        <v-flex md8 lg9 xl10 class="right pa-2">
           <v-layout row wrap class="py-3 text-xs-center">
             <v-flex class="title primary--text">
               {{ currentStudent.studentName }}
@@ -126,7 +129,7 @@
               box
               name="input-7-4"
               label="评语"
-              :height="300"
+              :height="100"
             ></v-textarea>
           </div>
           <!-- submit btn -->
@@ -135,8 +138,8 @@
               <v-btn color="primary" @click="submit">保存</v-btn>
             </v-flex>
           </v-layout>
-        </div>
-      </div>
+        </v-flex>
+      </v-layout>
     </v-card>
     <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
       {{ message }}
@@ -229,6 +232,15 @@ export default Vue.extend({
       )
 
       return window.innerHeight
+    },
+    title() {
+      const that: any = this
+      const currentGradeSubject = that.currentGradeSubject as GradeSubject
+      return `${currentGradeSubject.grade}, ${currentGradeSubject.subject}, ${
+        currentGradeSubject.type === 2
+          ? '上学期期末成绩考评'
+          : '下学期期末成绩考评'
+      }`
     }
   },
   created() {
@@ -350,12 +362,7 @@ export default Vue.extend({
 }
 
 .left {
-  flex: 1 1 auto !important;
   background: #f5f5f5 !important;
-}
-
-.right {
-  flex: 1 1 auto !important;
 }
 
 .v-list {
