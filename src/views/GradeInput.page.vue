@@ -44,14 +44,6 @@
                   <v-layout row nowrap>
                     <v-flex class="pr-1">
                       <v-select
-                        v-model="currentYear"
-                        :items="yearList"
-                        :hide-details="true"
-                        solo
-                      ></v-select>
-                    </v-flex>
-                    <v-flex class="pr-1">
-                      <v-select
                         v-model="currentSubject"
                         :items="avaliableSubjectList"
                         item-text="name"
@@ -110,7 +102,7 @@
           </td>
           <td>{{ props.item.subject }}</td>
           <td>
-            {{ props.item.year }}年{{ props.item.type | gradeTypeFilter }}
+            {{ props.item.type | gradeTypeFilter }}
           </td>
           <td class="text-xs-right">
             <div>
@@ -175,7 +167,7 @@ const EXAM_LIST = [
   }
 ]
 
-const YEAR_LIST = getYearSpan(2019, 10, 2)
+const YEAR_LIST = getYearSpan(2019, 2, 1)
 const CURRENT_YEAR = new Date().getFullYear()
 
 export default Vue.extend({
@@ -202,8 +194,7 @@ export default Vue.extend({
       currentSubject: {} as Subject,
       examList: EXAM_LIST,
       currentExam: EXAM_LIST[0],
-      yearList: YEAR_LIST,
-      currentYear: CURRENT_YEAR
+      yearList: YEAR_LIST
     }
   },
   watch: {
@@ -248,8 +239,7 @@ export default Vue.extend({
           classId: this.currentClass.classId,
           grade: this.currentClass.grade,
           subject: this.currentSubject.name,
-          type: this.currentExam.code,
-          year: this.currentYear.toString()
+          type: this.currentExam.code
         })
         .then(res => {
           console.log('TCL: addGradeSuject -> res', res)
@@ -263,8 +253,7 @@ export default Vue.extend({
               id: res.data.content,
               state: GradeStateTypes.unfinished,
               subject: this.currentSubject.name,
-              type: this.currentExam.code,
-              year: this.currentYear.toString()
+              type: this.currentExam.code
             }
             console.log(
               'TCL: addGradeSuject -> newGradeSubject',

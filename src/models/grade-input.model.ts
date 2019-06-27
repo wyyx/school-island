@@ -11,7 +11,6 @@ export interface GradeSubject {
   state: number
   subject: string
   type: number
-  year: string
 }
 
 export const EXAM_TYPES = [

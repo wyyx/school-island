@@ -115,7 +115,6 @@ export class GradeService {
     grade: string
     subject: string
     type: number
-    year: string
   }) {
     return this.httpConfigService.httpSercvice.post<AddGradeSubjectResponse>(
       this.baseUrl + '/w/exam-submit-record/add-subject',
@@ -132,7 +131,7 @@ export class GradeService {
   getStudentList(gradeSubjectId: number) {
     return this.httpConfigService.httpSercvice.post<GetStudentListResponse>(
       this.baseUrl + '/w/exam-submit-record/detailed',
-      gradeSubjectId
+      { id: gradeSubjectId }
     )
   }
 }
