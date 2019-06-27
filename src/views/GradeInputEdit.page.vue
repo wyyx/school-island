@@ -49,28 +49,19 @@
                         currentStudent.studentNumber === student.studentNumber
                     }"
                   >
-                    {{ student.studentName }}
-                    <v-icon
-                      v-if="student.comment"
-                      small
-                      :color="
-                        currentStudent.studentNumber === student.studentNumber
-                          ? 'primary'
-                          : 'grey'
-                      "
+                    <span
+                      class="caption"
+                      :class="{ 'success--text': student.achievement > 0 }"
                     >
-                      mode_comment
-                    </v-icon>
+                      {{ student.studentName }}
+                    </span>
                     <span class="pl-1">
                       <v-icon
+                        :size="16"
                         v-if="student.achievement"
-                        :color="
-                          currentStudent.studentNumber === student.studentNumber
-                            ? 'primary'
-                            : 'grey'
-                        "
-                        >cloud_done</v-icon
-                      >
+                        color="success"
+                        >comment
+                      </v-icon>
                     </span>
                   </v-list-tile-title>
                 </v-list-tile-content>
@@ -109,27 +100,26 @@
             <v-layout row nowrap>
               <v-flex>
                 <v-rating
-                  class="grade-input-edit-rating"
                   x-large
                   clearable
                   color="accent"
                   background-color="grey darken-1"
                   v-model="rating"
                   :length="3"
-                  size="128px"
                   medium
                 ></v-rating>
               </v-flex>
             </v-layout>
           </div>
           <!-- comment -->
-          <div class="">
+          <div>
             <v-textarea
+              class="comment-input"
               v-model="comment"
-              box
               name="input-7-4"
               label="评语"
-              :height="100"
+              auto-grow
+              :rows="4"
             ></v-textarea>
           </div>
           <!-- submit btn -->

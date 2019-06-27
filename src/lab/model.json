@@ -1,11 +1,5 @@
 {
-  "content": [
-    { "checkName": "礼仪", "scores": [0, 0, 0, 0] },
-    { "checkName": "两操", "scores": [0, 0, 0, 0] },
-    { "checkName": "纪律", "scores": [0, 0, 0, 0] },
-    { "checkName": "文明", "scores": [0, 0, 0, 0] },
-    { "checkName": "卫生", "scores": [0, 0, 0, 0] }
-  ],
+  "content": { "weekScore": 9.4, "scores": [-0.2, 0, 0, -0.2, -0.2] },
   "status": "OK",
   "errorCode": "0"
 }

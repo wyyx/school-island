@@ -86,10 +86,10 @@
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-              <div class="MyGrades flex">
+              <div class="MyGrades app-flex">
                 <div class="grow">我的成绩</div>
                 <div
-                  class="shrink"
+                  class="shrink both-center"
                   @click="goToStudentGradeDetailForParentsPage"
                 >
                   <span>详情</span>

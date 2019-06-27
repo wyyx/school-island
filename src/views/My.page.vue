@@ -19,8 +19,8 @@
                   <!-- when teache -->
                   <span
                     v-if="
-                      currentRole.code ===
-                        (roleType.Teacher || roleType.HeadTeacher)
+                      currentRole.code === roleType.Teacher ||
+                        currentRole.code === roleType.HeadTeacher
                     "
                     class="pr-2"
                   >
@@ -85,12 +85,16 @@
               </v-layout>
             </v-flex>
             <v-flex>
-              <v-layout row wrap @click="goToUserSettingsPage">
+              <v-layout row wrap>
                 <v-flex class="v-center">
                   <span class="pr-1">昵称：</span
                   ><span>{{ user.nickname }}</span>
                 </v-flex>
-                <v-flex shrink class="px-2">
+                <v-flex
+                  shrink
+                  class="px-2 text-xs-right"
+                  @click="goToUserSettingsPage"
+                >
                   <v-btn flat icon color="white">
                     <v-icon>keyboard_arrow_right</v-icon>
                   </v-btn>
@@ -98,23 +102,6 @@
               </v-layout>
             </v-flex>
           </v-layout>
-        </v-flex>
-      </v-layout>
-      <v-layout class="scores white pa-1" row wrap>
-        <v-flex class="flex column">
-          <div><v-icon color="accent">flare</v-icon></div>
-          <h3>2180</h3>
-          <div class="text--secondary">积分</div>
-        </v-flex>
-        <v-flex class="flex column">
-          <div><v-icon color="accent">whatshot</v-icon></div>
-          <h3>1566</h3>
-          <div class="text--secondary">学分</div></v-flex
-        >
-        <v-flex class="flex column">
-          <div><v-icon color="accent">people_outline</v-icon></div>
-          <h3>358</h3>
-          <div class="text--secondary">粉丝</div>
         </v-flex>
       </v-layout>
     </v-card>

@@ -24,18 +24,6 @@
             :return-object="true"
             :hide-details="true"
           ></v-select>
-
-          <div>
-            <v-rating
-              v-model="rating"
-              background-color="purple lighten-3"
-              color="purple"
-              small
-            ></v-rating>
-          </div>
-        </div>
-        <div class="class_Setting">
-          <img class="_img" src="../assets/Setting.svg" alt />
         </div>
       </div>
       <div class="member_box pb-2">

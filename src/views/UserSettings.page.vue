@@ -2,7 +2,7 @@
   <div class="fill-height">
     <v-list>
       <!-- nickname -->
-      <v-list-tile v-ripple>
+      <v-list-tile>
         <v-list-tile-content>
           <v-list-tile-title>
             <v-layout row wrap>
@@ -21,7 +21,7 @@
       </v-list-tile>
       <v-divider></v-divider>
       <!-- school name -->
-      <v-list-tile v-ripple>
+      <v-list-tile>
         <v-list-tile-content>
           <v-list-tile-title>
             <v-layout row wrap>
@@ -38,24 +38,6 @@
           <v-icon>keyboard_arrow_right</v-icon>
         </v-list-tile-action>
       </v-list-tile>
-      <v-divider></v-divider>
-      <!-- subject -->
-      <v-list-tile v-ripple>
-        <v-list-tile-content>
-          <v-list-tile-title>
-            <v-layout row wrap>
-              <v-flex xs4 class="grey--text">
-                任教科目
-              </v-flex>
-              <v-flex> </v-flex>
-            </v-layout>
-          </v-list-tile-title>
-        </v-list-tile-content>
-        <v-list-tile-action>
-          <v-icon>keyboard_arrow_right</v-icon>
-        </v-list-tile-action>
-      </v-list-tile>
-      <v-divider></v-divider>
     </v-list>
   </div>
 </template>

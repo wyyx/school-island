@@ -17,44 +17,13 @@
       </div>
       <div class="file_class">
         <span>{{ studentInfo.name }}</span>
-        <div>
-          <v-rating
-            v-model="rating"
-            full-icon="local_florist"
-            empty-icon="local_florist"
-            background-color="purple lighten-3"
-            color="purple"
-            small
-          ></v-rating>
-        </div>
         <span class="Born">{{ studentInfo.birthday }}</span>
       </div>
       <div class="file_honor">
         <span>{{ studentInfo.className }}</span>
       </div>
-      <div class="file_recommend">
-        <div class="recommend">
-          <span>推荐为</span>
-          <div>
-            <span class="group pa-2">
-              <v-icon>chevron_right</v-icon>
-            </span>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- <div class="contribution_box">
-      <div class="contribution_star">
-        <div>8988</div>
-        <span>星星</span>
-      </div>
-      <div class="contribution_energy">
-        <div>8988</div>
-        <span>星星</span>
-      </div>
-      <div class="contribution_raye"></div>
-    </div> -->
-    <div class="My_grades_box">
+    <v-card class="My_grades_box px-2">
       <v-tabs v-model="active">
         <v-tab v-for="(item, index) in tabTexts" :key="index">{{
           item.title
@@ -62,11 +31,14 @@
         <v-tab-item>
           <v-card flat>
             <v-card-text>
-              <div class="MyGrades">
-                <div>我的成绩</div>
-                <div @click="goToStudentGradeDetailForParentsPage">
+              <div class="MyGrades app-flex">
+                <div class="grow">我的成绩</div>
+                <div
+                  @click="goToStudentGradeDetailForParentsPage"
+                  class="shrink text-xs-right"
+                >
                   <span>详情</span>
-                  <span class="group pa-2">
+                  <span class="group pa-2 ">
                     <v-icon>chevron_right</v-icon>
                   </span>
                 </div>
@@ -81,7 +53,7 @@
           </v-card>
         </v-tab-item>
       </v-tabs>
-    </div>
+    </v-card>
   </div>
 </template>
 

@@ -78,15 +78,6 @@
           </v-layout>
         </v-flex>
       </v-layout>
-      <v-card-title class="pa-1">
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="搜索"
-          single-line
-          hide-details
-        ></v-text-field>
-      </v-card-title>
       <v-data-table
         :disable-initial-sort="true"
         :headers="headers"
@@ -108,12 +99,16 @@
             {{ props.item.type | gradeTypeFilter }}
           </td>
           <td class="text-xs-right" @click="goToGradeInputEditPage(props.item)">
-            <div>
-              {{ props.item.state | gradeStateFilter }}
-              <v-icon v-if="props.item.state === 1" color="primary">
-                cloud_done
-              </v-icon>
-              <v-icon>edit</v-icon>
+            <div class="both-center">
+              <span
+                :class="{
+                  'success--text': props.item.state === 1,
+                  'red--text': props.item.state === 0
+                }"
+              >
+                {{ props.item.state | gradeStateFilter }}
+              </span>
+              <span class="pl-4"> <v-icon>keyboard_arrow_right</v-icon> </span>
             </div>
           </td>
         </template>
@@ -206,7 +201,7 @@ export default Vue.extend({
       avaliableSubjectList: [] as Subject[],
       currentSubject: {} as Subject,
       examList: EXAM_LIST,
-      currentExam: EXAM_LIST[0],
+      currentExam: EXAM_LIST[1],
       yearList: YEAR_LIST
     }
   },

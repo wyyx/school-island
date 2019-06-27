@@ -1,9 +1,10 @@
 export interface DeductionHistoryByWeekResponse {
-  content: DeductionHistoryByWeekItem[]
+  content: DeductionHistoryByWeekItem
   status: string
+  errorCode: string
 }
 
 export interface DeductionHistoryByWeekItem {
-  checkName: string
+  weekScore: number
   scores: number[]
 }

@@ -36,7 +36,7 @@
         <v-flex v-if="hasClasses" class="class-selector">
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
-              <div class="class-selection-box primary lighten-4 py-1 px-2">
+              <div class="class-selection-box primary lighten-4 pa-2">
                 <v-select
                   v-model="currentClass"
                   :items="classList"
@@ -45,15 +45,6 @@
                   :return-object="true"
                   :hide-details="true"
                 ></v-select>
-                <v-rating
-                  class="py-1"
-                  color="accent"
-                  background-color="grey darken-1"
-                  dense
-                  small
-                  readonly
-                  v-model="rating"
-                ></v-rating>
               </div>
             </v-flex>
             <v-spacer></v-spacer>
@@ -142,17 +133,17 @@
               <v-card v-if="hasClasses" flat>
                 <!-- duty check one week -->
                 <!-- deduction week history graph -->
-                <div v-if="hasHistory" class="chart-wrapper fill-width pb-3">
-                  <h3 class="mb-2 duty-check-title">
+                <div class="chart-wrapper fill-width pb-3">
+                  <!-- <h3 class="mb-2 duty-check-title">
                     上周综合得分
                     <span class="accent--text text--darken-2">8.5分</span>
-                  </h3>
+                  </h3> -->
                   <div class="duty-check-image">
                     <v-layout row wrap class="duty-check-content">
                       <v-flex
                         class="text-xs-center"
-                        v-for="(score, index) in currentCheckItem.scores"
-                        :key="score"
+                        v-for="(score, index) in deductionWeekHistory.scores"
+                        :key="index"
                       >
                         <div class="white--text display-1">
                           {{ score }}
@@ -162,7 +153,7 @@
                     </v-layout>
                   </div>
                 </div>
-                <div v-if="!hasHistory" class="loading-wrapper">
+                <div v-if="0" class="loading-wrapper">
                   <v-progress-circular
                     indeterminate
                     color="accent"
@@ -347,7 +338,7 @@ export default Vue.extend({
       ],
       pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
       deductionListEntities: {} as { [classId: number]: Deduction[] },
-      deductionWeekHistory: [] as DeductionHistoryByWeekItem[],
+      deductionWeekHistory: {} as DeductionHistoryByWeekItem,
       search: '',
       imgs: [
         'https://picsum.photos/1920/1080',
@@ -384,29 +375,6 @@ export default Vue.extend({
       user,
       currentRole
     }),
-    legend() {
-      const that: any = this
-      return (
-        that.deductionWeekHistory &&
-        that.deductionWeekHistory.map(e => e.checkName)
-      )
-    },
-    currentCheckItem() {
-      const that: any = this
-
-      const deductionWeekHistory: DeductionHistoryByWeekItem =
-        that.deductionWeekHistory
-
-      return deductionWeekHistory[that.tab]
-    },
-    hasHistory() {
-      const that: any = this
-      return that.deductionWeekHistory && that.deductionWeekHistory.length > 0
-    },
-    series() {
-      const that: any = this
-      return that.converToSeries(that.deductionWeekHistory)
-    },
     currentDeductionList() {
       const that: any = this
       return that.deductionListEntities[that.currentClass.classId] || []
@@ -495,35 +463,7 @@ export default Vue.extend({
     formatDate(date) {
       return moment(date).format('M月D日 kk:mm')
     },
-    converToSeries(weekHistory: DeductionHistoryByWeekItem[]) {
-      console.log('TCL: converToSeries -> weekHistory', weekHistory)
-      const series = weekHistory.map((e: DeductionHistoryByWeekItem) => {
-        return {
-          name: e.checkName,
-          type: 'line',
-          data: e.scores,
-          itemStyle: {
-            color: '#2196F3'
-          }
-        }
-      })
 
-      // set different colors for each category
-      for (let index = 0; index < series.length; index++) {
-        const element: {
-          name: string
-          type: string
-          data: number[]
-          itemStyle: {
-            color: string
-          }
-        } = series[index]
-
-        element.itemStyle.color = COLORS[index]
-      }
-
-      return series
-    },
     convertToImages(imgUrls: string[]) {
       return imgUrls
         ? imgUrls.map(url => {
@@ -539,9 +479,6 @@ export default Vue.extend({
     },
     updateChart() {
       const that: any = this
-
-      console.log('TCL: initEcharts -> that.series', that.series)
-      console.log('TCL: updateChart -> that.legend', that.legend)
 
       this.chartOption = {
         tooltip: {},
@@ -586,11 +523,14 @@ export default Vue.extend({
       })
     },
     loadDeducionWeekHistory(classId: number) {
-      dutyService.getDeductionHistoryByWeek(classId).then(res => {
-        this.deductionWeekHistory = res.data.content
-
-        this.updateChart()
-      })
+      dutyService
+        .getDeductionHistoryByWeek(classId)
+        .then(res => {
+          console.log('TCL: loadDeducionWeekHistory -> res', res)
+          this.deductionWeekHistory =
+            res.data.content || ({} as DeductionHistoryByWeekItem)
+        })
+        .catch(error => {})
     },
     toShowSwiper(imgUrls: string[]) {
       console.log('TCL: toShowSwiper -> imgUrls', imgUrls)
@@ -692,7 +632,7 @@ export default Vue.extend({
 
 .teacher-helper {
   z-index: 5000;
-  bottom: 72px;
+  bottom: 8rem;
 }
 
 .container {
