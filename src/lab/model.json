@@ -1,6 +1,11 @@
 {
-  "content": 0,
-  "errorCode": "string",
-  "errorMsg": "string",
-  "status": "string"
+  "content": [
+    { "checkName": "礼仪", "scores": [0, 0, 0, 0] },
+    { "checkName": "两操", "scores": [0, 0, 0, 0] },
+    { "checkName": "纪律", "scores": [0, 0, 0, 0] },
+    { "checkName": "文明", "scores": [0, 0, 0, 0] },
+    { "checkName": "卫生", "scores": [0, 0, 0, 0] }
+  ],
+  "status": "OK",
+  "errorCode": "0"
 }

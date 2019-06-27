@@ -1,6 +1,5 @@
 <template>
   <div class="container pa-0">
-    <!-- <Header :showBack="true" title="工作台" @back="onBack"></Header> -->
     <v-speed-dial
       class="teacher-helper"
       fixed
@@ -141,27 +140,35 @@
           <v-tabs-items v-model="model" class="pt-3">
             <v-tab-item value="tab-1">
               <v-card v-if="hasClasses" flat>
-                <h3 class="mb-2">
-                  上周综合得分
-                  <span class="accent--text text--darken-2">8.5分</span>
-                </h3>
-                <!-- <h5 class="grey--text">超过 72% 的班级</h5> -->
+                <!-- duty check one week -->
                 <!-- deduction week history graph -->
-                <div v-if="hasHistory" class="chart-wrapper fill-width">
-                  <!-- <Chart
-                    v-if="chartOption"
-                    width="100%"
-                    height="300px"
-                    :option="chartOption"
-                  ></Chart> -->
+                <div v-if="hasHistory" class="chart-wrapper fill-width pb-3">
+                  <h3 class="mb-2 duty-check-title">
+                    上周综合得分
+                    <span class="accent--text text--darken-2">8.5分</span>
+                  </h3>
+                  <div class="duty-check-image">
+                    <v-layout row wrap class="duty-check-content">
+                      <v-flex
+                        class="text-xs-center"
+                        v-for="(score, index) in currentCheckItem.scores"
+                        :key="score"
+                      >
+                        <div class="white--text display-1">
+                          {{ score }}
+                        </div>
+                        <div class="pt-3">{{ getDayName(index) }}</div>
+                      </v-flex>
+                    </v-layout>
+                  </div>
                 </div>
                 <div v-if="!hasHistory" class="loading-wrapper">
                   <v-progress-circular
                     indeterminate
                     color="accent"
                   ></v-progress-circular>
-                  <!-- <p class="text-xs-center">暂无数据...</p> -->
                 </div>
+                <!-- duty check detail list -->
                 <h3>扣分明细</h3>
                 <v-card-title class="pa-1">
                   <v-text-field
@@ -359,7 +366,8 @@ export default Vue.extend({
       showClassMenu: false,
       chart: {} as ECharts,
       chartOption: null as EChartOption,
-      fab: false
+      fab: false,
+      tab: 0
     }
   },
   watch: {
@@ -382,6 +390,14 @@ export default Vue.extend({
         that.deductionWeekHistory &&
         that.deductionWeekHistory.map(e => e.checkName)
       )
+    },
+    currentCheckItem() {
+      const that: any = this
+
+      const deductionWeekHistory: DeductionHistoryByWeekItem =
+        that.deductionWeekHistory
+
+      return deductionWeekHistory[that.tab]
     },
     hasHistory() {
       const that: any = this
@@ -414,6 +430,25 @@ export default Vue.extend({
     this.scroll()
   },
   methods: {
+    getRandomNum() {
+      return Date.now() * Math.random()
+    },
+    getDayName(index: number) {
+      switch (index) {
+        case 0:
+          return '星期一'
+        case 1:
+          return '星期二'
+        case 2:
+          return '星期三'
+        case 3:
+          return '星期四'
+        case 4:
+          return '星期五'
+        default:
+          return ''
+      }
+    },
     goToGradeInputPage() {
       this.$router.push({
         name: 'grade-input'
@@ -637,6 +672,24 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.duty-check-title {
+  position: relative;
+  left: 10px;
+  top: 20px;
+}
+
+.duty-check-content {
+  position: relative;
+  top: -80px;
+}
+.duty-check-image {
+  width: 100%;
+  padding-top: 60.9271%;
+  background-image: url(../assets/images/duty_check_bg.jpg);
+  background-size: contain;
+  height: 0px;
+}
+
 .teacher-helper {
   z-index: 5000;
   bottom: 72px;
