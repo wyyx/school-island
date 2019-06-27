@@ -76,12 +76,11 @@
                   与学生的关系
                 </v-flex>
                 <v-flex>
-                  <v-autocomplete
+                  <v-select
                     v-model="relation"
                     :items="relations"
                     item-text="text"
                     item-value="value"
-                    persistent-hint
                     placeholder="请选择"
                     v-validate="'required'"
                     name="relation"
@@ -89,12 +88,7 @@
                     :error-messages="
                       validated && relation === 0 ? ['请选择与学生的关系'] : []
                     "
-                  >
-                    <template v-slot:append-outer>
-                      <v-slide-x-reverse-transition mode="out-in">
-                      </v-slide-x-reverse-transition>
-                    </template>
-                  </v-autocomplete>
+                  ></v-select>
                 </v-flex>
               </v-layout>
             </div>

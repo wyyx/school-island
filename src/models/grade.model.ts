@@ -109,7 +109,14 @@ export const GRADE_LEVEL_TEXTS = [
   '优秀3星'
 ]
 
-export const GRADE_LEVELS = {
+export interface GradeLevelModel {
+  name: string
+  code: number
+}
+
+export const GRADE_LEVEL_LENGTH = 5
+
+export const GRADE_LEVELS_FOR_CHART = {
   absent: {
     name: '缺考',
     code: 1
@@ -132,19 +139,37 @@ export const GRADE_LEVELS = {
   }
 }
 
-export interface GradeLevelModel {
-  name: string
-  code: number
+export const GRADE_LEVELS = {
+  absent: {
+    name: '缺考',
+    code: 5
+  },
+  prequalified: {
+    name: '待合格',
+    code: 4
+  },
+  qualified: {
+    name: '合格',
+    code: 3
+  },
+  good: {
+    name: '良好',
+    code: 2
+  },
+  excellent: {
+    name: '优秀',
+    code: 1
+  }
 }
 
 export const GRADE_LEVELS_ARR: GradeLevelModel[] = [
   {
     name: '缺考',
-    code: 1
+    code: 5
   },
   {
     name: '待合格',
-    code: 2
+    code: 4
   },
   {
     name: '合格',
@@ -152,11 +177,11 @@ export const GRADE_LEVELS_ARR: GradeLevelModel[] = [
   },
   {
     name: '良好',
-    code: 4
+    code: 2
   },
   {
     name: '优秀',
-    code: 5
+    code: 1
   }
 ]
 

@@ -22,20 +22,24 @@
         一年级3班，语文，上学期成绩考评
       </h3>
     </v-card>
-    <v-card class=" lighten-3 pa-3">
+    <v-card class=" lighten-3">
       <div class="content">
         <!-- left -->
         <div
-          class="left student-list-wrapper"
+          class="left student-list-wrapper pa-2"
           :style="{
             height: studentListWrapperHeight - 150 + 'px',
             'overflow-y': 'scroll'
           }"
         >
-          <v-list>
+          <v-list :expand="true">
             <div v-for="student in studentList" :key="student.studentId">
-              <v-list-tile class="pa-0" @click="setCurrentStudent(student)">
-                <v-list-tile-content>
+              <v-list-tile
+                class="pa-0"
+                @click="setCurrentStudent(student)"
+                color="primary "
+              >
+                <v-list-tile-content color="primary ">
                   <v-list-tile-title
                     :class="{
                       'primary--text':
@@ -44,7 +48,7 @@
                   >
                     {{ student.studentName }}
                     <v-icon
-                      v-if="currentStudent.comment"
+                      v-if="student.comment"
                       small
                       :color="
                         currentStudent.studentNumber === student.studentNumber
@@ -54,6 +58,17 @@
                     >
                       mode_comment
                     </v-icon>
+                    <span class="pl-1">
+                      <v-icon
+                        v-if="student.achievement"
+                        :color="
+                          currentStudent.studentNumber === student.studentNumber
+                            ? 'primary'
+                            : 'grey'
+                        "
+                        >cloud_done</v-icon
+                      >
+                    </span>
                   </v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
@@ -63,7 +78,7 @@
         </div>
         <!-- right -->
         <div class="right pa-2">
-          <v-layout row wrap class="pb-3 text-xs-center">
+          <v-layout row wrap class="py-3 text-xs-center">
             <v-flex class="title primary--text">
               {{ currentStudent.studentName }}
             </v-flex>
@@ -83,7 +98,7 @@
               v-validate="'required'"
               name="gradeLevel"
               data-vv-as="成绩"
-              :error-messages="errors.collect('gradeLevel') || []"
+              :error-messages="validated ? errors.collect('gradeLevel') : []"
             ></v-select>
           </div>
           <!-- rating -->
@@ -106,10 +121,10 @@
           <!-- comment -->
           <div class="">
             <v-textarea
+              v-model="comment"
               box
               name="input-7-4"
               label="评语"
-              clearable
               :height="300"
             ></v-textarea>
           </div>
@@ -122,6 +137,12 @@
         </div>
       </div>
     </v-card>
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+      {{ message }}
+      <v-btn dark flat @click="showSnackbar = false">
+        关闭
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -146,10 +167,13 @@ import {
 import {
   GRADE_LEVELS,
   GRADE_LEVELS_ARR,
-  GradeLevelModel
+  GradeLevelModel,
+  GRADE_LEVEL_LENGTH
 } from '../models/grade.model'
+import { snackbarMixin } from '../mixins/snackbar.mixin'
 
 export default Vue.extend({
+  mixins: [snackbarMixin],
   data: function() {
     return {
       currentClass: {} as ClassModel,
@@ -170,7 +194,10 @@ export default Vue.extend({
       currentGradeLevel: null as GradeLevelModel,
       gradeLevels: GRADE_LEVELS_ARR.reverse(),
       currentStudent: {} as Student,
-      rating: 0
+      rating: 0,
+      comment: '',
+      validated: false,
+      showSnackbar: false
     }
   },
   watch: {
@@ -237,13 +264,75 @@ export default Vue.extend({
       })
     },
     setCurrentStudent(student: Student) {
+      this.validated = false
       console.log('TCL: setCurrentStudent -> student', student)
       this.currentStudent = student
+      this.fillForm()
+    },
+    fillForm() {
+      this.currentGradeLevel = GRADE_LEVELS_ARR.filter(
+        gradeLevel => gradeLevel.code === this.currentStudent.achievement
+      )[0]
+      this.comment = this.currentStudent.comment
+      this.rating = this.currentStudent.star
     },
     submit() {
+      const that: any = this
+      const currentGradeSubject: GradeSubject = that.currentGradeSubject
+
       this.$validator.validate().then(valid => {
+        this.validated = true
         console.log('TCL: submit -> valid', valid)
+
+        if (valid) {
+          gradeService
+            .addStudentGrade({
+              achievement: this.currentGradeLevel.code,
+              comment: this.comment,
+              star: this.rating,
+              studentId: this.currentStudent.studentId,
+              studentName: this.currentStudent.studentName,
+              studentNumber: this.currentStudent.studentNumber,
+              examSubmitRecordId: currentGradeSubject.id
+            })
+            .then(res => {
+              console.log('TCL: submit -> res', res)
+
+              if (res.data.content) {
+                this.updateStudent(this.currentStudent)
+              } else {
+                const that: any = this
+                that.showFailMessage('保存失败！请稍后再试')
+              }
+            })
+            .catch(error => {
+              that.showFailMessage('保存失败！请稍后再试')
+            })
+        }
       })
+    },
+
+    updateStudent(student: Student) {
+      const index = this.studentList.findIndex(
+        student => student.studentId === this.currentStudent.studentId
+      )
+
+      this.currentStudent = {
+        ...this.currentStudent,
+        comment: this.comment,
+        achievement: this.currentGradeLevel.code,
+        star: this.rating,
+        studentId: this.currentStudent.studentId,
+        studentName: this.currentStudent.studentName,
+        studentNumber: this.currentStudent.studentNumber
+      }
+
+      console.log(
+        'TCL: updateStudent -> this.currentStudent',
+        this.currentStudent
+      )
+
+      this.studentList.splice(index, 1, this.currentStudent)
     }
   }
 })
@@ -260,10 +349,14 @@ export default Vue.extend({
 
 .left {
   flex: 0 1 auto !important;
-  box-shadow: rgba(0, 0, 0, 0.8) 3px 3px 10px inset !important;
+  background: #f5f5f5 !important;
 }
 
 .right {
   flex: 1 1 auto !important;
+}
+
+.v-list {
+  background: #f5f5f5 !important;
 }
 </style>

@@ -1,21 +1,5 @@
 {
-  "content": {
-    "classId": 0,
-    "className": "string",
-    "studentExamAchievementVoList": [
-      {
-        "achievement": 0,
-        "comment": "string",
-        "star": 0,
-        "studentId": 0,
-        "studentName": "string",
-        "studentNumber": "string"
-      }
-    ],
-    "subject": "string",
-    "type": 0,
-    "year": "string"
-  },
+  "content": 0,
   "errorCode": "string",
   "errorMsg": "string",
   "status": "string"

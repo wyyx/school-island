@@ -10,7 +10,8 @@ import {
   GradeInputGradeSubjectListResponse,
   GetAvaliableSubjectListResponse,
   AddGradeSubjectResponse,
-  GetStudentListResponse
+  GetStudentListResponse,
+  AddStudentGradeResponse
 } from '@/models/grade-input.model'
 
 export class GradeService {
@@ -132,6 +133,21 @@ export class GradeService {
     return this.httpConfigService.httpSercvice.post<GetStudentListResponse>(
       this.baseUrl + '/w/exam-submit-record/detailed',
       { id: gradeSubjectId }
+    )
+  }
+
+  addStudentGrade(params: {
+    achievement: number
+    comment: string
+    examSubmitRecordId: number
+    star: number
+    studentId: number
+    studentName: string
+    studentNumber: string
+  }) {
+    return this.httpConfigService.httpSercvice.post<AddStudentGradeResponse>(
+      this.baseUrl + '/w/exam-submit-record/add',
+      params
     )
   }
 }

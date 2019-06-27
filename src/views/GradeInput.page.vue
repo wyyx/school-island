@@ -109,7 +109,6 @@
               <v-icon v-if="props.item.state === 1" color="primary">
                 cloud_done
               </v-icon>
-              <v-icon v-else color="grey">cloud_off</v-icon>
               {{ props.item.state | gradeStateFilter }}
 
               <v-btn

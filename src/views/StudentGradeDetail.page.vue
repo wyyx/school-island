@@ -42,7 +42,7 @@ import {
   GradeLevel,
   StudentInfoForDetail,
   StudentGradeDetail,
-  GRADE_LEVELS
+  GRADE_LEVELS_FOR_CHART
 } from '../models/grade.model'
 import { get } from 'vuex-pathify'
 import {
@@ -186,8 +186,8 @@ export default Vue.extend({
                   const startText = star === 0 ? '' : `\n${star}星`
 
                   return (
-                    Object.keys(GRADE_LEVELS)
-                      .map(key => GRADE_LEVELS[key])
+                    Object.keys(GRADE_LEVELS_FOR_CHART)
+                      .map(key => GRADE_LEVELS_FOR_CHART[key])
                       .filter(
                         (e: { name: string; code: number }) => e.code === data
                       )[0].name + startText
@@ -206,11 +206,11 @@ export default Vue.extend({
                 console.log('TCL: updateChart -> params.data', params.data)
 
                 switch (params.data) {
-                  case GRADE_LEVELS.absent.code:
+                  case GRADE_LEVELS_FOR_CHART.absent.code:
                     return absentColor
-                  case GRADE_LEVELS.prequalified.code:
+                  case GRADE_LEVELS_FOR_CHART.prequalified.code:
                     return prequalified
-                  case GRADE_LEVELS.qualified.code:
+                  case GRADE_LEVELS_FOR_CHART.qualified.code:
                     return qualified
                   default:
                     return normal

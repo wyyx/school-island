@@ -16,11 +16,11 @@ export interface GradeSubject {
 export const EXAM_TYPES = [
   {
     code: 2,
-    exam: '上学期期末考评'
+    exam: '上学期'
   },
   {
     code: 4,
-    exam: '下学期期末考评'
+    exam: '下学期'
   }
 ]
 
@@ -82,4 +82,11 @@ export interface Student {
   studentId: number
   studentName: string
   studentNumber: string
+}
+
+export interface AddStudentGradeResponse {
+  content: number
+  errorCode: string
+  errorMsg: string
+  status: string
 }
