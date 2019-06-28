@@ -1,14 +1,7 @@
 <template>
   <div class="wrapper">
-    <div class="box">
-      <div class="Grade_entry">
-        <div @click="goBack" class="clickable">
-          <img class="_img" src="../assets/left.svg" alt />
-        </div>
-        <div class="Grade_entry_text">班级事务</div>
-      </div>
-    </div>
-    <div class="class_show">
+    <Header title="班级成绩" @back="goBack"></Header>
+    <div class="primary lighten-3">
       <div class="class_box">
         <div class="class_box_log">
           <v-avatar size="64">
@@ -26,31 +19,8 @@
           ></v-select>
         </div>
       </div>
-      <div class="member_box pb-2">
-        <div>老师</div>
-        <div>学生</div>
-        <div>家长</div>
-        <div>成员</div>
-      </div>
     </div>
-    <div class="Class_display">
-      <div class="Introduction">
-        <span></span>
-        <div>班级数据</div>
-      </div>
-      <div class="Introduction">
-        <span></span>
-        <div>班级照片</div>
-      </div>
-      <div class="Introduction">
-        <span></span>
-        <div>班级作品</div>
-      </div>
-      <div class="Introduction">
-        <span></span>
-        <div>班级荣誉</div>
-      </div>
-    </div>
+
     <div class="Class_transcript">
       <div class="app-flex pa-2 clickable" @click="goToClassDataPage" v-ripple>
         <div class="grow">班级成绩</div>
@@ -91,11 +61,13 @@ import {
 } from '../models/grade.model'
 import echarts, { EChartOption, ECharts } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
+import Header from '@/components/Header.component.vue'
 
 export default Vue.extend({
   name: 'MyClasses',
   components: {
-    Chart
+    Chart,
+    Header
   },
   props: {
     initClassId: {
@@ -274,10 +246,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.wrapper {
-  margin-bottom: 76px;
-}
-
 .class-grade {
   width: 100%;
   overflow-x: scroll;

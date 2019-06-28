@@ -349,10 +349,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.wrapper {
-  margin-bottom: 76px;
-}
-
 ._img {
   width: 20px;
   height: 20px;

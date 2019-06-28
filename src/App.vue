@@ -1,11 +1,13 @@
 <template>
   <v-app>
+    <!-- <div>{{ currentRoute }}</div> -->
     <div v-if="appIsLoading" class="loading-wrapper fill-height fill-width ">
       <div class="text-xs-center">
         <v-progress-circular indeterminate color="accent"></v-progress-circular>
       </div>
       <h3 class="subheading mt-1">正在加载数据...</h3>
     </div>
+
     <v-content v-else>
       <ul v-if="false">
         <li>isBinded:{{ isBinded }}</li>
@@ -13,7 +15,7 @@
         <li>roleRoute:{{ roleRoute }}</li>
       </ul>
       <router-view></router-view>
-      <AppTabs v-if="showTabs" :role="roleRoute" class="tabs"></AppTabs>
+      <AppTabs app v-if="showTabs" :role="roleRoute" class="tabs"></AppTabs>
     </v-content>
   </v-app>
 </template>
@@ -80,7 +82,11 @@ export default Vue.extend({
     }),
     ...get(authModulePath, {
       appIsLoading
-    })
+    }),
+    currentRoute() {
+      const that: any = this
+      return that.$router.currentRoute.fullPath
+    }
   },
   methods: {
     resolveInitUrl() {

@@ -36,7 +36,7 @@
         <v-flex v-if="hasClasses" class="class-selector">
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
-              <div class="class-selection-box primary lighten-4 pa-2">
+              <div class="px-2">
                 <v-select
                   v-model="currentClass"
                   :items="classList"
@@ -50,12 +50,7 @@
             <v-spacer></v-spacer>
             <v-flex shrink class="pr-2">
               <v-layout :align-center="true" fill-height wrap="false">
-                <v-flex class="">
-                  <v-btn depressed color="transparent" fab>
-                    <v-icon>search</v-icon>
-                  </v-btn>
-                </v-flex>
-                <v-flex class="">
+                <v-flex>
                   <v-menu offset-y>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -70,28 +65,10 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>aspect_ratio</v-icon>
-                          <span class="menu-text pl-2">扫一扫</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>assignment</v-icon>
-                          <span class="menu-text pl-2">任务中心</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile>
+                      <v-list-tile class="clickable">
                         <v-list-tile-title @click="goToMyClassesPage">
-                          <v-icon>vertical_split</v-icon>
-                          <span class="menu-text pl-2">任教班级</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>folder_shared</v-icon>
-                          <span class="menu-text pl-2">我的档案</span>
+                          <v-icon>insert_chart_outlined</v-icon>
+                          <span class="menu-text pl-2">看成绩</span>
                         </v-list-tile-title>
                       </v-list-tile>
                     </v-list>
@@ -128,16 +105,18 @@
           </v-layout>
         </v-flex>
         <v-flex>
-          <v-tabs-items v-model="model" class="pt-3">
+          <v-tabs-items v-model="model">
             <v-tab-item value="tab-1">
               <v-card v-if="hasClasses" flat>
                 <!-- duty check one week -->
                 <!-- deduction week history graph -->
                 <div class="chart-wrapper fill-width pb-3">
-                  <!-- <h3 class="mb-2 duty-check-title">
+                  <h3 class="mb-2 duty-check-title">
                     上周综合得分
-                    <span class="accent--text text--darken-2">8.5分</span>
-                  </h3> -->
+                    <span class="accent--text text--darken-2">
+                      {{ deductionWeekHistory.weekScore }}分
+                    </span>
+                  </h3>
                   <div class="duty-check-image">
                     <v-layout row wrap class="duty-check-content">
                       <v-flex

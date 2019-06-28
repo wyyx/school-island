@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar app height="48" class="px-0">
+  <v-toolbar app height="48">
     <v-toolbar-title class="title text-uppercase">
       <v-layout row wrap>
         <v-flex>
@@ -25,7 +25,7 @@ export default Vue.extend({
     },
     showBack: {
       type: Boolean,
-      default: false
+      default: true
     },
     showTitle: {
       type: Boolean,
@@ -41,7 +41,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.v-toolbar {
+.v-toolbar .v-toolbar__content {
   padding-left: 0px !important;
   padding-right: 0px !important;
 }

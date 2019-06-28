@@ -1,55 +1,87 @@
 <template>
-  <v-bottom-nav :active.sync="bottomNav" :value="true" absolute color="white">
-    <v-btn color="primary" flat value="home" to="/">
-      <span>首页</span>
-      <v-icon>home</v-icon>
-    </v-btn>
-
-    <!-- teacher tab -->
-    <v-btn
-      v-if="role === teacher && !isTourist"
-      color="primary"
-      flat
-      value="workbench"
-      :to="`/workbench/${role}`"
+  <div>
+    <v-bottom-nav
+      app
+      :active.sync="bottomNav"
+      :value="true"
+      absolute
+      color="white"
     >
-      <span>老师助手</span>
-      <v-icon>assignment_turned_in</v-icon>
-    </v-btn>
+      <v-btn color="primary" flat value="home" @click="showDialog = true">
+        <span class="in-developing">首页</span>
+        <v-icon class="in-developing">home</v-icon>
+      </v-btn>
 
-    <!-- school-run tab -->
-    <v-btn
-      v-if="role === schoolRun && !isTourist"
-      color="primary"
-      flat
-      value="workbench"
-      :to="`/workbench/${role}`"
-    >
-      <span>校办助手</span>
-      <v-icon>assessment</v-icon>
-    </v-btn>
+      <!-- teacher tab -->
+      <v-btn
+        v-if="role === teacher && !isTourist"
+        color="primary"
+        flat
+        value="workbench"
+        :to="`/workbench/${role}`"
+      >
+        <span>老师助手</span>
+        <v-icon>assignment_turned_in</v-icon>
+      </v-btn>
 
-    <!-- parents tab -->
-    <v-btn
-      v-if="role === parents && !isTourist"
-      color="primary"
-      flat
-      value="workbench"
-      :to="`/workbench/${role}`"
-    >
-      <span>{{ currentStudent.name }}</span>
-      <v-icon>face</v-icon>
-    </v-btn>
+      <!-- school-run tab -->
+      <v-btn
+        v-if="role === schoolRun && !isTourist"
+        color="primary"
+        flat
+        value="workbench"
+        :to="`/workbench/${role}`"
+      >
+        <span>校办助手</span>
+        <v-icon>assessment</v-icon>
+      </v-btn>
 
-    <v-btn color="primary" flat value="explore" to="/explore">
-      <span>发现</span>
-      <v-icon>search</v-icon>
-    </v-btn>
-    <v-btn color="primary" flat value="my" :to="myRoute">
-      <span>{{ isTourist ? '游客' : '账号' }}</span>
-      <v-icon>account_circle</v-icon>
-    </v-btn>
-  </v-bottom-nav>
+      <!-- parents tab -->
+      <v-btn
+        v-if="role === parents && !isTourist"
+        color="primary"
+        flat
+        value="workbench"
+        :to="`/workbench/${role}`"
+      >
+        <span>{{ currentStudent.name }}</span>
+        <v-icon>face</v-icon>
+      </v-btn>
+
+      <v-btn color="primary" flat value="explore" @click="showDialog = true">
+        <span class="in-developing">发现</span>
+        <v-icon class="in-developing">search</v-icon>
+      </v-btn>
+      <v-btn color="primary" flat value="my" :to="myRoute">
+        <span>{{ isTourist ? '游客' : '账号' }}</span>
+        <v-icon>account_circle</v-icon>
+      </v-btn>
+    </v-bottom-nav>
+
+    <div class="text-xs-center">
+      <v-dialog v-model="showDialog" width="500">
+        <v-card>
+          <!-- <v-card-title class="subheading">
+            提示
+          </v-card-title> -->
+          <v-divider></v-divider>
+
+          <v-card-text>
+            此页面正在开发中，敬请期待...
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click="showDialog = false">
+              确定
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -69,9 +101,11 @@ export default Vue.extend({
       type: String
     }
   },
+  components: {},
   data: function() {
     return {
-      bottomNav: '',
+      showDialog: false,
+      bottomNav: 'workbench',
       teacher: Role.Teacher,
       schoolRun: Role.SchoolRun,
       parents: Role.Parents
@@ -92,4 +126,12 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-card-title {
+  padding-top: 0px;
+}
+
+.in-developing {
+  color: #757575 !important;
+}
+</style>

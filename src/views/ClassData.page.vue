@@ -1,104 +1,85 @@
 <template>
   <div>
-    <div class="box">
-      <div class="Grade_entry">
-        <div @click="goBack" class="clickable">
-          <img class="_img" src="../assets/left.svg" alt />
-        </div>
-        <div class="Grade_entry_text">班级数据</div>
-      </div>
-    </div>
+    <Header title="班级数据" @back="goBack"></Header>
     <div>
-      <v-tabs v-model="active" fixed-tabs slider-color="primary">
-        <v-tab v-for="(item, index) in text" :key="index">{{
-          item.title
-        }}</v-tab>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text><Developing></Developing></v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text><Developing></Developing></v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card class="content">
-            <v-card-text>
-              <div>
-                <v-layout row wrap>
-                  <v-flex xs5 class="px-2">
-                    <v-select
-                      v-model="currentGrade"
-                      :items="gradeList"
-                      :hide-details="true"
-                      solo
-                    ></v-select>
-                  </v-flex>
-                  <v-flex xs7 class="px-2">
-                    <v-select
-                      :items="semisterlist"
-                      item-text="name"
-                      item-value="value"
-                      :return-object="true"
-                      v-model="currentSemister"
-                      solo
-                    ></v-select>
-                  </v-flex>
-                </v-layout>
-              </div>
-              <div></div>
-              <div class="Grade">
-                <v-card flat>
-                  <v-card-title class="pa-1">
-                    <v-text-field
-                      v-model="search"
-                      append-icon="search"
-                      label="搜索"
-                      single-line
-                      hide-details
-                    ></v-text-field>
-                  </v-card-title>
-                  <v-data-table
-                    :headers="headers"
-                    :items="studentList"
-                    class="elevation-0"
-                    hide-actions
-                    :search="search"
-                    no-data-text="暂无数据..."
-                    no-results-text="没有匹配的数据..."
-                    :pagination.sync="pagination"
-                  >
-                    <template v-slot:items="props">
-                      <td class="text-xs-right">
-                        {{ props.item.studentNumber }}
-                      </td>
-                      <td class="text-xs-right">
-                        {{ props.item.studentName }}
-                      </td>
-                      <td
-                        v-ripple
-                        class="text-xs-right clickable"
-                        @click="goToStudentGradeDetailPage(props.item)"
-                      >
-                        <div class="search-btn-wrapper" v-ripple>
-                          <v-icon>search</v-icon>
-                        </div>
-                      </td>
-                    </template>
-                  </v-data-table>
-                </v-card>
-              </div>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text><Developing></Developing></v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs>
+      <v-card class="pa-3">
+        <v-tabs v-model="active" fixed-tabs slider-color="primary">
+          <v-tab v-for="(item, index) in text" :key="index">{{
+            item.title
+          }}</v-tab>
+          <v-tab-item class="pt-3">
+            <div>
+              <v-layout row wrap>
+                <v-flex xs5 class="px-2">
+                  <v-select
+                    v-model="currentGrade"
+                    :items="gradeList"
+                    :hide-details="true"
+                    solo
+                  ></v-select>
+                </v-flex>
+                <v-flex xs7 class="px-2">
+                  <v-select
+                    :items="semisterlist"
+                    item-text="name"
+                    item-value="value"
+                    :return-object="true"
+                    v-model="currentSemister"
+                    solo
+                  ></v-select>
+                </v-flex>
+              </v-layout>
+            </div>
+            <div></div>
+            <div class="Grade">
+              <v-card flat>
+                <v-card-title class="pa-1">
+                  <v-text-field
+                    v-model="search"
+                    append-icon="search"
+                    label="搜索"
+                    single-line
+                    hide-details
+                  ></v-text-field>
+                </v-card-title>
+                <v-data-table
+                  :headers="headers"
+                  :items="studentList"
+                  class="elevation-0"
+                  hide-actions
+                  :search="search"
+                  no-data-text="暂无数据..."
+                  no-results-text="没有匹配的数据..."
+                  :pagination.sync="pagination"
+                >
+                  <template v-slot:items="props">
+                    <td class="text-xs-right">
+                      {{ props.item.studentNumber }}
+                    </td>
+                    <td class="text-xs-right">
+                      {{ props.item.studentName }}
+                    </td>
+                    <td
+                      v-ripple
+                      class="text-xs-right clickable"
+                      @click="goToStudentGradeDetailPage(props.item)"
+                    >
+                      <div class="search-btn-wrapper" v-ripple>
+                        <v-icon>search</v-icon>
+                      </div>
+                    </td>
+                  </template>
+                </v-data-table>
+              </v-card>
+            </div>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-card-text><Developing></Developing></v-card-text>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+      </v-card>
     </div>
   </div>
 </template>
@@ -118,10 +99,11 @@ import { gradeService } from '../services/grade.service'
 import { BriefGrade, StudentInfoForDetail } from '../models/grade.model'
 import { StudentVo } from '../models/user.model'
 import { storeService } from '../services/store.service'
+import Header from '@/components/Header.component.vue'
 
 export default Vue.extend({
   name: 'ClassData',
-  components: { Developing },
+  components: { Developing, Header },
   props: {
     classId: {
       type: String,
@@ -130,13 +112,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      active: 2,
-      text: [
-        { title: '能量表现' },
-        { title: '值周数据' },
-        { title: '班级成绩' },
-        { title: '基础数据' }
-      ],
+      active: 0,
+      text: [{ title: '班级成绩' }],
       currentClass: {} as ClassModel,
       semisterlist: [
         { name: '上学期', value: 2 },
@@ -366,9 +343,5 @@ export default Vue.extend({
 .search-btn-wrapper {
   width: 25px;
   margin-left: auto;
-}
-
-.content {
-  margin-bottom: 76px;
 }
 </style>

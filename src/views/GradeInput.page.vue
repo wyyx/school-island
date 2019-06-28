@@ -1,24 +1,6 @@
 <template>
   <div class="content-wrapper">
-    <v-toolbar app height="48" class="px-0">
-      <v-toolbar-title class="title text-uppercase">
-        <v-layout row wrap>
-          <v-flex>
-            <div
-              class="back-btn-wrapper pa-2 clickable"
-              v-ripple
-              @click="goBack"
-            >
-              <v-icon>arrow_back</v-icon>
-            </div>
-          </v-flex>
-          <v-flex class="pl-2 both-center">
-            <span>成绩单</span>
-          </v-flex>
-        </v-layout>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-toolbar>
+    <Header title="成绩单" @back="goBack"></Header>
     <v-card class="pa-3">
       <v-layout row nowrap class="main-content-wrapper">
         <v-flex xs6>
@@ -130,7 +112,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Header from '../components/Header.component.vue'
 import { ClassModel } from '../models/class.model'
 import { get } from 'vuex-pathify'
 import {
@@ -149,6 +130,7 @@ import {
 } from '../models/grade-input.model'
 import { getYearSpan } from '../utils/date.util'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
+import Header from '@/components/Header.component.vue'
 
 const EXAM_LIST = [
   {
@@ -165,6 +147,9 @@ const YEAR_LIST = getYearSpan(2019, 2, 1)
 const CURRENT_YEAR = new Date().getFullYear()
 
 export default Vue.extend({
+  components: {
+    Header
+  },
   mixins: [snackbarMixin],
   data: function() {
     return {

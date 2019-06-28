@@ -387,7 +387,5 @@ export default Vue.extend({
   margin-left: auto;
 }
 
-.content {
-  margin-bottom: 76px;
-}
+
 </style>

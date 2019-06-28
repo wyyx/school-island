@@ -1,13 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="box">
-      <div class="Grade_entry">
-        <div @click="goBack" class="clickable">
-          <img class="_img" src="../assets/left.svg" alt />
-        </div>
-        <div class="Grade_entry_text">{{ title }}</div>
-      </div>
-    </div>
+    <Header :title="title" @back="goBack"></Header>
     <v-card class="mb-3">
       <Chart
         v-if="chartOption"
@@ -50,10 +43,11 @@ import {
   currentStudentForTeacher
 } from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
+import Header from '@/components/Header.component.vue'
 
 export default Vue.extend({
   name: 'StudentGradeDetail',
-  components: { Chart },
+  components: { Chart, Header },
   props: {},
   data() {
     return {
@@ -232,9 +226,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-.wrapper {
-  margin-bottom: 76px;
-}
 
 ._img {
   width: 20px;
