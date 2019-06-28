@@ -11,7 +11,6 @@
       <template v-slot:activator>
         <v-btn color="accent" dark fab>
           <v-icon>add</v-icon>
-          <!-- <v-icon>close</v-icon> -->
         </v-btn>
       </template>
       <v-btn @click="goToGradeInputPage" color="accent"> 录入成绩 </v-btn>
@@ -112,7 +111,7 @@
                 <!-- deduction week history graph -->
                 <div class="chart-wrapper fill-width pb-3">
                   <h3 class="mb-2 duty-check-title">
-                    上周综合得分
+                    {{ deductionWeekHistory.date }}，值周综合得分
                     <span class="accent--text text--darken-2">
                       {{ deductionWeekHistory.weekScore }}分
                     </span>
@@ -361,6 +360,20 @@ export default Vue.extend({
     hasClasses() {
       const that: any = this
       return that.classList.length > 0
+    },
+    dateTitle() {
+      const that: any = this
+      const deductionWeekHistory =
+        (that.deductionWeekHistory as DeductionHistoryByWeekItem) ||
+        ({} as DeductionHistoryByWeekItem)
+      const arr = deductionWeekHistory.date
+        ? deductionWeekHistory.date.split('~')
+        : ['']
+      const day1 = arr[0] ? arr[0] + '日' : ''
+      const day2 = arr[1] ? arr[1] + '日' : ''
+
+      console.log('TCL: dateTitle -> arr', arr)
+      return day1 + day2
     }
   },
   created() {

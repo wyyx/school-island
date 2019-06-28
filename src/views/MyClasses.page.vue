@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <Header title="班级成绩" @back="goBack"></Header>
-    <div class="primary lighten-3">
+    <v-card class="primary lighten-3 mb-2">
       <div class="class_box">
         <div class="class_box_log">
           <v-avatar size="64">
@@ -19,16 +19,21 @@
           ></v-select>
         </div>
       </div>
-    </div>
+    </v-card>
 
-    <div class="Class_transcript">
-      <div class="app-flex pa-2 clickable" @click="goToClassDataPage" v-ripple>
-        <div class="grow">班级成绩</div>
-        <div class="shrink">
+    <v-card v-ripple class="pa-3 mb-2 clickable">
+      <div class="app-flex " @click="goToClassDataPage">
+        <div class="grow subheading">班级成绩详情</div>
+        <div class="shrink both-center">
           <img class="_img" src="../assets/right.svg" alt />
         </div>
       </div>
+    </v-card>
 
+    <v-card class="pa-3 mb-2">
+      <h3 class="subheading">
+        {{ briefGrade.currentGrade + examTypeName }}成绩总览
+      </h3>
       <v-tabs v-model="tab" slider-color="primary">
         <v-tab v-for="subject in subjectList" :key="subject.subject" ripple>
           {{ subject.subject }}
@@ -43,7 +48,7 @@
           :option="chartOption"
         ></Chart>
       </div>
-    </div>
+    </v-card>
   </div>
 </template>
 
@@ -62,6 +67,7 @@ import {
 import echarts, { EChartOption, ECharts } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
 import Header from '@/components/Header.component.vue'
+import { EXAM_TYPES } from '../models/grade-input.model'
 
 export default Vue.extend({
   name: 'MyClasses',
@@ -81,7 +87,8 @@ export default Vue.extend({
       rating: 2,
       currentClass: {} as ClassModel,
       briefGrade: {} as BriefGrade,
-      chartOption: null as EChartOption
+      chartOption: null as EChartOption,
+      examTypes: EXAM_TYPES
     }
   },
   computed: {
@@ -100,6 +107,14 @@ export default Vue.extend({
       console.log('TCL: this.subjectList', this.subjectList)
 
       return this.subjectList[this.tab]
+    },
+    examTypeName() {
+      const that: any = this
+      const briefGrade = that.briefGrade as BriefGrade
+      const exam = EXAM_TYPES.filter(
+        type => type.code === briefGrade.examType
+      )[0]
+      return exam && exam.exam
     }
   },
   watch: {

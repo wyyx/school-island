@@ -6,5 +6,6 @@ export interface DeductionHistoryByWeekResponse {
 
 export interface DeductionHistoryByWeekItem {
   weekScore: number
+  date: string
   scores: number[]
 }

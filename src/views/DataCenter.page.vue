@@ -7,13 +7,6 @@
         <v-tab v-for="(item, index) in tabTextList" :key="index">{{
           item.title
         }}</v-tab>
-        <!-- duty check tab content -->
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text><Developing></Developing></v-card-text>
-          </v-card>
-        </v-tab-item>
-
         <!-- studnet grade tab content -->
         <v-tab-item>
           <v-card class="content pa-2">
@@ -66,18 +59,6 @@
             </div>
           </v-card>
         </v-tab-item>
-        <!-- teacher data tab content -->
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text><Developing></Developing></v-card-text>
-          </v-card>
-        </v-tab-item>
-        <!-- school data tab content -->
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text><Developing></Developing></v-card-text>
-          </v-card>
-        </v-tab-item>
       </v-tabs>
     </div>
   </div>
@@ -108,7 +89,7 @@ import Header from '../components/Header.component.vue'
 
 export default Vue.extend({
   name: 'ClassData',
-  components: { Developing, Chart, Header },
+  components: { Chart, Header },
   props: {
     classId: {
       type: String,
@@ -117,14 +98,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      categoryTab: 1,
+      categoryTab: 0,
       subjectTab: 1,
-      tabTextList: [
-        { title: '值周数据' },
-        { title: '学生数据' },
-        { title: '老师数据' },
-        { title: '校园数据' }
-      ],
+      tabTextList: [{ title: '学生数据' }],
       gradeList: [] as GradeVo[],
       classListVo: [] as ClassModelForSchoolRun[],
       currentClass: {} as ClassModelForSchoolRun,
@@ -183,6 +159,38 @@ export default Vue.extend({
       })
     },
     updateChart() {
+      const arr = this.currentSubject
+        ? this.currentSubject.achievements || []
+        : []
+      const levels = GRADE_LEVEL_TEXTS
+      const colors = [
+        '#909090',
+        '#F86E6E',
+        '#E591E5',
+        '#33CCFF',
+        '#33CCFF',
+        '#33CCFF',
+        '#33CCFF',
+        '#33CCFF',
+        '#33CCFF',
+        '#33CCFF',
+        '#33CCFF'
+      ].reverse()
+
+      let filterdColors = []
+      const filterdGradeLevelTexts = []
+      const filterdArr = []
+
+      for (let index = 0; index < arr.length; index++) {
+        const element = arr[index]
+
+        if (element !== 0) {
+          filterdArr.push(element)
+          filterdGradeLevelTexts.push(GRADE_LEVEL_TEXTS[index])
+          filterdColors.push(colors[index])
+        }
+      }
+
       this.chartOption = {
         color: ['#3398DB'],
         tooltip: {
@@ -202,7 +210,7 @@ export default Vue.extend({
           {
             show: false,
             type: 'category',
-            data: GRADE_LEVEL_TEXTS,
+            data: filterdGradeLevelTexts,
             axisTick: {
               alignWithLabel: true
             }
@@ -235,29 +243,11 @@ export default Vue.extend({
                 lineHeight: 18
               }
             },
-            data: this.currentSubject
-              ? this.currentSubject.achievements || []
-              : [],
+            data: filterdArr,
 
             itemStyle: {
               color: function(params) {
-                var colorList = [
-                  '#909090',
-                  '#F86E6E',
-                  '#E591E5',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF',
-                  '#33CCFF'
-                ]
-                return colorList[params.dataIndex]
+                return filterdColors[params.dataIndex]
               }
             }
           }
