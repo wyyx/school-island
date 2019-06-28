@@ -1,10 +1,16 @@
 <template>
-  <v-toolbar app height="48">
+  <v-toolbar app height="48" class="px-0">
     <v-toolbar-title class="title text-uppercase">
-      <v-btn v-if="showBack" depressed fab color="transparent" @click="onBack">
-        <v-icon>arrow_back</v-icon>
-      </v-btn>
-      <span v-if="showTitle">{{ title }}</span>
+      <v-layout row wrap>
+        <v-flex>
+          <div class="back-btn-wrapper pa-2 clickable" v-ripple @click="goBack">
+            <v-icon>arrow_back</v-icon>
+          </div>
+        </v-flex>
+        <v-flex class="both-center subheading">
+          <span>{{ title }}</span>
+        </v-flex>
+      </v-layout>
     </v-toolbar-title>
     <v-spacer></v-spacer>
   </v-toolbar>
@@ -27,11 +33,16 @@ export default Vue.extend({
     }
   },
   methods: {
-    onBack() {
+    goBack() {
       this.$emit('back')
     }
   }
 })
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.v-toolbar {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+</style>

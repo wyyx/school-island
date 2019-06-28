@@ -1,26 +1,24 @@
 <template>
   <div class="content-wrapper">
-    <div class="header-wrapper">
-      <v-toolbar app height="48" class="px-0">
-        <v-toolbar-title class="title text-uppercase">
-          <v-layout row wrap>
-            <v-flex>
-              <div
-                class="back-btn-wrapper pa-2 clickable"
-                v-ripple
-                @click="goBack"
-              >
-                <v-icon>arrow_back</v-icon>
-              </div>
-            </v-flex>
-            <v-flex class="pl-2 both-center">
-              <span>成绩录入</span>
-            </v-flex>
-          </v-layout>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
-    </div>
+    <v-toolbar app height="48" class="px-0">
+      <v-toolbar-title class="title text-uppercase">
+        <v-layout row wrap>
+          <v-flex>
+            <div
+              class="back-btn-wrapper pa-2 clickable"
+              v-ripple
+              @click="goBack"
+            >
+              <v-icon>arrow_back</v-icon>
+            </div>
+          </v-flex>
+          <v-flex class="both-center subheading">
+            <span>成绩录入</span>
+          </v-flex>
+        </v-layout>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     <div class="main-content-wrapper">
       <v-card class="primary lighten-3 pa-3 grade-title">
         <h3 class="title text-xs-center">
@@ -77,7 +75,7 @@
             </v-list>
           </v-flex>
           <!-- right -->
-          <v-flex class="right pa-2">
+          <v-flex class="right pa-3">
             <v-layout row wrap class="py-3 text-xs-center">
               <v-flex class="title primary--text">
                 {{ currentStudent.studentName }}
@@ -377,10 +375,6 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .content-wrapper {
   margin-bottom: 76px;
-}
-
-.main-content-wrapper {
-  margin-top: 48px !important;
 }
 
 .content {

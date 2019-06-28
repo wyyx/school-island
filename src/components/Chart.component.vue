@@ -41,6 +41,10 @@ export default Vue.extend({
     initEcharts(option: EChartOption) {
       this.chart = echarts.init(this.$refs.chart as HTMLDivElement)
       this.chart.setOption(option)
+
+      window.addEventListener('resize', () => {
+        this.chart.resize()
+      })
     }
   }
 })

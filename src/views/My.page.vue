@@ -15,7 +15,7 @@
           <v-layout column wrap>
             <v-flex class="title">
               <v-layout row wrap>
-                <v-flex class="v-center shrink pr-3">
+                <v-flex class="v-center shrink pr-2">
                   <!-- when teache -->
                   <span
                     v-if="
@@ -105,123 +105,6 @@
         </v-flex>
       </v-layout>
     </v-card>
-    <v-card v-if="false" class="mb-2">
-      <v-layout class="scores white pa-3 text--secondary" row wrap>
-        <v-flex>
-          <div><v-icon color="accent">star</v-icon></div>
-          <div>我的班级</div>
-        </v-flex>
-        <v-flex>
-          <div><v-icon color="accent">filter_vintage</v-icon></div>
-          <div>我的荣誉</div>
-        </v-flex>
-        <v-flex>
-          <div><v-icon color="accent">image</v-icon></div>
-          <div>我的作品</div>
-        </v-flex>
-        <v-flex>
-          <div><v-icon color="accent">insert_drive_file</v-icon></div>
-          <div>我的文章</div>
-        </v-flex>
-        <v-flex>
-          <div><v-icon color="accent">card_giftcard</v-icon></div>
-          <div>兑换中心</div>
-        </v-flex>
-      </v-layout>
-    </v-card>
-
-    <!-- list -->
-    <v-card v-if="false">
-      <v-list subheader class="text--secondary">
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <v-icon color="accent">sms</v-icon>
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title>
-              我的消息
-            </v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">keyboard_arrow_right</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider inset></v-divider>
-
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <v-icon color="accent">local_post_office</v-icon>
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title>
-              我的发帖
-            </v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">keyboard_arrow_right</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider inset></v-divider>
-
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <v-icon color="accent">insert_drive_file</v-icon>
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title>我的草稿</v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">keyboard_arrow_right</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider inset></v-divider>
-
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <v-icon color="accent">timer</v-icon>
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title>我的任务</v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">keyboard_arrow_right</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider inset></v-divider>
-
-        <v-list-tile avatar>
-          <v-list-tile-avatar>
-            <v-icon color="accent">help_outline</v-icon>
-          </v-list-tile-avatar>
-
-          <v-list-tile-content>
-            <v-list-tile-title>帮助</v-list-tile-title>
-          </v-list-tile-content>
-
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">keyboard_arrow_right</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-list>
-    </v-card>
   </div>
 </template>
 
@@ -306,5 +189,9 @@ export default Vue.extend({
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 100px;
+}
+
+.v-btn {
+  min-width: unset !important;
 }
 </style>

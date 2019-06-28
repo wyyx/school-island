@@ -1,27 +1,25 @@
 <template>
   <div class="content-wrapper">
+    <v-toolbar app height="48" class="px-0">
+      <v-toolbar-title class="title text-uppercase">
+        <v-layout row wrap>
+          <v-flex>
+            <div
+              class="back-btn-wrapper pa-2 clickable"
+              v-ripple
+              @click="goBack"
+            >
+              <v-icon>arrow_back</v-icon>
+            </div>
+          </v-flex>
+          <v-flex class="pl-2 both-center">
+            <span>成绩单</span>
+          </v-flex>
+        </v-layout>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
     <v-card class="pa-3">
-      <div class="header-wrapper">
-        <v-toolbar app height="48" class="px-0">
-          <v-toolbar-title class="title text-uppercase">
-            <v-layout row wrap>
-              <v-flex>
-                <div
-                  class="back-btn-wrapper pa-2 clickable"
-                  v-ripple
-                  @click="goBack"
-                >
-                  <v-icon>arrow_back</v-icon>
-                </div>
-              </v-flex>
-              <v-flex class="pl-2 both-center">
-                <span>成绩单</span>
-              </v-flex>
-            </v-layout>
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </div>
       <v-layout row nowrap class="main-content-wrapper">
         <v-flex xs6>
           <!-- <div>{{ currentClass }}</div> -->
@@ -323,14 +321,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.content-wrapper {
-  margin-bottom: 76px;
-}
-
-.main-content-wrapper {
-  padding-top: 48px !important;
-}
-
 .grade-subject-table {
   table-layout: fixed;
 }
