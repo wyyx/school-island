@@ -80,7 +80,13 @@
           <v-card flat>
             <div>
               <div class="app-flex">
-                <div class="grow v-center">我的成绩</div>
+                <div class="grow v-center">
+                  {{
+                    studentGrade.currentGrade + examTypeName
+                      ? studentGrade.currentGrade + examTypeName
+                      : ''
+                  }}成绩
+                </div>
                 <div
                   class="shrink both-center clickable"
                   @click="goToStudentGradeDetailForParentsPage"
@@ -129,6 +135,7 @@ import {
   StudentGradeDetail
 } from '../models/grade.model'
 import { gradeService } from '../services/grade.service'
+import { EXAM_TYPES } from '../models/grade-input.model'
 
 export default Vue.extend({
   mixins: [snackbarMixin],
@@ -156,6 +163,13 @@ export default Vue.extend({
     studentList() {
       const that: any = this
       return (that.user as UserInfo).studentVoList || []
+    },
+    examTypeName() {
+      const that: any = this
+      const studentGrade = that.studentGrade as BriefStudentGradeForParents
+      const exam = EXAM_TYPES.filter(type => type.code === studentGrade.type)[0]
+
+      return exam && exam.exam
     }
   },
   components: { Chart },

@@ -35,14 +35,14 @@
         <v-tab-item>
           <v-card flat>
             <div>
-              <div class="app-flex">
-                <div class="grow">
+              <div class="app-flex py-2">
+                <div class="app-grow v-center ">
                   {{ studentGrade.currentGrade
                   }}{{ getExamType(studentGrade.type) }}成绩
                 </div>
                 <div
                   @click="goToStudentGradeDetailForParentsPage"
-                  class="shrink text-xs-right clickable"
+                  class="app-shrink text-xs-right clickable"
                 >
                   <span>详情</span>
                   <span class="group pa-2 ">
