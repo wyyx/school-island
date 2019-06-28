@@ -31,9 +31,6 @@
         <v-layout class="content">
           <!-- left -->
           <v-flex
-            md4
-            lg3
-            xl2
             class="left student-list-wrapper pa-2"
             :style="{
               height: studentListWrapperHeight - 150 + 'px',
@@ -59,12 +56,12 @@
                       }"
                     >
                       <span
-                        class="caption"
+                        class="body-2"
                         :class="{ 'success--text': student.achievement > 0 }"
                       >
                         {{ student.studentName }}
                       </span>
-                      <span class="pl-1">
+                      <span class="app-pl-5">
                         <v-icon
                           :size="16"
                           v-if="student.achievement"
@@ -80,7 +77,7 @@
             </v-list>
           </v-flex>
           <!-- right -->
-          <v-flex md8 lg9 xl10 class="right pa-2">
+          <v-flex class="right pa-2">
             <v-layout row wrap class="py-3 text-xs-center">
               <v-flex class="title primary--text">
                 {{ currentStudent.studentName }}
@@ -90,8 +87,9 @@
               </v-flex>
             </v-layout>
             <!-- grade select -->
-            <div class="pt-3">
+            <div class="pt-3 fill-width">
               <v-select
+                class="fill-width grade-level-select"
                 v-model="currentGradeLevel"
                 :items="gradeLevels"
                 item-text="name"
@@ -391,6 +389,11 @@ export default Vue.extend({
 
 .left {
   background: #f5f5f5 !important;
+  flex: 0 0 auto;
+}
+
+.right {
+  flex: 1 0 auto;
 }
 
 .v-list {
