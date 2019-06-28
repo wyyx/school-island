@@ -17,126 +17,128 @@
         <v-spacer></v-spacer>
       </v-toolbar>
     </div>
-    <v-card class="primary lighten-3 pa-3 grade-title">
-      <h3 class="title text-xs-center">
-        {{ title }}
-      </h3>
-    </v-card>
-    <v-card class=" lighten-3">
-      <v-layout class="content">
-        <!-- left -->
-        <v-flex
-          md4
-          lg3
-          xl2
-          class="left student-list-wrapper pa-2"
-          :style="{
-            height: studentListWrapperHeight - 150 + 'px',
-            'overflow-y': 'scroll'
-          }"
-        >
-          <v-list :expand="true">
-            <div v-for="student in studentList" :key="student.studentId">
-              <v-list-tile
-                class="pa-0"
-                @click="setCurrentStudent(student)"
-                color="primary "
-              >
-                <v-list-tile-content color="primary ">
-                  <v-list-tile-title
-                    :class="{
-                      'primary--text':
-                        currentStudent.studentNumber === student.studentNumber
-                    }"
-                  >
-                    <span
-                      class="caption"
-                      :class="{ 'success--text': student.achievement > 0 }"
+    <div class="main-content-wrapper">
+      <v-card class="primary lighten-3 pa-3 grade-title">
+        <h3 class="title text-xs-center">
+          {{ title }}
+        </h3>
+      </v-card>
+      <v-card class=" lighten-3">
+        <v-layout class="content">
+          <!-- left -->
+          <v-flex
+            md4
+            lg3
+            xl2
+            class="left student-list-wrapper pa-2"
+            :style="{
+              height: studentListWrapperHeight - 150 + 'px',
+              'overflow-y': 'scroll'
+            }"
+          >
+            <v-list :expand="true">
+              <div v-for="student in studentList" :key="student.studentId">
+                <v-list-tile
+                  class="pa-0"
+                  @click="setCurrentStudent(student)"
+                  color="primary "
+                >
+                  <v-list-tile-content color="primary ">
+                    <v-list-tile-title
+                      :class="{
+                        'primary--text':
+                          currentStudent.studentNumber === student.studentNumber
+                      }"
                     >
-                      {{ student.studentName }}
-                    </span>
-                    <span class="pl-1">
-                      <v-icon
-                        :size="16"
-                        v-if="student.achievement"
-                        color="success"
-                        >comment
-                      </v-icon>
-                    </span>
-                  </v-list-tile-title>
-                </v-list-tile-content>
-              </v-list-tile>
-              <v-divider></v-divider>
-            </div>
-          </v-list>
-        </v-flex>
-        <!-- right -->
-        <v-flex md8 lg9 xl10 class="right pa-2">
-          <v-layout row wrap class="py-3 text-xs-center">
-            <v-flex class="title primary--text">
-              {{ currentStudent.studentName }}
-            </v-flex>
-            <v-flex class="title primary--text">
-              {{ currentStudent.studentNumber }}
-            </v-flex>
-          </v-layout>
-          <!-- grade select -->
-          <div class="pt-3">
-            <v-select
-              v-model="currentGradeLevel"
-              :items="gradeLevels"
-              item-text="name"
-              :return-object="true"
-              solo
-              placeholder="请选择"
-              v-validate="'required'"
-              name="gradeLevel"
-              data-vv-as="成绩"
-              :error-messages="validated ? errors.collect('gradeLevel') : []"
-            ></v-select>
-          </div>
-          <!-- rating -->
-          <div v-if="showRating" class="py-2">
-            <v-layout row nowrap>
-              <v-flex>
-                <v-rating
-                  x-large
-                  clearable
-                  color="accent"
-                  background-color="grey darken-1"
-                  v-model="rating"
-                  :length="3"
-                  medium
-                ></v-rating>
+                      <span
+                        class="caption"
+                        :class="{ 'success--text': student.achievement > 0 }"
+                      >
+                        {{ student.studentName }}
+                      </span>
+                      <span class="pl-1">
+                        <v-icon
+                          :size="16"
+                          v-if="student.achievement"
+                          color="success"
+                          >comment
+                        </v-icon>
+                      </span>
+                    </v-list-tile-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+                <v-divider></v-divider>
+              </div>
+            </v-list>
+          </v-flex>
+          <!-- right -->
+          <v-flex md8 lg9 xl10 class="right pa-2">
+            <v-layout row wrap class="py-3 text-xs-center">
+              <v-flex class="title primary--text">
+                {{ currentStudent.studentName }}
+              </v-flex>
+              <v-flex class="title primary--text">
+                {{ currentStudent.studentNumber }}
               </v-flex>
             </v-layout>
-          </div>
-          <!-- comment -->
-          <div>
-            <v-textarea
-              class="comment-input"
-              v-model="comment"
-              name="input-7-4"
-              label="评语"
-              auto-grow
-              :rows="4"
-            ></v-textarea>
-          </div>
-          <!-- submit btn -->
-          <v-layout row wrap>
-            <v-flex class="text-xs-right">
-              <v-btn color="primary" @click="submit">保存</v-btn>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-card>
-    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
-      {{ message }}
-      <v-btn dark flat @click="showSnackbar = false">
-        关闭
-      </v-btn>
-    </v-snackbar>
+            <!-- grade select -->
+            <div class="pt-3">
+              <v-select
+                v-model="currentGradeLevel"
+                :items="gradeLevels"
+                item-text="name"
+                :return-object="true"
+                solo
+                placeholder="请选择"
+                v-validate="'required'"
+                name="gradeLevel"
+                data-vv-as="成绩"
+                :error-messages="validated ? errors.collect('gradeLevel') : []"
+              ></v-select>
+            </div>
+            <!-- rating -->
+            <div v-if="showRating" class="py-2">
+              <v-layout row nowrap>
+                <v-flex>
+                  <v-rating
+                    x-large
+                    clearable
+                    color="accent"
+                    background-color="grey darken-1"
+                    v-model="rating"
+                    :length="3"
+                    medium
+                  ></v-rating>
+                </v-flex>
+              </v-layout>
+            </div>
+            <!-- comment -->
+            <div>
+              <v-textarea
+                class="comment-input"
+                v-model="comment"
+                name="input-7-4"
+                label="评语"
+                auto-grow
+                :rows="4"
+              ></v-textarea>
+            </div>
+            <!-- submit btn -->
+            <v-layout row wrap>
+              <v-flex class="text-xs-right">
+                <v-btn color="primary" @click="submit">保存</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-card>
+      <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+        {{ message }}
+        <v-btn dark flat @click="showSnackbar = false">
+          关闭
+        </v-btn>
+      </v-snackbar>
+    </div>
   </div>
 </template>
 
@@ -345,6 +347,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .content-wrapper {
   margin-bottom: 76px;
+}
+
+.main-content-wrapper {
+  margin-top: 48px !important;
 }
 
 .content {

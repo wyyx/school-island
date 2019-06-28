@@ -38,3 +38,10 @@ td,
 th {
   padding: 0 12px !important;
 }
+
+.teacher-helper {
+  position: fixed !important;
+  right: 1rem !important;
+  bottom: 5rem !important;
+  z-index: 5000 !important;
+}

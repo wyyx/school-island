@@ -18,7 +18,7 @@
           <v-spacer></v-spacer>
         </v-toolbar>
       </div>
-      <v-layout row nowrap>
+      <v-layout row nowrap class="main-content-wrapper">
         <v-flex xs6>
           <!-- <div>{{ currentClass }}</div> -->
           <v-select
@@ -108,7 +108,9 @@
               >
                 {{ props.item.state | gradeStateFilter }}
               </span>
-              <span class="pl-4"> <v-icon>keyboard_arrow_right</v-icon> </span>
+              <span class="pl-5">
+                <v-icon>keyboard_arrow_right</v-icon>
+              </span>
             </div>
           </td>
         </template>
@@ -318,6 +320,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .content-wrapper {
   margin-bottom: 76px;
+}
+
+.main-content-wrapper {
+  padding-top: 48px !important;
 }
 
 .grade-subject-table {

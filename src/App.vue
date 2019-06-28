@@ -1,10 +1,9 @@
 <template>
   <v-app>
-    <div
-      v-if="appIsLoading"
-      class="loading-wrapper fill-height fill-width both-center column"
-    >
-      <v-progress-circular indeterminate color="accent"></v-progress-circular>
+    <div v-if="appIsLoading" class="loading-wrapper fill-height fill-width ">
+      <div class="text-xs-center">
+        <v-progress-circular indeterminate color="accent"></v-progress-circular>
+      </div>
       <h3 class="subheading mt-1">正在加载数据...</h3>
     </div>
     <v-content v-else>
@@ -206,5 +205,12 @@ export default Vue.extend({
   position: fixed;
   bottom: 0px;
   z-index: 999;
+}
+
+.loading-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 </style>

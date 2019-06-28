@@ -631,8 +631,10 @@ export default Vue.extend({
 }
 
 .teacher-helper {
-  z-index: 5000;
-  bottom: 8rem;
+  position: fixed !important;
+  right: 1rem !important;
+  bottom: 5rem !important;
+  z-index: 5000 !important;
 }
 
 .container {
