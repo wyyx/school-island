@@ -18,6 +18,14 @@
   flex-direction: column;
 }
 
+.app-grow {
+  flex: 1 0 auto;
+}
+
+.app-shrink {
+  flex: 0 1 auto;
+}
+
 .both-center {
   display: flex;
   justify-content: center;

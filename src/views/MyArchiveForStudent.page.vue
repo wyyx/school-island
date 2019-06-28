@@ -2,7 +2,7 @@
   <div>
     <div class="box">
       <div class="Grade_entry">
-        <div @click="goBack">
+        <div @click="goBack" class="clickable">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">成长档案</div>
@@ -35,7 +35,7 @@
                 <div class="grow">我的成绩</div>
                 <div
                   @click="goToStudentGradeDetailForParentsPage"
-                  class="shrink text-xs-right"
+                  class="shrink text-xs-right clickable"
                 >
                   <span>详情</span>
                   <span class="group pa-2 ">

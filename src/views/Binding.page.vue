@@ -5,7 +5,7 @@
         <v-flex class="h-center">
           <v-avatar size="64" class="text-xs-center">
             <img v-if="schoolLogo" :src="schoolLogo" alt="alt" />
-            <v-icon v-else :size="64">help_outline</v-icon>
+            <v-icon v-else :size="64" color="white">help_outline</v-icon>
           </v-avatar>
         </v-flex>
         <v-flex class="text-center pa-2">
@@ -135,7 +135,7 @@
       </v-card>
     </div>
 
-    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
       {{ message }}
       <v-btn dark flat @click="showSnackbar = false">
         关闭

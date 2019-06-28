@@ -6,7 +6,11 @@
           <v-toolbar-title class="title text-uppercase">
             <v-layout row wrap>
               <v-flex>
-                <div class="back-btn-wrapper pa-2" v-ripple @click="goBack">
+                <div
+                  class="back-btn-wrapper pa-2 clickable"
+                  v-ripple
+                  @click="goBack"
+                >
                   <v-icon>arrow_back</v-icon>
                 </div>
               </v-flex>
@@ -89,18 +93,19 @@
         no-results-text="没有匹配的数据..."
       >
         <template v-slot:items="props">
-          <td @click="goToGradeInputEditPage(props.item)">
+          <td @click="goToGradeInputEditPage(props.item)" class="clickable">
             {{ props.item.grade }}
           </td>
-          <td @click="goToGradeInputEditPage(props.item)">
+          <td @click="goToGradeInputEditPage(props.item)" class="clickable">
             {{ props.item.subject }}
           </td>
-          <td @click="goToGradeInputEditPage(props.item)">
+          <td @click="goToGradeInputEditPage(props.item)" class="clickable">
             {{ props.item.type | gradeTypeFilter }}
           </td>
-          <td class="text-xs-right" @click="goToGradeInputEditPage(props.item)">
-            <div class="both-center">
+          <td class="clickable" @click="goToGradeInputEditPage(props.item)">
+            <div class="v-center">
               <span
+                class="app-grow"
                 :class="{
                   'success--text': props.item.state === 1,
                   'red--text': props.item.state === 0
@@ -108,7 +113,7 @@
               >
                 {{ props.item.state | gradeStateFilter }}
               </span>
-              <span class="pl-5">
+              <span class="pl-2 app-shrink">
                 <v-icon>keyboard_arrow_right</v-icon>
               </span>
             </div>
@@ -116,7 +121,7 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
       {{ message }}
       <v-btn dark flat @click="showSnackbar = false">
         关闭

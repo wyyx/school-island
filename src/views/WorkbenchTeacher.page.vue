@@ -261,7 +261,7 @@
         </div>
       </v-flex>
     </v-layout>
-    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
       {{ message }}
       <v-btn dark flat @click="showSnackbar = false">
         关闭

@@ -2,7 +2,7 @@
   <div>
     <div class="box">
       <div class="Grade_entry">
-        <div @click="goBack">
+        <div @click="goBack" class="clickable">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">班级数据</div>
@@ -78,7 +78,8 @@
                         {{ props.item.studentName }}
                       </td>
                       <td
-                        class="text-xs-right"
+                        v-ripple
+                        class="text-xs-right clickable"
                         @click="goToStudentGradeDetailPage(props.item)"
                       >
                         <div class="search-btn-wrapper" v-ripple>

@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="box">
       <div class="Grade_entry">
-        <div @click="goBack">
+        <div @click="goBack" class="clickable">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">{{ title }}</div>

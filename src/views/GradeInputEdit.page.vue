@@ -5,7 +5,11 @@
         <v-toolbar-title class="title text-uppercase">
           <v-layout row wrap>
             <v-flex>
-              <div class="back-btn-wrapper pa-2" v-ripple @click="goBack">
+              <div
+                class="back-btn-wrapper pa-2 clickable"
+                v-ripple
+                @click="goBack"
+              >
                 <v-icon>arrow_back</v-icon>
               </div>
             </v-flex>
@@ -40,8 +44,12 @@
               <div v-for="student in studentList" :key="student.studentId">
                 <v-list-tile
                   class="pa-0"
+                  :class="{
+                    'cyan lighten-5':
+                      currentStudent.studentNumber === student.studentNumber
+                  }"
                   @click="setCurrentStudent(student)"
-                  color="primary "
+                  color="primary"
                 >
                   <v-list-tile-content color="primary ">
                     <v-list-tile-title
@@ -126,13 +134,27 @@
             <!-- submit btn -->
             <v-layout row wrap>
               <v-flex class="text-xs-right">
-                <v-btn color="primary" @click="submit">保存</v-btn>
+                <v-btn
+                  color="primary"
+                  @click="submit"
+                  :depressed="isPending ? true : false"
+                >
+                  <span v-if="isPending">
+                    <v-progress-circular
+                      :size="24"
+                      :width="2"
+                      indeterminate
+                      color="white"
+                    ></v-progress-circular
+                  ></span>
+                  <span v-else>保存</span>
+                </v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
         </v-layout>
       </v-card>
-      <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+      <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
         {{ message }}
         <v-btn dark flat @click="showSnackbar = false">
           关闭
@@ -172,6 +194,7 @@ export default Vue.extend({
   mixins: [snackbarMixin],
   data: function() {
     return {
+      isPending: false,
       currentClass: {} as ClassModel,
       headers: [
         {
@@ -289,7 +312,9 @@ export default Vue.extend({
         this.validated = true
         console.log('TCL: submit -> valid', valid)
 
-        if (valid) {
+        if (valid && !this.isPending) {
+          this.isPending = true
+
           gradeService
             .addStudentGrade({
               achievement: this.currentGradeLevel.code,
@@ -302,17 +327,24 @@ export default Vue.extend({
             })
             .then(res => {
               console.log('TCL: submit -> res', res)
+              this.isPending = false
 
               if (res.data.content) {
                 that.showSuccessMessage('保存成功！')
                 this.updateStudent(this.currentStudent)
               } else {
                 const that: any = this
-                that.showFailMessage('保存失败！请稍后再试')
+
+                const msg = res.data.errorMsg
+                that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
               }
             })
+            .finally(() => {
+              this.isPending = false
+            })
             .catch(error => {
-              that.showFailMessage('保存失败！请稍后再试')
+              this.isPending = false
+              that.showFailMessage('保存失败！出现未知错误，请稍后再试')
             })
         }
       })

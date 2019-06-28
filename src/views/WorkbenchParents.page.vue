@@ -89,7 +89,7 @@
               <div class="MyGrades app-flex">
                 <div class="grow">我的成绩</div>
                 <div
-                  class="shrink both-center"
+                  class="shrink both-center clickable"
                   @click="goToStudentGradeDetailForParentsPage"
                 >
                   <span>详情</span>
@@ -110,7 +110,7 @@
       </v-tabs>
     </v-card>
 
-    <v-snackbar v-model="showSnackbar" :color="color" :timeout="3000">
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
       {{ message }}
       <v-btn dark flat @click="showSnackbar = false">
         关闭

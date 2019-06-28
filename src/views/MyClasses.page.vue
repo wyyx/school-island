@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="box">
       <div class="Grade_entry">
-        <div @click="goBack">
+        <div @click="goBack" class="clickable">
           <img class="_img" src="../assets/left.svg" alt />
         </div>
         <div class="Grade_entry_text">班级事务</div>
@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="Class_transcript">
-      <div class="flex pa-2" @click="goToClassDataPage" v-ripple>
+      <div class="app-flex pa-2 clickable" @click="goToClassDataPage" v-ripple>
         <div class="grow">班级成绩</div>
         <div class="shrink">
           <img class="_img" src="../assets/right.svg" alt />
