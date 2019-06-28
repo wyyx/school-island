@@ -271,7 +271,12 @@ import moment from 'moment'
 import { httpConfigService } from '../services/http-config.service'
 import { userService } from '../services/user.service'
 import { get } from 'vuex-pathify'
-import { authModulePath, user, currentRole } from '../store/auth/auth.paths'
+import {
+  authModulePath,
+  user,
+  currentRole,
+  showTabs
+} from '../store/auth/auth.paths'
 import { classesModulePath, classList } from '../store/classes/classes.paths'
 import { UserInfo } from '../models/user.model'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
@@ -296,6 +301,13 @@ export default Vue.extend({
     swiperSlide
     // Chart
   },
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //     console.log('yyyyyyyyyyy')
+  //     const store: any = vm.$store
+  //     store.set(authModulePath + showTabs, true)
+  //   })
+  // },
   data: function() {
     return {
       currentClass: {} as ClassModel,

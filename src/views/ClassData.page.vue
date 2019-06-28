@@ -64,7 +64,7 @@
                       class="text-xs-right clickable"
                       @click="goToStudentGradeDetailPage(props.item)"
                     >
-                      <div class="search-btn-wrapper" v-ripple>
+                      <div class="search-btn-wrapper">
                         <v-icon>search</v-icon>
                       </div>
                     </td>

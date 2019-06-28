@@ -61,23 +61,23 @@
     <div class="text-xs-center">
       <v-dialog v-model="showDialog" width="500">
         <v-card>
-          <!-- <v-card-title class="subheading">
-            提示
-          </v-card-title> -->
+          <v-card-title class="subheading">
+            <v-icon>info</v-icon>
+          </v-card-title>
           <v-divider></v-divider>
 
           <v-card-text>
-            <v-icon>info</v-icon> 此页面正在开发中，敬请期待...
+            此页面正在开发中，敬请期待...
           </v-card-text>
 
           <v-divider></v-divider>
 
-          <!-- <v-card-actions>
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" flat @click="showDialog = false">
-              确定
+              关闭
             </v-btn>
-          </v-card-actions> -->
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </div>

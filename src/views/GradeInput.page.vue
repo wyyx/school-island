@@ -120,7 +120,7 @@ import {
   currentGradeSubject
 } from '../store/classes/classes.paths'
 import { gradeService } from '../services/grade.service'
-import { authModulePath, user } from '../store/auth/auth.paths'
+import { authModulePath, user, showTabs } from '../store/auth/auth.paths'
 import {
   EXAM_TYPES,
   Subject,
@@ -151,13 +151,20 @@ export default Vue.extend({
     Header
   },
   mixins: [snackbarMixin],
+  // beforeRouteEnter(to, from, next) {
+  //   next(vm => {
+  //     console.log('aaaaaaaaaaaaaa')
+  //     const store: any = vm.$store
+  //     store.set(authModulePath + showTabs, false)
+  //   })
+  // },
   data: function() {
     return {
       showSnackbar: false,
       currentClass: {} as ClassModel,
       headers: [
         {
-          text: '年级',
+          text: '历史成绩',
           align: 'left',
           value: 'grade',
           width: '20%'

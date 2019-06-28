@@ -44,7 +44,7 @@
                       <span class="app-pl-5">
                         <v-icon
                           :size="16"
-                          v-if="student.achievement"
+                          v-if="student.comment"
                           color="success"
                           >comment
                         </v-icon>
@@ -68,6 +68,9 @@
             </v-layout>
             <!-- grade select -->
             <div class="pt-3 fill-width">
+              <h3 class="input-title subheading grey--text text--darken-1 pb-3">
+                成绩
+              </h3>
               <v-select
                 class="fill-width grade-level-select"
                 v-model="currentGradeLevel"
@@ -83,10 +86,10 @@
               ></v-select>
             </div>
             <!-- rating -->
-            <div v-if="showRating">
+            <div v-if="showRating" class="pt-1">
               <v-layout row nowrap>
                 <v-flex>
-                  <h3 class="rating-title subheading grey--text text--darken-1">
+                  <h3 class="input-title subheading grey--text text--darken-1">
                     星级
                   </h3>
                   <v-rating
@@ -102,12 +105,14 @@
               </v-layout>
             </div>
             <!-- comment -->
-            <div>
+            <div class="pt-4">
+              <h3 class="input-title subheading grey--text text--darken-1">
+                评语
+              </h3>
               <v-textarea
                 class="comment-input"
                 v-model="comment"
                 name="input-7-4"
-                label="评语"
                 auto-grow
                 :rows="4"
               ></v-textarea>
@@ -214,14 +219,6 @@ export default Vue.extend({
       classList,
       currentGradeSubject
     }),
-    // sortedStudentList() {
-    //   const that: any = this
-    //   const studentList = that.studentList as Student[]
-
-    //   return studentList.sort((a, b) => {
-    //     return parseInt(a.studentNumber) - parseInt(b.studentNumber)
-    //   })
-    // },
     showRating() {
       const that: any = this
       const currentGradeLevel = that.currentGradeLevel as GradeLevelModel
@@ -379,11 +376,11 @@ export default Vue.extend({
 
 .left {
   background: #f5f5f5 !important;
-  flex: 0 0 auto;
+  flex: 1 0 auto;
 }
 
 .right {
-  flex: 1 0 auto;
+  flex: 10 0 auto;
 }
 
 .v-list {
@@ -394,7 +391,11 @@ export default Vue.extend({
   margin-bottom: 0px !important;
 }
 
-.rating-title {
+.input-title {
   font-size: 1.2rem;
+}
+
+.comment-input {
+  padding-top: 0px !important;
 }
 </style>

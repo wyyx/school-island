@@ -71,16 +71,16 @@
       </v-layout>
     </v-card>
 
-    <v-card class="grade-wrapper pa-2">
+    <v-card class="grade-wrapper pa-3">
       <v-tabs v-model="active">
         <v-tab v-for="(item, index) in tabTexts" :key="index">{{
           item.title
         }}</v-tab>
         <v-tab-item>
           <v-card flat>
-            <v-card-text>
-              <div class="MyGrades app-flex">
-                <div class="grow">我的成绩</div>
+            <div>
+              <div class="app-flex">
+                <div class="grow v-center">我的成绩</div>
                 <div
                   class="shrink both-center clickable"
                   @click="goToStudentGradeDetailForParentsPage"
@@ -97,7 +97,7 @@
                 height="300px"
                 :option="chartOption"
               ></Chart>
-            </v-card-text>
+            </div>
           </v-card>
         </v-tab-item>
       </v-tabs>
