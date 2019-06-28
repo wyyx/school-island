@@ -18,7 +18,10 @@
             }"
           >
             <v-list :expand="true">
-              <div v-for="student in studentList" :key="student.studentId">
+              <div
+                v-for="student in sortedStudentList"
+                :key="student.studentId"
+              >
                 <v-list-tile
                   class="pa-0"
                   :class="{
@@ -211,6 +214,14 @@ export default Vue.extend({
       classList,
       currentGradeSubject
     }),
+    sortedStudentList() {
+      const that: any = this
+      const studentList = that.studentList as Student[]
+
+      return studentList.sort((a, b) => {
+        return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+      })
+    },
     showRating() {
       const that: any = this
       const currentGradeLevel = that.currentGradeLevel as GradeLevelModel

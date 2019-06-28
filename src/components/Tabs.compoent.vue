@@ -7,7 +7,7 @@
       absolute
       color="white"
     >
-      <v-btn color="primary" flat value="home" @click="showDialog = true">
+      <v-btn color="primary" flat value="home" @click="_showDialog">
         <span class="in-developing">首页</span>
         <v-icon class="in-developing">home</v-icon>
       </v-btn>
@@ -67,17 +67,17 @@
           <v-divider></v-divider>
 
           <v-card-text>
-            此页面正在开发中，敬请期待...
+            <v-icon>info</v-icon> 此页面正在开发中，敬请期待...
           </v-card-text>
 
           <v-divider></v-divider>
 
-          <v-card-actions>
+          <!-- <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" flat @click="showDialog = false">
               确定
             </v-btn>
-          </v-card-actions>
+          </v-card-actions> -->
         </v-card>
       </v-dialog>
     </div>
@@ -96,6 +96,7 @@ import {
 import { UserInfo, Role } from '../models/user.model'
 
 export default Vue.extend({
+  name: 'AppTabs',
   props: {
     role: {
       type: String
@@ -122,7 +123,14 @@ export default Vue.extend({
       return that.isTourist ? '/account/tourist' : '/account/my'
     }
   },
-  name: 'AppTabs'
+  methods: {
+    _showDialog() {
+      this.showDialog = true
+      setTimeout(() => {
+        this.showDialog = false
+      }, 2000)
+    }
+  }
 })
 </script>
 

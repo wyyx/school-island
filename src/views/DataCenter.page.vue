@@ -1,13 +1,6 @@
 <template>
   <div>
-    <div class="box">
-      <div class="Grade_entry">
-        <div @click="goBack">
-          <img class="_img" src="../assets/left.svg" alt />
-        </div>
-        <div class="Grade_entry_text">数据中心</div>
-      </div>
-    </div>
+    <Header title="数据中心" @back="goBack"></Header>
     <div>
       <!-- categoryTab -->
       <v-tabs v-model="categoryTab" fixed-tabs slider-color="primary">
@@ -111,10 +104,11 @@ import { StudentVo } from '../models/user.model'
 import { storeService } from '../services/store.service'
 import { EChartOption } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
+import Header from '../components/Header.component.vue'
 
 export default Vue.extend({
   name: 'ClassData',
-  components: { Developing, Chart },
+  components: { Developing, Chart, Header },
   props: {
     classId: {
       type: String,
@@ -386,6 +380,4 @@ export default Vue.extend({
   width: 25px;
   margin-left: auto;
 }
-
-
 </style>

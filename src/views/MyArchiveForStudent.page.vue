@@ -1,28 +1,32 @@
 <template>
   <div>
-    <div class="box">
-      <div class="Grade_entry">
-        <div @click="goBack" class="clickable">
-          <img class="_img" src="../assets/left.svg" alt />
-        </div>
-        <div class="Grade_entry_text">成长档案</div>
-      </div>
-    </div>
-    <div class="file_box">
-      <div class="avatar-wrapper pl-3">
-        <v-avatar :size="64" :tile="true">
-          <img v-if="avatarUrl" src="" alt="头像" />
-          <v-icon :size="64">account_box</v-icon>
-        </v-avatar>
-      </div>
-      <div class="file_class">
-        <span>{{ studentInfo.name }}</span>
-        <span class="Born">{{ studentInfo.birthday }}</span>
-      </div>
-      <div class="file_honor">
-        <span>{{ studentInfo.className }}</span>
-      </div>
-    </div>
+    <Header title="成长档案" @back="goBack"></Header>
+    <v-card class="pa-3 mb-2">
+      <v-layout row wrap>
+        <v-flex xs3>
+          <v-avatar :size="64" :tile="true">
+            <img v-if="avatarUrl" src="" alt="头像" />
+            <v-icon :size="64" color="grey lighten-1">account_box</v-icon>
+          </v-avatar>
+        </v-flex>
+        <v-flex xs9>
+          <v-layout column wrap justify-center>
+            <v-flex class="title py-2">
+              {{ studentInfo.name }}
+            </v-flex>
+            <v-flex class="py-1">
+              生日：<span class="Born">
+                {{ studentInfo.birthday | dateFilter }}
+              </span>
+            </v-flex>
+            <v-flex class="py-1">
+              年级：<span>{{ studentInfo.className }}</span>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+      <div></div>
+    </v-card>
     <v-card class="My_grades_box px-2">
       <v-tabs v-model="active">
         <v-tab v-for="(item, index) in tabTexts" :key="index">{{
@@ -32,7 +36,10 @@
           <v-card flat>
             <v-card-text>
               <div class="MyGrades app-flex">
-                <div class="grow">我的成绩</div>
+                <div class="grow">
+                  我的{{ studentGrade.currentGrade
+                  }}{{ getExamType(studentGrade.type) }}成绩
+                </div>
                 <div
                   @click="goToStudentGradeDetailForParentsPage"
                   class="shrink text-xs-right clickable"
@@ -72,6 +79,8 @@ import Chart from '@/components/Chart.component.vue'
 import { studentService } from '@/services/student.service'
 import { Student } from '../models/user.model'
 import { StudentInfo } from '../models/student.model'
+import Header from '../components/Header.component.vue'
+import { EXAM_TYPES } from '../models/grade-input.model'
 
 export default Vue.extend({
   name: 'MyArchiveForStudent',
@@ -80,7 +89,7 @@ export default Vue.extend({
       currentStudent
     })
   },
-  components: { Chart },
+  components: { Chart, Header },
   props: {},
   data() {
     return {
@@ -90,7 +99,8 @@ export default Vue.extend({
       studentGrade: {} as BriefStudentGradeForParents,
       chartOption: null as EChartOption,
       studentInfo: {} as StudentInfo,
-      avatarUrl: ''
+      avatarUrl: '',
+      examTypes: EXAM_TYPES
     }
   },
   methods: {
@@ -113,6 +123,10 @@ export default Vue.extend({
             res.data.content || ({} as BriefStudentGradeForParents)
           this.updateChart()
         })
+    },
+    getExamType(code: number) {
+      const exam = this.examTypes.filter(type => type.code === code)[0]
+      return exam && exam.exam
     },
     updateChart() {
       const that: any = this

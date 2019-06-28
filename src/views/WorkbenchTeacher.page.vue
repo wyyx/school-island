@@ -36,7 +36,7 @@
         <v-flex v-if="hasClasses" class="class-selector">
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
-              <div class="px-2">
+              <div class="class-selection-box primary lighten-4 pa-2">
                 <v-select
                   v-model="currentClass"
                   :items="classList"
@@ -616,10 +616,6 @@ export default Vue.extend({
   z-index: 5000 !important;
 }
 
-.container {
-  margin-bottom: 56px;
-}
-
 .class-selection-box {
   border-radius: 2px;
 }
@@ -667,10 +663,6 @@ export default Vue.extend({
 #chart {
   height: 300px;
   width: 100%;
-}
-
-.bottom-hint {
-  margin-bottom: 56px !important;
 }
 
 .loading-wrapper {

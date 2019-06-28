@@ -1,7 +1,7 @@
 <template>
   <div class="container pa-0">
     <v-card color="primary" class="mb-2">
-      <v-layout class="teachers py-3" row wrap>
+      <v-layout class="teachers py-4" row wrap>
         <v-flex xs3>
           <v-layout row wrap fill-height justify-center align-center>
             <v-flex shrink>

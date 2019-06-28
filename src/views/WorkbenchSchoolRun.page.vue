@@ -35,11 +35,6 @@
             <v-spacer></v-spacer>
             <v-flex shrink class="pr-2">
               <v-layout :align-center="true" fill-height wrap="false">
-                <v-flex class="">
-                  <v-btn depressed color="transparent" fab>
-                    <v-icon>search</v-icon>
-                  </v-btn>
-                </v-flex>
                 <v-flex>
                   <v-menu offset-y>
                     <template v-slot:activator="{ on }">
@@ -59,18 +54,6 @@
                         <v-list-tile-title>
                           <v-icon>equalizer</v-icon>
                           <span class="menu-text pl-2">数据中心</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>assignment</v-icon>
-                          <span class="menu-text pl-2">任务中心</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>folder_shared</v-icon>
-                          <span class="menu-text pl-2">我的档案</span>
                         </v-list-tile-title>
                       </v-list-tile>
                     </v-list>
@@ -547,10 +530,6 @@ export default Vue.extend({
 #chart {
   height: 300px;
   width: 100%;
-}
-
-.bottom-hint {
-  margin-bottom: 56px !important;
 }
 
 .loading-wrapper {

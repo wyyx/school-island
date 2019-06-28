@@ -133,7 +133,11 @@ export default Vue.extend({
         { text: '姓名', align: 'right', sortable: false, value: 'name' },
         { text: '详情', align: 'right', sortable: true, value: '' }
       ],
-      pagination: { sortBy: 'createTime', descending: true, rowsPerPage: -1 },
+      pagination: {
+        sortBy: 'studentNumber',
+        descending: false,
+        rowsPerPage: -1
+      },
       search: '',
       studentList: [] as StudentVo[]
     }

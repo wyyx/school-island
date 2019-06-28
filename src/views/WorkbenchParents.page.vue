@@ -6,7 +6,7 @@
         <v-flex class="class-selector">
           <v-layout row wrap class="primary lighten-3 pa-2">
             <v-flex xs6>
-              <div class="class-selection-box primary lighten-4 py-1 px-2">
+              <!-- <div class="class-selection-box primary lighten-4 py-1 px-2">
                 <v-menu offset-y>
                   <template v-slot:activator="{ on }">
                     <v-btn light flat v-on="on" class="subheading">
@@ -24,6 +24,17 @@
                     </v-list-tile>
                   </v-list>
                 </v-menu>
+              </div> -->
+
+              <div class="class-selection-box primary lighten-4 pa-2">
+                <v-select
+                  v-model="student"
+                  :items="studentList"
+                  item-text="name"
+                  item-value="studentNumber"
+                  :return-object="true"
+                  :hide-details="true"
+                ></v-select>
               </div>
             </v-flex>
             <v-spacer></v-spacer>
@@ -44,24 +55,6 @@
                       </v-btn>
                     </template>
                     <v-list>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>aspect_ratio</v-icon>
-                          <span class="menu-text pl-2">扫一扫</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile @click="inDeveloping">
-                        <v-list-tile-title>
-                          <v-icon>assignment</v-icon>
-                          <span class="menu-text pl-2">任务中心</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
-                      <v-list-tile>
-                        <v-list-tile-title @click="inDeveloping">
-                          <v-icon>vertical_split</v-icon>
-                          <span class="menu-text pl-2">我的班级</span>
-                        </v-list-tile-title>
-                      </v-list-tile>
                       <v-list-tile @click="goToMyArchivePage">
                         <v-list-tile-title>
                           <v-icon>folder_shared</v-icon>
@@ -149,6 +142,11 @@ export default Vue.extend({
       chartOption: null as EChartOption
     }
   },
+  watch: {
+    student(newVal, oldVal) {
+      this.switchStudent(this.student)
+    }
+  },
   computed: {
     ...get(authModulePath, {
       user,
@@ -165,21 +163,18 @@ export default Vue.extend({
     const that: any = this
     // that.currentStudent
     console.log('TCL: created -> that.currentStudent', that.currentStudent)
+    this.student = that.currentStudent || ({} as Student)
     this.loadStudentGrade()
   },
   methods: {
     goToStudentGradeDetailForParentsPage() {
       this.$router.push({ name: 'student-grade-detail-for-parents' })
     },
-    onAutocompleteChanged() {
-      console.log('this.student', this.student)
-      this.switchStudent(this.student)
-    },
     switchStudent(student: Student) {
       console.log('TCL: student', student)
-
       const store: any = this.$store
       store.set(authModulePath + currentStudent, student)
+      this.loadStudentGrade()
     },
     goToMyArchivePage() {
       this.$router.push({

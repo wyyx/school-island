@@ -1,14 +1,6 @@
 <template>
   <div class="wrapper">
-    <div class="box">
-      <div class="Grade_entry">
-        <div @click="goBack" class="clickable">
-          <img class="_img" src="../assets/left.svg" alt />
-        </div>
-        <div class="Grade_entry_text">{{ title }}</div>
-      </div>
-    </div>
-
+    <Header :title="title" @back="goBack"></Header>
     <v-card class="mb-3">
       <v-layout class="pa-3">
         <v-flex class="pr-1">
@@ -82,11 +74,11 @@ import {
   GRADE_LEVELS_FOR_CHART
 } from '../models/grade.model'
 import { get } from 'vuex-pathify'
-
 import { gradeService } from '../services/grade.service'
 import { authModulePath, currentStudent } from '../store/auth/auth.paths'
 import { BriefStudentGradeForParents } from '../models/parents-grade.model'
 import { Student } from '../models/user.model'
+import Header from '../components/Header.component.vue'
 
 interface Semister {
   value: number
@@ -95,7 +87,7 @@ interface Semister {
 
 export default Vue.extend({
   name: 'StudentGradeDetailForParents',
-  components: { Chart },
+  components: { Chart, Header },
   props: {},
   data() {
     return {
