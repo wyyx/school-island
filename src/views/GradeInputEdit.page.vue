@@ -11,7 +11,7 @@
         <div class="content">
           <!-- left -->
           <div
-            class="left student-list-wrapper pa-2"
+            class="left-content student-list-wrapper pa-2"
             :style="{
               height: studentListWrapperHeight - 150 + 'px',
               'overflow-y': 'scroll'
@@ -57,7 +57,7 @@
             </v-list>
           </div>
           <!-- right -->
-          <div class="right pa-3">
+          <div class="right-content pa-3">
             <v-layout row wrap class="py-3 text-xs-center">
               <v-flex class="title primary--text">
                 {{ currentStudent.studentName }}
@@ -374,12 +374,12 @@ export default Vue.extend({
   display: flex;
 }
 
-.left {
+.left-content {
   background: #f5f5f5 !important;
   flex: 1 0 auto;
 }
 
-.right {
+.right-content {
   flex: 10 0 auto;
 }
 
