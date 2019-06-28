@@ -18,10 +18,7 @@
             }"
           >
             <v-list :expand="true">
-              <div
-                v-for="student in sortedStudentList"
-                :key="student.studentId"
-              >
+              <div v-for="student in studentList" :key="student.studentId">
                 <v-list-tile
                   class="pa-0"
                   :class="{
@@ -78,7 +75,7 @@
                 item-text="name"
                 :return-object="true"
                 solo
-                placeholder="请选择"
+                placeholder="请选择成绩"
                 v-validate="'required'"
                 name="gradeLevel"
                 data-vv-as="成绩"
@@ -86,9 +83,12 @@
               ></v-select>
             </div>
             <!-- rating -->
-            <div v-if="showRating" class="py-2">
+            <div v-if="showRating">
               <v-layout row nowrap>
                 <v-flex>
+                  <h3 class="rating-title subheading grey--text text--darken-1">
+                    星级
+                  </h3>
                   <v-rating
                     x-large
                     clearable
@@ -214,14 +214,14 @@ export default Vue.extend({
       classList,
       currentGradeSubject
     }),
-    sortedStudentList() {
-      const that: any = this
-      const studentList = that.studentList as Student[]
+    // sortedStudentList() {
+    //   const that: any = this
+    //   const studentList = that.studentList as Student[]
 
-      return studentList.sort((a, b) => {
-        return parseInt(a.studentNumber) - parseInt(b.studentNumber)
-      })
-    },
+    //   return studentList.sort((a, b) => {
+    //     return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+    //   })
+    // },
     showRating() {
       const that: any = this
       const currentGradeLevel = that.currentGradeLevel as GradeLevelModel
@@ -279,6 +279,10 @@ export default Vue.extend({
         this.studentListContent = res.data.content || ({} as StudentListContent)
         this.studentList =
           this.studentListContent.studentExamAchievementVoList || []
+
+        this.studentList = this.studentList.sort((a, b) => {
+          return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+        })
 
         this.setCurrentStudent(this.studentList[0] || ({} as Student))
       })
@@ -386,7 +390,11 @@ export default Vue.extend({
   background: #f5f5f5 !important;
 }
 
-.v-rating {
-  font-size: 48px !important;
+.grade-level-select .v-text-field__details {
+  margin-bottom: 0px !important;
+}
+
+.rating-title {
+  font-size: 1.2rem;
 }
 </style>

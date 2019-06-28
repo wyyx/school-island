@@ -48,7 +48,7 @@
         <v-icon>face</v-icon>
       </v-btn>
 
-      <v-btn color="primary" flat value="explore" @click="showDialog = true">
+      <v-btn color="primary" flat value="explore" @click="_showDialog">
         <span class="in-developing">发现</span>
         <v-icon class="in-developing">search</v-icon>
       </v-btn>

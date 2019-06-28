@@ -1,5 +1,6 @@
 <template>
   <div class="fill-height">
+    <Header title="用户设置" @back="goBack"></Header>
     <v-list>
       <!-- nickname -->
       <v-list-tile>
@@ -50,6 +51,9 @@ import { authModulePath, user, school } from '../store/auth/auth.paths'
 
 export default Vue.extend({
   name: 'explore',
+  components: {
+    Header
+  },
   computed: {
     ...get(authModulePath, {
       user,
@@ -60,7 +64,7 @@ export default Vue.extend({
     this.changeTitle()
   },
   methods: {
-    back() {
+    goBack() {
       this.$router.back()
     },
     changeTitle() {
