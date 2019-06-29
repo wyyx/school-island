@@ -1,5 +1,5 @@
 <template>
-  <div class="fill-height">
+  <div class="app-fill-height">
     <Developing v-if="developing"></Developing>
     <div v-else class="container pa-0">
       <!-- <Header :showBack="false" title="发现"></Header> -->

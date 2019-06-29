@@ -1,5 +1,5 @@
 <template>
-  <div class="fill-height">
+  <div class="app-fill-height">
     <Header title="用户设置" @back="goBack"></Header>
     <v-list>
       <!-- nickname -->

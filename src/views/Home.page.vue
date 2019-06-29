@@ -1,8 +1,8 @@
 <template>
-  <div class="fill-height">
+  <div class="app-fill-height">
     <div
       v-if="appIsLoading"
-      class="loading-wrapper fill-height fill-width both-center column"
+      class="loading-wrapper app-fill-height app-fill-width app-both-center column"
     >
       <v-progress-circular indeterminate color="accent"></v-progress-circular>
       <h3 class="subheading mt-1">正在加载数据...</h3>
@@ -21,8 +21,8 @@
               </v-tabs>
             </v-flex>
             <v-spacer></v-spacer>
-            <v-flex shrink class="pr-2">
-              <v-layout :align-center="true" fill-height>
+            <v-flex app-shrink class="pr-2">
+              <v-layout :align-center="true" app-fill-height>
                 <v-flex class="px-2">
                   <v-icon>notifications_none</v-icon>
                 </v-flex>

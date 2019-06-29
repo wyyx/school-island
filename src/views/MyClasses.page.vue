@@ -23,8 +23,8 @@
 
     <v-card v-ripple class="pa-3 mb-2 clickable">
       <div class="app-flex " @click="goToClassDataPage">
-        <div class="grow subheading">班级成绩详情</div>
-        <div class="shrink both-center">
+        <div class="app-grow subheading">班级成绩详情</div>
+        <div class="app-shrink app-both-center">
           <img class="_img" src="../assets/right.svg" alt />
         </div>
       </div>

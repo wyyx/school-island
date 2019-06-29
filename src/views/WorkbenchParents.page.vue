@@ -38,8 +38,8 @@
               </div>
             </v-flex>
             <v-spacer></v-spacer>
-            <v-flex shrink class="pr-2">
-              <v-layout :align-center="true" fill-height wrap="false">
+            <v-flex app-shrink class="pr-2">
+              <v-layout :align-center="true" app-fill-height wrap="false">
                 <v-flex class="">
                   <v-menu offset-y>
                     <template v-slot:activator="{ on }">
@@ -80,7 +80,7 @@
           <v-card flat>
             <div>
               <div class="app-flex">
-                <div class="grow v-center">
+                <div class="app-grow app-v-center">
                   {{
                     studentGrade.currentGrade + examTypeName
                       ? studentGrade.currentGrade + examTypeName
@@ -88,7 +88,7 @@
                   }}成绩
                 </div>
                 <div
-                  class="shrink both-center clickable"
+                  class="app-shrink app-both-center clickable"
                   @click="goToStudentGradeDetailForParentsPage"
                 >
                   <span>详情</span>

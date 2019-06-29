@@ -3,13 +3,13 @@
     <v-layout
       v-if="showLoading"
       class="loading-wrapper"
-      fill-height
+      app-fill-height
       justify-center
       align-center
       row
       wrap
     >
-      <v-flex shrink>
+      <v-flex app-shrink>
         <v-progress-circular indeterminate color="accent"></v-progress-circular>
       </v-flex>
     </v-layout>
@@ -33,8 +33,8 @@
               </div>
             </v-flex>
             <v-spacer></v-spacer>
-            <v-flex shrink class="pr-2">
-              <v-layout :align-center="true" fill-height wrap="false">
+            <v-flex app-shrink class="pr-2">
+              <v-layout :align-center="true" app-fill-height wrap="false">
                 <v-flex>
                   <v-menu offset-y>
                     <template v-slot:activator="{ on }">

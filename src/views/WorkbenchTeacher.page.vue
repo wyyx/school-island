@@ -47,8 +47,8 @@
               </div>
             </v-flex>
             <v-spacer></v-spacer>
-            <v-flex shrink class="pr-2">
-              <v-layout :align-center="true" fill-height wrap="false">
+            <v-flex app-shrink class="pr-2">
+              <v-layout :align-center="true" app-fill-height wrap="false">
                 <v-flex>
                   <v-menu offset-y>
                     <template v-slot:activator="{ on }">
@@ -94,7 +94,7 @@
       <v-layout column>
         <v-flex>
           <v-layout row wrap>
-            <v-flex shrink>
+            <v-flex app-shrink>
               <v-tabs v-model="model" centered slider-color="primary">
                 <v-tab href="#tab-1">
                   值周
@@ -109,7 +109,7 @@
               <v-card v-if="hasClasses" flat>
                 <!-- duty check one week -->
                 <!-- deduction week history graph -->
-                <div class="chart-wrapper fill-width pb-3">
+                <div class="chart-wrapper app-fill-width pb-3">
                   <h3 class="mb-2 duty-check-title">
                     {{ deductionWeekHistory.date }}，值周综合得分
                     <span class="accent--text text--darken-2">
@@ -196,7 +196,7 @@
                                   >
                                     <template v-slot:placeholder>
                                       <v-layout
-                                        fill-height
+                                        app-fill-height
                                         align-center
                                         justify-center
                                         ma-0
@@ -218,7 +218,7 @@
                   </template>
                 </v-data-table>
               </v-card>
-              <div v-else class="both-center no-data-wrapper">
+              <div v-else class="app-both-center no-data-wrapper">
                 <img src="../assets/images/no_data.jpg" alt="" />
               </div>
             </v-tab-item>
@@ -227,7 +227,7 @@
       </v-layout>
     </v-card>
     <v-layout row wrap v-if="loadingMore" class="bottom-hint pa-3">
-      <v-flex class="h-center">
+      <v-flex class="app-h-center">
         <v-progress-circular indeterminate color="accent"></v-progress-circular>
       </v-flex>
     </v-layout>

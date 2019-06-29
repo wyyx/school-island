@@ -1,6 +1,6 @@
 <template>
-  <v-layout fill-height column wrap class="pa-3">
-    <v-flex shrink>
+  <v-layout app-fill-height column wrap class="pa-3">
+    <v-flex app-shrink>
       <Header :showBack="true" title="转载文章" @back="onBack"></Header>
     </v-flex>
     <v-flex>
@@ -12,7 +12,7 @@
         ></v-text-field>
       </v-form>
     </v-flex>
-    <v-flex shrink>
+    <v-flex app-shrink>
       <div class="btn-wrapper">
         <v-btn block color="primary" @click="onClick">下一步</v-btn>
       </div>

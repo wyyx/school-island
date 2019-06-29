@@ -20,3 +20,17 @@ table.v-table tbody td:first-child {
 .v-item-group.v-bottom-nav .v-btn {
   padding-top: 6px !important;
 }
+
+.batch-switch.v-input--switch .v-input__slot {
+  margin: 0px !important;
+}
+
+.batch-switch {
+  display: flex;
+  justify-content: center;
+}
+
+.grade-input-edit-batch-selection.v-input--selection-controls:not(.v-input--hide-details)
+  .v-input__slot {
+  margin-bottom: 6px !important;
+}

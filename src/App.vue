@@ -1,7 +1,10 @@
 <template>
   <v-app>
     <!-- <div>{{ currentRoute }}</div> -->
-    <div v-if="appIsLoading" class="loading-wrapper fill-height fill-width ">
+    <div
+      v-if="appIsLoading"
+      class="loading-wrapper app-fill-height app-fill-width "
+    >
       <div class="text-xs-center">
         <v-progress-circular indeterminate color="accent"></v-progress-circular>
       </div>

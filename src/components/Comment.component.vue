@@ -1,6 +1,6 @@
 <template>
   <v-layout row>
-    <v-flex shrink class="pa-2">
+    <v-flex app-shrink class="pa-2">
       <v-avatar size="48">
         <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="alt" />
       </v-avatar>

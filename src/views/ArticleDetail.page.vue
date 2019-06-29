@@ -3,8 +3,8 @@
     <v-card color="primary pa-2" class="">
       <v-layout class="" row wrap>
         <v-flex xs6 class="pr-1">
-          <v-layout row wrap align-center justify-end fill-height>
-            <v-flex shrink class="pr-2">
+          <v-layout row wrap align-center justify-end app-fill-height>
+            <v-flex app-shrink class="pr-2">
               <v-avatar
                 class="avatar"
                 :tile="false"

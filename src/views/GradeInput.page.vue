@@ -83,7 +83,7 @@
             {{ props.item.type | gradeTypeFilter }}
           </td>
           <td class="clickable" @click="goToGradeInputEditPage(props.item)">
-            <div class="v-center">
+            <div class="app-v-center">
               <span
                 class="app-grow"
                 :class="{

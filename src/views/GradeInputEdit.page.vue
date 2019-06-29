@@ -11,13 +11,33 @@
         <div class="content">
           <!-- left -->
           <div
-            class="left-content student-list-wrapper pa-2"
+            class="left-content student-list-wrapper pa-2 "
             :style="{
               height: studentListWrapperHeight - 150 + 'px',
               'overflow-y': 'scroll'
             }"
           >
+            <div app-h-center>
+              <v-switch
+                class="batch-switch app-shrink py-1"
+                color="primary"
+                v-model="batchMode"
+                label="批量"
+                :hide-details="true"
+              ></v-switch>
+            </div>
             <v-list :expand="true">
+              <v-list-tile v-if="batchMode" @click="toggleSelectAll">
+                <div class="app-flex">
+                  <v-checkbox
+                    class="grade-input-edit-batch-selection"
+                    :input-value="isSelectedAll()"
+                    label="全选"
+                    color="primary"
+                  ></v-checkbox>
+                </div>
+              </v-list-tile>
+              <v-divider></v-divider>
               <div v-for="student in studentList" :key="student.studentId">
                 <v-list-tile
                   class="pa-0"
@@ -25,11 +45,22 @@
                     'cyan lighten-5':
                       currentStudent.studentNumber === student.studentNumber
                   }"
-                  @click="setCurrentStudent(student)"
+                  @click="
+                    setCurrentStudent(student), toggleSelectStudent(student)
+                  "
                   color="primary"
                 >
-                  <v-list-tile-content color="primary ">
-                    <v-list-tile-title
+                  <div class="app-flex">
+                    <div v-if="batchMode">
+                      <v-checkbox
+                        class="grade-input-edit-batch-selection"
+                        :input-value="isSelected(student)"
+                        value
+                        color="primary"
+                      ></v-checkbox>
+                    </div>
+                    <div
+                      class="app-v-center"
                       :class="{
                         'primary--text':
                           currentStudent.studentNumber === student.studentNumber
@@ -37,7 +68,9 @@
                     >
                       <span
                         class="body-2"
-                        :class="{ 'success--text': student.achievement > 0 }"
+                        :class="{
+                          'success--text': student.achievement > 0
+                        }"
                       >
                         {{ student.studentName }}
                       </span>
@@ -49,8 +82,8 @@
                           >comment
                         </v-icon>
                       </span>
-                    </v-list-tile-title>
-                  </v-list-tile-content>
+                    </div>
+                  </div>
                 </v-list-tile>
                 <v-divider></v-divider>
               </div>
@@ -67,12 +100,12 @@
               </v-flex>
             </v-layout>
             <!-- grade select -->
-            <div class="pt-3 fill-width">
+            <div class="pt-3 app-fill-width">
               <h3 class="input-title subheading grey--text text--darken-1 pb-3">
                 成绩
               </h3>
               <v-select
-                class="fill-width grade-level-select"
+                class="app-fill-width grade-level-select"
                 v-model="currentGradeLevel"
                 :items="gradeLevels"
                 item-text="name"
@@ -205,11 +238,17 @@ export default Vue.extend({
       rating: 0,
       comment: '',
       validated: false,
-      showSnackbar: false
+      showSnackbar: false,
+      batchMode: false,
+      selectedStudentList: [] as Student[]
     }
   },
   watch: {
-    currentClass(newVal, oldVal) {}
+    currentClass(newVal, oldVal) {},
+    batchMode() {
+      const that: any = this
+      that.selectedStudentList = []
+    }
   },
   computed: {
     ...get(authModulePath, {
@@ -262,6 +301,50 @@ export default Vue.extend({
   methods: {
     goBack() {
       this.$router.back()
+    },
+    toggleSelectStudent(student: Student) {
+      if (!this.batchMode) {
+        return
+      }
+
+      const index = this.selectedStudentList.findIndex(
+        s => s.studentId === student.studentId
+      )
+
+      if (index > -1) {
+        this.selectedStudentList.splice(index, 1)
+      } else {
+        this.selectedStudentList.push(student)
+      }
+
+      console.log(
+        'TCL: toggleSelectStudent -> this.selectedStudentList',
+        this.selectedStudentList
+      )
+    },
+    isSelected(student: Student) {
+      const index = this.selectedStudentList.findIndex(
+        s => s.studentId === student.studentId
+      )
+      if (index > -1) {
+        return true
+      } else {
+        false
+      }
+    },
+    isSelectedAll() {
+      if (this.selectedStudentList.length === this.studentList.length) {
+        return true
+      } else {
+        return false
+      }
+    },
+    toggleSelectAll() {
+      if (this.selectedStudentList.length === this.studentList.length) {
+        this.selectedStudentList = []
+      } else {
+        this.selectedStudentList = this.studentList.slice()
+      }
     },
     setInitClass() {
       const that: any = this
@@ -380,7 +463,7 @@ export default Vue.extend({
 }
 
 .right-content {
-  flex: 10 0 auto;
+  flex: 10 1 auto;
 }
 
 .v-list {
@@ -397,5 +480,9 @@ export default Vue.extend({
 
 .comment-input {
   padding-top: 0px !important;
+}
+
+.batch-switch.v-input--switch {
+  margin: 0px !important;
 }
 </style>

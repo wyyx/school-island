@@ -1,8 +1,8 @@
-.fill-height {
+.app-fill-height {
   height: 100% !important;
 }
 
-.fill-width {
+.app-fill-width {
   width: 100% !important;
 }
 
@@ -26,18 +26,18 @@
   flex: 0 1 auto;
 }
 
-.both-center {
+.app-both-center {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.h-center {
+.app-h-center {
   display: flex;
   justify-content: center;
 }
 
-.v-center {
+.app-v-center {
   display: flex;
   align-items: center;
 }

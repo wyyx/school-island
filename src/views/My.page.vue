@@ -3,8 +3,8 @@
     <v-card color="primary" class="mb-2">
       <v-layout class="teachers py-4" row wrap>
         <v-flex xs3>
-          <v-layout row wrap fill-height justify-center align-center>
-            <v-flex shrink>
+          <v-layout row wrap app-fill-height justify-center align-center>
+            <v-flex app-shrink>
               <v-avatar :tile="false" :size="64" color="grey lighten-4">
                 <img :src="user.headImgUrl" alt="avatar" />
               </v-avatar>
@@ -15,7 +15,7 @@
           <v-layout column wrap>
             <v-flex class="title">
               <v-layout row wrap>
-                <v-flex class="v-center shrink pr-2">
+                <v-flex class="app-v-center app-shrink pr-2">
                   <!-- when teache -->
                   <span
                     v-if="
@@ -43,10 +43,10 @@
                     {{ user.name }}{{ currentRole.name }}
                   </span>
                 </v-flex>
-                <v-flex class="shrink v-center">
+                <v-flex class="app-shrink app-v-center">
                   <v-icon color="white">swap_horiz</v-icon>
                 </v-flex>
-                <v-flex class="shrink">
+                <v-flex class="app-shrink">
                   <!-- switch role -->
                   <v-menu offset-y v-if="roleList.length > 0">
                     <template v-slot:activator="{ on }">
@@ -86,12 +86,12 @@
             </v-flex>
             <v-flex>
               <v-layout row wrap>
-                <v-flex class="v-center">
+                <v-flex class="app-v-center">
                   <span class="pr-1">昵称：</span
                   ><span>{{ user.nickname }}</span>
                 </v-flex>
                 <v-flex
-                  shrink
+                  app-shrink
                   class="px-2 text-xs-right"
                   @click="goToUserSettingsPage"
                 >

@@ -2,7 +2,7 @@
   <div>
     <v-card color="primary" class="mb-2">
       <v-layout column wrap class="pa-3">
-        <v-flex class="h-center">
+        <v-flex class="app-h-center">
           <v-avatar size="64" class="text-xs-center">
             <img v-if="schoolLogo" :src="schoolLogo" alt="alt" />
             <v-icon v-else :size="64" color="white">help_outline</v-icon>
@@ -11,11 +11,11 @@
         <v-flex class="text-center pa-2">
           <h2
             v-if="schoolName"
-            class="title white--text text-xs-center fill-width"
+            class="title white--text text-xs-center app-fill-width"
           >
             {{ schoolName }}
           </h2>
-          <h2 v-else class="title white--text text-xs-center fill-width">
+          <h2 v-else class="title white--text text-xs-center app-fill-width">
             未知学校名称
           </h2>
         </v-flex>
@@ -144,7 +144,7 @@
 
     <div
       v-if="showLoading"
-      class="loading-wrapper fill-height fill-width both-center"
+      class="loading-wrapper app-fill-height app-fill-width app-both-center"
     >
       <v-progress-circular
         :size="50"

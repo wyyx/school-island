@@ -3,7 +3,7 @@
     <Header title="成长档案" @back="goBack"></Header>
     <v-card class="pa-3 mb-2">
       <v-layout row wrap>
-        <v-flex xs3 class="v-center">
+        <v-flex xs3 class="app-v-center">
           <v-avatar :size="64" :tile="true">
             <img v-if="avatarUrl" src="" alt="头像" />
             <v-icon :size="64" color="grey lighten-1">account_box</v-icon>
@@ -36,7 +36,7 @@
           <v-card flat>
             <div>
               <div class="app-flex py-2">
-                <div class="app-grow v-center ">
+                <div class="app-grow app-v-center ">
                   {{ studentGrade.currentGrade
                   }}{{ getExamType(studentGrade.type) }}成绩
                 </div>

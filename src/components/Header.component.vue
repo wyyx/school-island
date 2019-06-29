@@ -7,7 +7,7 @@
             <v-icon>arrow_back</v-icon>
           </div>
         </v-flex>
-        <v-flex class="both-center subheading">
+        <v-flex class="app-both-center subheading">
           <span>{{ title }}</span>
         </v-flex>
       </v-layout>

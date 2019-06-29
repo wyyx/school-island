@@ -34,7 +34,7 @@
           :option="chartOption"
         ></Chart>
       </div>
-      <div v-else class="no-data-wrapper both-center">
+      <div v-else class="no-data-wrapper app-both-center">
         <h3 class="grey--text">暂无数据</h3>
       </div>
     </v-card>
@@ -56,7 +56,7 @@
           </div>
         </div>
       </div>
-      <div v-else class="no-data-wrapper both-center">
+      <div v-else class="no-data-wrapper app-both-center">
         <h3 class="grey--text">暂无数据</h3>
       </div>
     </v-card>

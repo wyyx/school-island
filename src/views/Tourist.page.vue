@@ -4,8 +4,8 @@
     <v-card color="primary" class="mb-2">
       <v-layout class="teachers py-3" row wrap>
         <v-flex xs4>
-          <v-layout row wrap fill-height justify-center align-center>
-            <v-flex shrink>
+          <v-layout row wrap app-fill-height justify-center align-center>
+            <v-flex app-shrink>
               <v-icon :size="64" color="white">account_circle</v-icon>
             </v-flex>
           </v-layout>

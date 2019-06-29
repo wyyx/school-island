@@ -70,7 +70,7 @@
                   <v-list-tile-title>
                     <v-layout row wrap>
                       <v-flex
-                        shrink
+                        app-shrink
                         @click="formatClearColor(currentSelection)"
                       >
                         <div class="color-sample no-color-sample">
@@ -84,7 +84,7 @@
                   <v-list-tile-title>
                     <v-layout row wrap>
                       <v-flex
-                        shrink
+                        app-shrink
                         @click="formatColor('red', currentSelection)"
                       >
                         <div class="color-sample red-color-sample"></div>
@@ -96,7 +96,7 @@
                   <v-list-tile-title>
                     <v-layout row wrap>
                       <v-flex
-                        shrink
+                        app-shrink
                         @click="formatColor('green', currentSelection)"
                       >
                         <div class="color-sample green-color-sample"></div>
@@ -107,7 +107,7 @@
                   <v-list-tile-title>
                     <v-layout row wrap>
                       <v-flex
-                        shrink
+                        app-shrink
                         @click="formatColor('blue', currentSelection)"
                       >
                         <div class="color-sample blue-color-sample"></div>
@@ -182,10 +182,10 @@
     </v-layout>
     <!-- actions -->
     <v-layout class="actions" row wrap justify-center>
-      <v-flex shrink>
+      <v-flex app-shrink>
         <v-btn color="light" @click="saveAsDraft">存为草稿</v-btn>
       </v-flex>
-      <v-flex shrink>
+      <v-flex app-shrink>
         <v-btn color="success" @click="publish">发布</v-btn>
       </v-flex>
     </v-layout>
