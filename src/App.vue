@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <!-- <div>{{ currentRoute }}</div> -->
     <div
       v-if="appIsLoading"
       class="loading-wrapper app-fill-height app-fill-width "
@@ -42,6 +41,7 @@ import {
   showTabs,
   user,
   roleRoute,
+  firstRoleRoute,
   isTourist,
   isBinded,
   appIsLoading
@@ -76,10 +76,23 @@ export default Vue.extend({
     // open when build
     this.loadSchoolInfo()
   },
+  watch: {
+    firstRoleRoute(newVal, oldVal) {
+      const that: any = this
+      if (that.firstRoleRoute) {
+        // have matched workbench route
+        console.log('=== have matched workbench route')
+        this.$router.push({ path: `/workbench/${that.firstRoleRoute}` }, () => {
+          this.hideAppLoading()
+        })
+      }
+    }
+  },
   computed: {
     ...get(authModulePath, {
       showTabs,
       roleRoute,
+      firstRoleRoute,
       isTourist,
       isBinded
     }),
@@ -130,46 +143,54 @@ export default Vue.extend({
           const userInfo = res.data.content
           console.log('TCL: checkBinding -> userInfo', userInfo)
 
-          // save user info
           if (userInfo) {
-            this.$store.dispatch(
-              authModulePath + loadUserInfoSuccessAction,
-              userInfo
-            )
-          } else {
-            this.$store.dispatch(authModulePath + loadUserInfoFailAction)
-          }
+            // have userInfo
+            this.$store
+              .dispatch(authModulePath + loadUserInfoSuccessAction, userInfo)
+              .then(() => {
+                if (userInfo.roleVoList && userInfo.roleVoList.length > 0) {
+                  // if binded
+                  storeService.store.set(authModulePath + showTabs, true)
 
-          if (
-            userInfo &&
-            userInfo.roleVoList &&
-            userInfo.roleVoList.length > 0
-          ) {
-            // show tabs if binded
-            storeService.store.set(authModulePath + showTabs, true)
+                  const that: any = this
 
-            const that: any = this
-
-            // go to workbench page, setTimeout for waiting roleRoute to be ready
-            setTimeout(() => {
-              if (that.roleRoute) {
-                this.$router.push(
-                  { path: `/workbench/${that.roleRoute}` },
-                  () => {
-                    this.hideAppLoading()
+                  // go to workbench page, setTimeout for waiting firstRoleRoute to be ready
+                  if (that.firstRoleRoute) {
+                    // have matched workbench route
+                    console.log('=== have matched workbench route')
+                    this.$router.push(
+                      { path: `/workbench/${that.firstRoleRoute}` },
+                      () => {
+                        this.hideAppLoading()
+                      }
+                    )
+                  } else {
+                    // not have matched workbench route
+                    console.log('!!! not have matched workbench route')
                   }
-                )
-              } else {
-                this.$router.push({ name: 'home' })
+                } else {
+                  // if not binded
+                  this.$router.push(
+                    {
+                      name: 'binding'
+                    },
+                    () => {
+                      this.hideAppLoading()
+                    }
+                  )
+                }
+              })
+          } else {
+            // no userInfo
+            this.$store.dispatch(authModulePath + loadUserInfoFailAction)
+            this.$router.push(
+              {
+                name: 'binding'
+              },
+              () => {
                 this.hideAppLoading()
               }
-            }, 10)
-          } else {
-            // if not binded
-            this.$router.push({
-              name: 'binding'
-            })
-            this.hideAppLoading()
+            )
           }
         })
         .catch(error => {

@@ -22,6 +22,7 @@ export function authGuard(to, from, next) {
 
   // go to binding page if binded and not tourist
   if (!_isBinded && !_isTourist) {
+    console.log('yyyyyyyyyyyyyyyyyyyyyy', )
     return router.push({ name: 'binding' })
   }
 

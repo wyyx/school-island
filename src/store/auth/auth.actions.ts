@@ -59,7 +59,10 @@ export const authActions = {
     })
   },
   [loadUserInfoSuccessAction]({ dispatch, commit }, payload: UserInfo) {
-    commit(user, payload)
+    return new Promise((resolve, reject) => {
+      commit(user, payload)
+      resolve()
+    })
   },
   [loadUserInfoFailAction]({ dispatch, commit }) {
     commit(user, {})
