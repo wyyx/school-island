@@ -218,7 +218,8 @@ import {
   EXAM_TYPES,
   StudentListContent,
   Student,
-  GradeSubject
+  GradeSubject,
+  AddStudentGradeResponse
 } from '../models/grade-input.model'
 import {
   GRADE_LEVELS,
@@ -227,6 +228,7 @@ import {
   GRADE_LEVEL_LENGTH
 } from '../models/grade.model'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
+import { AxiosPromise } from 'axios'
 
 export default Vue.extend({
   components: {
@@ -340,11 +342,6 @@ export default Vue.extend({
       } else {
         this.selectedStudentList.push(student)
       }
-
-      console.log(
-        'TCL: toggleSelectStudent -> this.selectedStudentList',
-        this.selectedStudentList
-      )
     },
     isSelected(student: Student) {
       const index = this.selectedStudentList.findIndex(
@@ -373,7 +370,6 @@ export default Vue.extend({
     setInitClass() {
       const that: any = this
       this.currentClass = that.classList[0]
-      console.log('TCL: setInitClass -> that.classList', that.classList)
     },
     loadStudentList() {
       const that: any = this
@@ -432,35 +428,74 @@ export default Vue.extend({
               }
             })
 
+            const promiseList = [] as AxiosPromise<AddStudentGradeResponse>[]
+
             paramsList.forEach(params => {
-              gradeService
-                .addStudentGrade(params)
-                .then(res => {
-                  console.log('TCL: submit -> res', res)
-                  this.isPending = false
+              promiseList.push(gradeService.addStudentGrade(params))
 
-                  if (res.data.content) {
-                    that.showSuccessMessage('保存成功！')
-                    this.updateStudent(
-                      this.selectedStudentList.filter(
-                        s => s.studentId === params.studentId
-                      )[0]
-                    )
-                  } else {
-                    const that: any = this
+              // gradeService
+              //   .addStudentGrade(params)
+              //   .then(res => {
+              //     console.log('TCL: submit -> res', res)
+              //     this.isPending = false
 
-                    const msg = res.data.errorMsg
-                    that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
-                  }
-                })
-                .finally(() => {
-                  this.isPending = false
-                })
-                .catch(error => {
-                  this.isPending = false
-                  that.showFailMessage('保存失败！出现未知错误，请稍后再试')
-                })
+              //     if (res.data.content) {
+              //       that.showSuccessMessage('保存成功！')
+              //       this.updateStudent(
+              //         this.selectedStudentList.filter(
+              //           s => s.studentId === params.studentId
+              //         )[0]
+              //       )
+              //     } else {
+              //       const that: any = this
+
+              //       const msg = res.data.errorMsg
+              //       that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
+              //     }
+              //   })
+              //   .finally(() => {
+              //     this.isPending = false
+              //   })
+              //   .catch(error => {
+              //     this.isPending = false
+              //     that.showFailMessage('保存失败！出现未知错误，请稍后再试')
+              //   })
+
+              // // clear current selections
+              // setTimeout(() => {
+              //   this.selectedStudentList = []
+              // }, 100)
             })
+
+            Promise.all(promiseList)
+              .then(res => {
+                console.log('TCL: submit -> res', res)
+
+                this.isPending = false
+
+                that.showSuccessMessage('保存成功！')
+
+                // update students
+                paramsList.forEach(params => {
+                  this.updateStudent(
+                    this.selectedStudentList.filter(
+                      s => s.studentId === params.studentId
+                    )[0]
+                  )
+                })
+
+                // clear current selections
+                setTimeout(() => {
+                  this.selectedStudentList = []
+                }, 50)
+              })
+              .finally(() => {
+                this.isPending = false
+              })
+              .catch(error => {
+                this.isPending = false
+                that.showFailMessage('保存失败！出现未知错误，请稍后再试')
+              })
           } else {
             gradeService
               .addStudentGrade({
