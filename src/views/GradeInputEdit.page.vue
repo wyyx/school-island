@@ -91,7 +91,26 @@
           </div>
           <!-- right -->
           <div class="right-content pa-3">
-            <v-layout row wrap class="py-3 text-xs-center">
+            <h3
+              class="title primary--text text-xs-center py-3"
+              v-if="selectedStudentList.length > 0"
+            >
+              已选择{{ selectedStudentList.length }}人
+            </h3>
+            <div v-if="batchMode" class="app-flex app-wrap">
+              <div
+                class="name-wrapper pa-1"
+                v-for="student in selectedStudentList"
+                :key="student.studentNumber"
+              >
+                <div
+                  class="first-letter subheading  lighten-3 app-both-center elevation-1"
+                >
+                  {{ student.studentName[0] }}
+                </div>
+              </div>
+            </div>
+            <v-layout v-else row wrap class="py-3 text-xs-center">
               <v-flex class="title primary--text">
                 {{ currentStudent.studentName }}
               </v-flex>
@@ -258,6 +277,11 @@ export default Vue.extend({
       classList,
       currentGradeSubject
     }),
+    studentNameFirstLetterList() {
+      const that: any = this
+      const selectedStudentList = that.selectedStudentList as Student[]
+      return selectedStudentList.map(name => name.studentName[0])
+    },
     showRating() {
       const that: any = this
       const currentGradeLevel = that.currentGradeLevel as GradeLevelModel
@@ -391,62 +415,104 @@ export default Vue.extend({
         if (valid && !this.isPending) {
           this.isPending = true
 
-          gradeService
-            .addStudentGrade({
-              achievement: this.currentGradeLevel.code,
-              comment: this.comment,
-              star: this.rating,
-              studentId: this.currentStudent.studentId,
-              studentName: this.currentStudent.studentName,
-              studentNumber: this.currentStudent.studentNumber,
-              examSubmitRecordId: currentGradeSubject.id
-            })
-            .then(res => {
-              console.log('TCL: submit -> res', res)
-              this.isPending = false
+          if (this.batchMode) {
+            console.log('batchMode batchMode batchMode')
+            const that: any = this
+            const currentGradeSubject = that.currentGradeSubject as GradeSubject
 
-              if (res.data.content) {
-                that.showSuccessMessage('保存成功！')
-                this.updateStudent(this.currentStudent)
-              } else {
-                const that: any = this
-
-                const msg = res.data.errorMsg
-                that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
+            const paramsList = this.selectedStudentList.map(student => {
+              return {
+                achievement: this.currentGradeLevel.code,
+                comment: this.comment,
+                star: this.rating,
+                studentId: student.studentId,
+                studentName: student.studentName,
+                studentNumber: student.studentNumber,
+                examSubmitRecordId: currentGradeSubject.id
               }
             })
-            .finally(() => {
-              this.isPending = false
+
+            paramsList.forEach(params => {
+              gradeService
+                .addStudentGrade(params)
+                .then(res => {
+                  console.log('TCL: submit -> res', res)
+                  this.isPending = false
+
+                  if (res.data.content) {
+                    that.showSuccessMessage('保存成功！')
+                    this.updateStudent(
+                      this.selectedStudentList.filter(
+                        s => s.studentId === params.studentId
+                      )[0]
+                    )
+                  } else {
+                    const that: any = this
+
+                    const msg = res.data.errorMsg
+                    that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
+                  }
+                })
+                .finally(() => {
+                  this.isPending = false
+                })
+                .catch(error => {
+                  this.isPending = false
+                  that.showFailMessage('保存失败！出现未知错误，请稍后再试')
+                })
             })
-            .catch(error => {
-              this.isPending = false
-              that.showFailMessage('保存失败！出现未知错误，请稍后再试')
-            })
+          } else {
+            gradeService
+              .addStudentGrade({
+                achievement: this.currentGradeLevel.code,
+                comment: this.comment,
+                star: this.rating,
+                studentId: this.currentStudent.studentId,
+                studentName: this.currentStudent.studentName,
+                studentNumber: this.currentStudent.studentNumber,
+                examSubmitRecordId: currentGradeSubject.id
+              })
+              .then(res => {
+                console.log('TCL: submit -> res', res)
+                this.isPending = false
+
+                if (res.data.content) {
+                  that.showSuccessMessage('保存成功！')
+                  this.updateStudent(this.currentStudent)
+                } else {
+                  const that: any = this
+
+                  const msg = res.data.errorMsg
+                  that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
+                }
+              })
+              .finally(() => {
+                this.isPending = false
+              })
+              .catch(error => {
+                this.isPending = false
+                that.showFailMessage('保存失败！出现未知错误，请稍后再试')
+              })
+          }
         }
       })
     },
-
     updateStudent(student: Student) {
       const index = this.studentList.findIndex(
-        student => student.studentId === this.currentStudent.studentId
+        s => s.studentId === student.studentId
       )
 
-      this.currentStudent = {
-        ...this.currentStudent,
+      student = {
+        ...student,
         comment: this.comment,
         achievement: this.currentGradeLevel.code,
         star: this.rating,
-        studentId: this.currentStudent.studentId,
-        studentName: this.currentStudent.studentName,
-        studentNumber: this.currentStudent.studentNumber
+        studentId: student.studentId,
+        studentName: student.studentName,
+        studentNumber: student.studentNumber
       }
 
-      console.log(
-        'TCL: updateStudent -> this.currentStudent',
-        this.currentStudent
-      )
-
-      this.studentList.splice(index, 1, this.currentStudent)
+      this.studentList.splice(index, 1, student)
     }
   }
 })
@@ -484,5 +550,12 @@ export default Vue.extend({
 
 .batch-switch.v-input--switch {
   margin: 0px !important;
+}
+
+.first-letter {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  // background: grey;
 }
 </style>

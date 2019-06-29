@@ -90,3 +90,10 @@ export interface AddStudentGradeResponse {
   errorMsg: string
   status: string
 }
+
+export interface BatchAddStudentGradeResponse {
+  content: number
+  errorCode: string
+  errorMsg: string
+  status: string
+}

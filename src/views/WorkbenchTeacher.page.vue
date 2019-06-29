@@ -6,11 +6,13 @@
       bottom
       right
       direction="left"
-      transition="slide-y-reverse-transition"
+      transition="slide-x-reverse-transition"
+      origin="bottom"
     >
       <template v-slot:activator>
-        <v-btn color="accent" dark fab>
+        <v-btn color="accent" dark fab @click="showAdd = !showAdd">
           <v-icon>add</v-icon>
+          <!-- <v-icon v-else>close</v-icon> -->
         </v-btn>
       </template>
       <v-btn @click="goToGradeInputPage" color="accent"> 录入成绩 </v-btn>
@@ -310,6 +312,7 @@ export default Vue.extend({
   // },
   data: function() {
     return {
+      showAdd: true,
       currentClass: {} as ClassModel,
       classList: [] as ClassModel[],
       rating: 4,
