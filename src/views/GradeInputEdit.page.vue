@@ -395,6 +395,8 @@ export default Vue.extend({
       const currentGradeSubject: GradeSubject = that.currentGradeSubject
 
       this.$validator.validate().then(valid => {
+        const that: any = this
+
         this.validated = true
         console.log('TCL: submit -> valid', valid)
 
@@ -402,8 +404,14 @@ export default Vue.extend({
           this.isPending = true
 
           if (this.batchMode) {
+            if (this.selectedStudentList.length < 1) {
+              that.showMessage('请选择学生！')
+              this.isPending = false
+              return
+            }
+
             console.log('batchMode batchMode batchMode')
-            const that: any = this
+
             const currentGradeSubject = that.currentGradeSubject as GradeSubject
 
             const paramsList = this.selectedStudentList.map(student => {
@@ -422,39 +430,6 @@ export default Vue.extend({
 
             paramsList.forEach(params => {
               promiseList.push(gradeService.addStudentGrade(params))
-
-              // gradeService
-              //   .addStudentGrade(params)
-              //   .then(res => {
-              //     console.log('TCL: submit -> res', res)
-              //     this.isPending = false
-
-              //     if (res.data.content) {
-              //       that.showSuccessMessage('保存成功！')
-              //       this.updateStudent(
-              //         this.selectedStudentList.filter(
-              //           s => s.studentId === params.studentId
-              //         )[0]
-              //       )
-              //     } else {
-              //       const that: any = this
-
-              //       const msg = res.data.errorMsg
-              //       that.showFailMessage(msg ? msg : '保存失败！请稍后再试')
-              //     }
-              //   })
-              //   .finally(() => {
-              //     this.isPending = false
-              //   })
-              //   .catch(error => {
-              //     this.isPending = false
-              //     that.showFailMessage('保存失败！出现未知错误，请稍后再试')
-              //   })
-
-              // // clear current selections
-              // setTimeout(() => {
-              //   this.selectedStudentList = []
-              // }, 100)
             })
 
             Promise.all(promiseList)

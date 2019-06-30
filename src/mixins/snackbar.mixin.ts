@@ -22,6 +22,7 @@ export const snackbarMixin = {
     showMessage(message: string) {
       const that: any = this
       that.showSnackbar = true
+      that.color = ''
       that.message = message
     }
   }
