@@ -1,31 +1,11 @@
 <template>
-  <div class="container pa-0">
+  <div class="wrapper">
     <!-- header -->
     <v-card class="mb-2">
       <v-layout column wrap>
         <v-flex class="class-selector">
-          <v-layout row wrap class="primary lighten-3 pa-2">
-            <v-flex xs6>
-              <!-- <div class="class-selection-box primary lighten-4 py-1 px-2">
-                <v-menu offset-y>
-                  <template v-slot:activator="{ on }">
-                    <v-btn light flat v-on="on" class="subheading">
-                      {{ currentStudent.name }}
-                      <v-icon>swap_horiz</v-icon>
-                    </v-btn>
-                  </template>
-                  <v-list>
-                    <v-list-tile
-                      v-for="(student, index) in studentList"
-                      :key="index"
-                      @click="switchStudent(student)"
-                    >
-                      <v-list-tile-title>{{ student.name }}</v-list-tile-title>
-                    </v-list-tile>
-                  </v-list>
-                </v-menu>
-              </div> -->
-
+          <v-layout row wrap class="primary lighten-3">
+            <v-flex xs6 class="app-both-center px-2">
               <div class="class-selection-box primary lighten-4 pa-2">
                 <v-select
                   v-model="student"
@@ -327,6 +307,10 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  padding-bottom: 48px;
+}
+
 .class-selection-box {
   border-radius: 2px;
 }

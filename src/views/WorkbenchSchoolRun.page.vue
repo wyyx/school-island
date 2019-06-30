@@ -1,5 +1,5 @@
 <template>
-  <div class="container pa-0">
+  <div class="wrapper">
     <v-layout
       v-if="showLoading"
       class="loading-wrapper"
@@ -18,8 +18,8 @@
       <v-layout column wrap>
         <!-- header -->
         <v-flex class="class-selector">
-          <v-layout row wrap class="primary lighten-3 pa-2">
-            <v-flex xs6>
+          <v-layout row wrap class="primary lighten-3">
+            <v-flex xs6 class="app-both-center px-2">
               <div class="class-selection-box primary lighten-4 pa-2">
                 <v-select
                   v-model="currentGrade"
@@ -360,6 +360,10 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  padding-bottom: 48px;
+}
+
 .class-selection-box {
   border-radius: 2px;
 }

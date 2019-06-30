@@ -1,5 +1,5 @@
 <template>
-  <div class="container pa-0">
+  <div class="wrapper">
     <v-speed-dial
       class="teacher-helper"
       fixed
@@ -35,8 +35,8 @@
       <v-layout column wrap>
         <!-- header -->
         <v-flex v-if="hasClasses" class="class-selector">
-          <v-layout row wrap class="primary lighten-3 pa-2">
-            <v-flex xs6>
+          <v-layout row wrap class="primary lighten-3">
+            <v-flex xs6 class="app-both-center px-2">
               <div class="class-selection-box primary lighten-4 pa-2">
                 <v-select
                   v-model="currentClass"
@@ -51,7 +51,7 @@
             <v-spacer></v-spacer>
             <v-flex app-shrink class="pr-2">
               <v-layout :align-center="true" app-fill-height wrap="false">
-                <v-flex>
+                <v-flex class="pa-0">
                   <v-menu offset-y>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -619,6 +619,9 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.wrapper {
+  padding-bottom: 48px;
+}
 .duty-check-title {
   position: relative;
   left: 10px;

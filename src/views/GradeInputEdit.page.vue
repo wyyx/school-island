@@ -162,7 +162,7 @@
           </div>
           <!-- submit btn -->
           <v-layout row wrap>
-            <v-flex class="text-xs-right">
+            <v-flex class="text-xs-right pb-3">
               <v-btn
                 color="primary"
                 @click="submit"
