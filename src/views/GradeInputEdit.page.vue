@@ -1,9 +1,9 @@
 <template>
-  <div class="content-wrapper">
+  <div class="grade-input-edit-page content-wrapper">
     <Header title="成绩录入" @back="goBack"></Header>
     <div class="main-content-wrapper">
       <div class="primary lighten-3 pa-3 grade-title">
-        <h3 class="title text-xs-center">
+        <h3 class="subheading text-xs-center">
           {{ title }}
         </h3>
       </div>
