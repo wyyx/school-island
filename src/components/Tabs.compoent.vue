@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div app>
     <v-bottom-nav
       app
       :active.sync="bottomNav"

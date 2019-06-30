@@ -13,6 +13,8 @@ $material-design-icons-font-directory-path: '~material-design-icons-iconfont/dis
 
 html,
 body {
+  position: fixed;
+  height: 100%;
   width: 100%;
   margin: 0px;
   box-sizing: border-box;
@@ -20,6 +22,11 @@ body {
 
 * {
   letter-spacing: 0.1rem !important;
+  box-sizing: border-box;
+}
+
+.application {
+  height: 100%;
 }
 
 .class-selection-box .v-text-field {
@@ -54,9 +61,10 @@ th {
   padding: 0 10px;
 }
 
-// main {
-//   padding: 48px 0px 56px 0px !important;
-// }
+main {
+  height: 100%;
+  width: 100%;
+}
 
 .v-toolbar .v-toolbar__content {
   padding-left: 8px !important;

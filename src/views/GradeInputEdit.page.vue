@@ -2,203 +2,193 @@
   <div class="content-wrapper">
     <Header title="成绩录入" @back="goBack"></Header>
     <div class="main-content-wrapper">
-      <v-card class="primary lighten-3 pa-3 grade-title">
+      <div class="primary lighten-3 pa-3 grade-title">
         <h3 class="title text-xs-center">
           {{ title }}
         </h3>
-      </v-card>
-      <v-card class=" lighten-3">
-        <div class="content">
-          <!-- left -->
-          <div
-            class="left-content student-list-wrapper pa-2 "
-            :style="{
-              height: studentListWrapperHeight - 150 + 'px',
-              'overflow-y': 'scroll'
-            }"
-          >
-            <div app-h-center>
-              <v-switch
-                class="batch-switch app-shrink py-1"
+      </div>
+      <v-card class="content">
+        <!-- left -->
+        <div class="left-content student-list-wrapper pa-2 ">
+          <div app-h-center>
+            <v-switch
+              class="batch-switch app-shrink py-1"
+              color="primary"
+              v-model="batchMode"
+              label="批量"
+              :hide-details="true"
+            ></v-switch>
+          </div>
+          <v-list :expand="true">
+            <v-list-tile v-if="batchMode" @click="toggleSelectAll">
+              <div class="app-flex">
+                <v-checkbox
+                  class="grade-input-edit-batch-selection"
+                  :input-value="isSelectedAll()"
+                  label="全选"
+                  color="primary"
+                ></v-checkbox>
+              </div>
+            </v-list-tile>
+            <v-divider></v-divider>
+            <div v-for="student in studentList" :key="student.studentId">
+              <v-list-tile
+                class="pa-0"
+                :class="{
+                  'cyan lighten-5':
+                    currentStudent.studentNumber === student.studentNumber
+                }"
+                @click="
+                  setCurrentStudent(student), toggleSelectStudent(student)
+                "
                 color="primary"
-                v-model="batchMode"
-                label="批量"
-                :hide-details="true"
-              ></v-switch>
-            </div>
-            <v-list :expand="true">
-              <v-list-tile v-if="batchMode" @click="toggleSelectAll">
+              >
                 <div class="app-flex">
-                  <v-checkbox
-                    class="grade-input-edit-batch-selection"
-                    :input-value="isSelectedAll()"
-                    label="全选"
-                    color="primary"
-                  ></v-checkbox>
+                  <div v-if="batchMode">
+                    <v-checkbox
+                      class="grade-input-edit-batch-selection"
+                      :input-value="isSelected(student)"
+                      value
+                      color="primary"
+                    ></v-checkbox>
+                  </div>
+                  <div
+                    class="app-v-center"
+                    :class="{
+                      'primary--text':
+                        currentStudent.studentNumber === student.studentNumber
+                    }"
+                  >
+                    <span
+                      class="body-2"
+                      :class="{
+                        'success--text': student.achievement > 0
+                      }"
+                    >
+                      {{ student.studentName }}
+                    </span>
+                    <span class="app-pl-5">
+                      <v-icon :size="16" v-if="student.comment" color="success"
+                        >comment
+                      </v-icon>
+                    </span>
+                  </div>
                 </div>
               </v-list-tile>
               <v-divider></v-divider>
-              <div v-for="student in studentList" :key="student.studentId">
-                <v-list-tile
-                  class="pa-0"
-                  :class="{
-                    'cyan lighten-5':
-                      currentStudent.studentNumber === student.studentNumber
-                  }"
-                  @click="
-                    setCurrentStudent(student), toggleSelectStudent(student)
-                  "
-                  color="primary"
-                >
-                  <div class="app-flex">
-                    <div v-if="batchMode">
-                      <v-checkbox
-                        class="grade-input-edit-batch-selection"
-                        :input-value="isSelected(student)"
-                        value
-                        color="primary"
-                      ></v-checkbox>
-                    </div>
-                    <div
-                      class="app-v-center"
-                      :class="{
-                        'primary--text':
-                          currentStudent.studentNumber === student.studentNumber
-                      }"
-                    >
-                      <span
-                        class="body-2"
-                        :class="{
-                          'success--text': student.achievement > 0
-                        }"
-                      >
-                        {{ student.studentName }}
-                      </span>
-                      <span class="app-pl-5">
-                        <v-icon
-                          :size="16"
-                          v-if="student.comment"
-                          color="success"
-                          >comment
-                        </v-icon>
-                      </span>
-                    </div>
-                  </div>
-                </v-list-tile>
-                <v-divider></v-divider>
-              </div>
-            </v-list>
-          </div>
-          <!-- right -->
-          <div class="right-content pa-3">
-            <h3
-              class="title primary--text text-xs-center py-3"
-              v-if="selectedStudentList.length > 0"
+            </div>
+          </v-list>
+        </div>
+        <!-- right -->
+        <div class="right-content pa-3">
+          <h3
+            class="title primary--text text-xs-center py-3"
+            v-if="selectedStudentList.length > 0"
+          >
+            已选择{{ selectedStudentList.length }}人
+          </h3>
+          <div v-if="batchMode" class="app-flex app-wrap">
+            <div
+              class="name-wrapper pa-1"
+              v-for="student in selectedStudentList"
+              :key="student.studentNumber"
             >
-              已选择{{ selectedStudentList.length }}人
-            </h3>
-            <div v-if="batchMode" class="app-flex app-wrap">
               <div
-                class="name-wrapper pa-1"
-                v-for="student in selectedStudentList"
-                :key="student.studentNumber"
+                class="first-letter subheading  lighten-3 app-both-center elevation-1"
               >
-                <div
-                  class="first-letter subheading  lighten-3 app-both-center elevation-1"
-                >
-                  {{ student.studentName[0] }}
-                </div>
+                {{ student.studentName[0] }}
               </div>
             </div>
-            <v-layout v-else row wrap class="py-3 text-xs-center">
-              <v-flex class="title primary--text">
-                {{ currentStudent.studentName }}
-              </v-flex>
-              <v-flex class="title primary--text">
-                {{ currentStudent.studentNumber }}
-              </v-flex>
-            </v-layout>
-            <!-- grade select -->
-            <div class="pt-3 app-fill-width">
-              <h3 class="input-title subheading grey--text text--darken-1 pb-3">
-                成绩
-              </h3>
-              <v-select
-                class="app-fill-width grade-level-select"
-                v-model="currentGradeLevel"
-                :items="gradeLevels"
-                item-text="name"
-                :return-object="true"
-                solo
-                placeholder="请选择成绩"
-                v-validate="'required'"
-                name="gradeLevel"
-                data-vv-as="成绩"
-                :error-messages="validated ? errors.collect('gradeLevel') : []"
-              ></v-select>
-            </div>
-            <!-- rating -->
-            <div v-if="showRating" class="pt-1">
-              <v-layout row nowrap>
-                <v-flex>
-                  <h3 class="input-title subheading grey--text text--darken-1">
-                    星级
-                  </h3>
-                  <v-rating
-                    x-large
-                    clearable
-                    color="accent"
-                    background-color="grey darken-1"
-                    v-model="rating"
-                    :length="3"
-                    medium
-                  ></v-rating>
-                </v-flex>
-              </v-layout>
-            </div>
-            <!-- comment -->
-            <div class="pt-4">
-              <h3 class="input-title subheading grey--text text--darken-1">
-                评语
-              </h3>
-              <v-textarea
-                class="comment-input"
-                v-model="comment"
-                name="input-7-4"
-                auto-grow
-                :rows="4"
-              ></v-textarea>
-            </div>
-            <!-- submit btn -->
-            <v-layout row wrap>
-              <v-flex class="text-xs-right">
-                <v-btn
-                  color="primary"
-                  @click="submit"
-                  :depressed="isPending ? true : false"
-                >
-                  <span v-if="isPending">
-                    <v-progress-circular
-                      :size="24"
-                      :width="2"
-                      indeterminate
-                      color="white"
-                    ></v-progress-circular
-                  ></span>
-                  <span v-else>保存</span>
-                </v-btn>
+          </div>
+          <v-layout v-else row wrap class="py-3 text-xs-center">
+            <v-flex class="title primary--text">
+              {{ currentStudent.studentName }}
+            </v-flex>
+            <v-flex class="title primary--text">
+              {{ currentStudent.studentNumber }}
+            </v-flex>
+          </v-layout>
+          <!-- grade select -->
+          <div class="pt-3 app-fill-width">
+            <h3 class="input-title subheading grey--text text--darken-1 pb-2">
+              成绩
+            </h3>
+            <v-select
+              class="app-fill-width grade-level-select"
+              v-model="currentGradeLevel"
+              :items="gradeLevels"
+              item-text="name"
+              :return-object="true"
+              solo
+              placeholder="请选择成绩"
+              v-validate="'required'"
+              name="gradeLevel"
+              data-vv-as="成绩"
+              :error-messages="validated ? errors.collect('gradeLevel') : []"
+            ></v-select>
+          </div>
+          <!-- rating -->
+          <div v-if="showRating" class="pt-1">
+            <v-layout row nowrap>
+              <v-flex>
+                <h3 class="input-title subheading grey--text text--darken-1">
+                  星级
+                </h3>
+                <v-rating
+                  x-large
+                  clearable
+                  color="accent"
+                  background-color="grey darken-1"
+                  v-model="rating"
+                  :length="3"
+                  medium
+                ></v-rating>
               </v-flex>
             </v-layout>
           </div>
+          <!-- comment -->
+          <div class="pt-4">
+            <h3 class="input-title subheading grey--text text--darken-1 pb-2">
+              评语
+            </h3>
+            <v-textarea
+              class="comment-input"
+              v-model="comment"
+              name="input-7-4"
+              auto-grow
+              :rows="4"
+              outline
+            ></v-textarea>
+          </div>
+          <!-- submit btn -->
+          <v-layout row wrap>
+            <v-flex class="text-xs-right">
+              <v-btn
+                color="primary"
+                @click="submit"
+                :depressed="isPending ? true : false"
+              >
+                <span v-if="isPending">
+                  <v-progress-circular
+                    :size="24"
+                    :width="2"
+                    indeterminate
+                    color="white"
+                  ></v-progress-circular
+                ></span>
+                <span v-else>保存</span>
+              </v-btn>
+            </v-flex>
+          </v-layout>
         </div>
       </v-card>
-      <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
-        {{ message }}
-        <v-btn dark flat @click="showSnackbar = false">
-          关闭
-        </v-btn>
-      </v-snackbar>
     </div>
+    <v-snackbar v-model="showSnackbar" :color="color" :timeout="2000">
+      {{ message }}
+      <v-btn dark flat @click="showSnackbar = false">
+        关闭
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -554,17 +544,38 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+.content-wrapper {
+  height: 100%;
+}
+
+.main-content-wrapper {
+  height: 100%;
+}
+
+.grade-title {
+  top: 0px;
+  width: 100%;
+  position: absolute;
+  z-index: 2;
+}
+
 .content {
   display: flex;
+  height: 100%;
+  padding-top: 52px;
 }
 
 .left-content {
   background: #f5f5f5 !important;
   flex: 1 0 auto;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .right-content {
   flex: 10 1 auto;
+  height: 100%;
+  overflow-y: scroll;
 }
 
 .v-list {
@@ -591,6 +602,5 @@ export default Vue.extend({
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  // background: grey;
 }
 </style>

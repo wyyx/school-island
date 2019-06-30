@@ -5,6 +5,7 @@ import store from './store/store'
 import './plugins'
 import './fontawesome'
 import './ttt.js'
+import './router/global.guard'
 // import filters
 import '@/filters'
 
@@ -24,6 +25,7 @@ import moment from 'moment'
 import { storeService } from './services/store.service'
 moment.locale('zh-CN')
 
+// toggle when build
 if (process.env.NODE_ENV === 'production') {
   var vConsole = new VConsole()
 }

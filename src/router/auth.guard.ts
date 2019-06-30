@@ -15,14 +15,8 @@ export function authGuard(to, from, next) {
   const _isTourist = storeService.store.getters[authModulePath + isTourist]
   console.log('TCL: authGuard -> _isTourist', _isTourist)
 
-  // show tabs if binded
-  if (_isBinded) {
-    storeService.store.set(authModulePath + showTabs, true)
-  }
-
   // go to binding page if binded and not tourist
   if (!_isBinded && !_isTourist) {
-    console.log('yyyyyyyyyyyyyyyyyyyyyy', )
     return router.push({ name: 'binding' })
   }
 

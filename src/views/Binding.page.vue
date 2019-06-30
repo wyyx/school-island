@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header v-if="isBinded" title="添加绑定" @back="goBack"></Header>
     <v-card color="primary" class="mb-2">
       <v-layout column wrap class="pa-3">
         <v-flex class="app-h-center">
@@ -168,8 +169,10 @@ import {
 } from '../store/auth/auth.paths'
 import { loadUserInfoAction } from '../store/auth/auth.actions'
 import { get } from 'vuex-pathify'
+import Header from '../components/Header.component.vue'
 
 export default Vue.extend({
+  components: { Header },
   data: function() {
     return {
       tab: 1,
@@ -243,6 +246,9 @@ export default Vue.extend({
     this.$validator.localize('zh_CN')
   },
   methods: {
+    goBack() {
+      this.$router.back()
+    },
     browseAsTourist() {
       this.$router.push({
         name: 'home'

@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar app height="48">
+  <v-toolbar app height="48" class="header">
     <v-toolbar-title class="title text-uppercase">
       <v-layout row wrap>
         <v-flex>
@@ -44,5 +44,9 @@ export default Vue.extend({
 .v-toolbar .v-toolbar__content {
   padding-left: 0px !important;
   padding-right: 0px !important;
+}
+
+.header {
+  z-index: 1000;
 }
 </style>
