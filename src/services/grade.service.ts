@@ -116,6 +116,7 @@ export class GradeService {
     classId: number
     grade: string
     subject: string
+    subjectCode: number
     type: number
   }) {
     return this.httpConfigService.httpSercvice.post<AddGradeSubjectResponse>(

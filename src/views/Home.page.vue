@@ -129,9 +129,15 @@ import { articles } from '../services/article.service'
 import { dutyService } from '../services/duty.service'
 import { get } from 'vuex-pathify'
 import { developing } from '../store/global.paths'
-import { school, authModulePath, appIsLoading } from '@/store/auth/auth.paths'
+import {
+  school,
+  authModulePath,
+  appIsLoading,
+  roleRoute
+} from '@/store/auth/auth.paths'
 import { SchoolInfo } from '../models/school.model'
 import Developing from '../components/Developing.component.vue'
+import { storeService } from '../services/store.service'
 
 export default Vue.extend({
   beforeRouteEnter(to, from, next) {
@@ -154,7 +160,7 @@ export default Vue.extend({
     ...get({
       developing
     }),
-    ...get(authModulePath, { school }),
+    ...get(authModulePath, { school, roleRoute }),
     ...get(authModulePath, {
       appIsLoading
     })
@@ -162,9 +168,21 @@ export default Vue.extend({
   name: 'home',
   components: { Article, Developing },
   created() {
+    storeService.store.set(authModulePath + appIsLoading, true)
+    const that: any = this
     this.changeTitle()
     dutyService.baseUrl
     console.log('TCL: created -> dutyService.baseUrl', dutyService.baseUrl)
+
+    this.$router.push(
+      {
+        path: `/workbench/${that.roleRoute}`
+      },
+
+      () => {
+        storeService.store.set(authModulePath + appIsLoading, false)
+      }
+    )
   },
   methods: {
     goToCreateArticle() {

@@ -56,7 +56,7 @@ export default new Router({
     {
       path: '/my-classes',
       name: 'my-classes',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -66,7 +66,7 @@ export default new Router({
     {
       path: '/class-data',
       name: 'class-data',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -76,7 +76,7 @@ export default new Router({
     {
       path: '/student-grade-detail',
       name: 'student-grade-detail',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -86,7 +86,7 @@ export default new Router({
     {
       path: '/my-archieve-for-student',
       name: 'my-archieve-for-student',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -96,7 +96,7 @@ export default new Router({
     {
       path: '/student-grade-detail-for-parents',
       name: 'student-grade-detail-for-parents',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -106,7 +106,7 @@ export default new Router({
     {
       path: '/data-center',
       name: 'data-center',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -116,7 +116,7 @@ export default new Router({
     {
       path: '/grade-input',
       name: 'grade-input',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -126,7 +126,7 @@ export default new Router({
     {
       path: '/grade-input-edit',
       name: 'grade-input-edit',
-      props: true,
+      props: route => ({ ...route.params, ...route.query }),
       beforeEnter: authGuard,
       component: () =>
         import(
@@ -172,7 +172,7 @@ export default new Router({
         import(
           /* webpackChunkName: "article-detail" */ '../views/ArticleDetail.page.vue'
         ),
-      props: true
+      props: route => ({ ...route.params, ...route.query })
     },
     {
       path: '/create-article',
@@ -181,7 +181,7 @@ export default new Router({
         import(
           /* webpackChunkName: "create-article" */ '../views/CreateArticle.page.vue'
         ),
-      props: true
+      props: route => ({ ...route.params, ...route.query })
     },
     {
       path: '/convert-article-guide',
@@ -191,7 +191,7 @@ export default new Router({
         import(
           /* webpackChunkName: "convert-article-guide" */ '../views/ConvertArticleGuide.page.vue'
         ),
-      props: true
+      props: route => ({ ...route.params, ...route.query })
     },
     {
       path: '/convert-article',
@@ -201,14 +201,14 @@ export default new Router({
         import(
           /* webpackChunkName: "convert-article" */ '../views/ConvertArticle.page.vue'
         ),
-      props: true
+      props: route => ({ ...route.params, ...route.query })
     },
     {
       path: '/binding',
       name: 'binding',
       component: () =>
         import(/* webpackChunkName: "binding" */ '../views/Binding.page.vue'),
-      props: true
+      props: route => ({ ...route.params, ...route.query })
     },
     {
       path: '/user-settings',
@@ -218,7 +218,7 @@ export default new Router({
         import(
           /* webpackChunkName: "user-settings" */ '../views/UserSettings.page.vue'
         ),
-      props: true
+      props: route => ({ ...route.params, ...route.query })
     }
   ]
 })

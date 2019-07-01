@@ -358,8 +358,11 @@ export default Vue.extend({
     currentClass(newVal, oldVal) {
       console.log('TCL: currentClass -> newVal', newVal)
       const aclass = newVal as ClassModel
-      this.loadDeducionList(aclass.classId)
-      this.loadDeducionWeekHistory(aclass.classId)
+
+      if (aclass.classId) {
+        this.loadDeducionList(aclass.classId)
+        this.loadDeducionWeekHistory(aclass.classId)
+      }
     },
     showSwiper(newVal, oldVal) {}
   },
@@ -392,7 +395,6 @@ export default Vue.extend({
     }
   },
   created() {
-    this.loadDeducionList(this.currentClass.classId)
     const that: any = this
     this.loadClassList((that.user as UserInfo).teacherId)
   },
@@ -434,8 +436,8 @@ export default Vue.extend({
       console.log('TCL: goToMyClassesPage -> goToMyClassesPage')
       this.$router.push({
         name: 'my-classes',
-        params: {
-          initClassId: this.currentClass.classId.toString()
+        query: {
+          classId: this.currentClass.classId.toString()
         }
       })
     },

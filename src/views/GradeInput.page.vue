@@ -4,7 +4,6 @@
     <v-card class="pa-3">
       <v-layout row nowrap class="main-content-wrapper">
         <v-flex xs6>
-          <!-- <div>{{ currentClass }}</div> -->
           <v-select
             v-model="currentClass"
             :items="classList"
@@ -131,6 +130,8 @@ import {
 import { getYearSpan } from '../utils/date.util'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
 import Header from '@/components/Header.component.vue'
+import { UserInfo } from '../models/user.model'
+import { dutyService } from '../services/duty.service'
 
 const EXAM_LIST = [
   {
@@ -151,13 +152,6 @@ export default Vue.extend({
     Header
   },
   mixins: [snackbarMixin],
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     console.log('aaaaaaaaaaaaaa')
-  //     const store: any = vm.$store
-  //     store.set(authModulePath + showTabs, false)
-  //   })
-  // },
   data: function() {
     return {
       showSnackbar: false,
@@ -199,34 +193,49 @@ export default Vue.extend({
       currentSubject: {} as Subject,
       examList: EXAM_LIST,
       currentExam: EXAM_LIST[1],
-      yearList: YEAR_LIST
+      yearList: YEAR_LIST,
+      classList: [] as ClassModel[]
     }
   },
   watch: {
     currentClass(newVal, oldVal) {
-      this.loadGradeSubjectList()
-      this.loadAvaliableSubjectList()
+      const currentClass = newVal as ClassModel
+
+      if (currentClass && currentClass.classId) {
+        this.loadGradeSubjectList()
+        this.loadAvaliableSubjectList()
+      }
     }
   },
   computed: {
     ...get(authModulePath, {
       user
-    }),
-    ...get(classesModulePath, {
-      classList
     })
   },
   created() {
     const that: any = this
-    that.classList
-    console.log('TCL: created -> that.classList', that.classList)
+    this.loadClassList((that.user as UserInfo).teacherId)
+
     this.setInitClass()
-    this.loadGradeSubjectList()
-    this.loadAvaliableSubjectList()
   },
   methods: {
     goBack() {
       this.$router.back()
+    },
+    loadClassList(teacherId: number) {
+      dutyService.getClassList(teacherId).then(res => {
+        this.classList = res.data.content || []
+        console.log('TCL: loadClassList -> res.data.content', res.data.content)
+
+        // show first class default
+        const firstClass =
+          this.classList.length > 0 ? this.classList[0] : ({} as ClassModel)
+
+        this.currentClass = firstClass
+
+        this.loadGradeSubjectList()
+        this.loadAvaliableSubjectList()
+      })
     },
     goToGradeInputEditPage(gradeSubject: GradeSubject) {
       const store: any = this.$store
@@ -246,6 +255,7 @@ export default Vue.extend({
           classId: this.currentClass.classId,
           grade: this.currentClass.grade,
           subject: this.currentSubject.name,
+          subjectCode: this.currentSubject.code,
           type: this.currentExam.code
         })
         .then(res => {

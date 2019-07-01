@@ -7,7 +7,9 @@ export const GUO_BASE_URL = process.env.VUE_APP_GUO_BASE_URL
 
 export const LOCAL_STORAGE_KEYS = {
   schoolId: 'schoolId',
-  xyd: 'xyd'
+  xyd: 'xyd',
+  targetUrl: 'targetUrl',
+  targetRoleCode: 'targetRoleCode'
 }
 
 export const COLORS = [

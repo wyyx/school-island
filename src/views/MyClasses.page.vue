@@ -68,6 +68,8 @@ import echarts, { EChartOption, ECharts } from 'echarts'
 import Chart from '@/components/Chart.component.vue'
 import Header from '@/components/Header.component.vue'
 import { EXAM_TYPES } from '../models/grade-input.model'
+import { dutyService } from '../services/duty.service'
+import { UserInfo } from '../models/user.model'
 
 export default Vue.extend({
   name: 'MyClasses',
@@ -76,7 +78,7 @@ export default Vue.extend({
     Header
   },
   props: {
-    initClassId: {
+    classId: {
       type: String,
       required: false
     }
@@ -85,6 +87,7 @@ export default Vue.extend({
     return {
       tab: 0,
       rating: 2,
+      classList: [] as ClassModel[],
       currentClass: {} as ClassModel,
       briefGrade: {} as BriefGrade,
       chartOption: null as EChartOption,
@@ -92,9 +95,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...get(classesModulePath, {
-      classList
-    }),
     ...get(authModulePath, {
       user
     }),
@@ -135,20 +135,37 @@ export default Vue.extend({
     goToClassDataPage() {
       this.$router.push({
         name: 'class-data',
-        params: {
+        query: {
           classId: this.currentClass.classId.toString()
         }
       })
     },
-    setInitClass() {
-      const that: any = this
+    loadClassList(teacherId: number) {
+      dutyService.getClassList(teacherId).then(res => {
+        this.classList = res.data.content || []
+        console.log('TCL: loadClassList -> res.data.content', res.data.content)
 
-      if (!this.initClassId) {
-        this.currentClass = that.classList[0]
+        this.setInitClass()
+      })
+    },
+    setInitClass() {
+      if (!this.classId) {
+        // show first class default
+        const firstClass =
+          this.classList.length > 0 ? this.classList[0] : ({} as ClassModel)
+
+        this.currentClass = firstClass
       } else {
-        this.currentClass = (that.classList as ClassModel[]).filter(
-          aclass => aclass.classId === parseInt(this.initClassId)
+        // set to target class
+        const targetClass = this.classList.filter(
+          aclass => aclass.classId === parseInt(this.classId)
         )[0]
+
+        this.currentClass = targetClass || ({} as ClassModel)
+      }
+
+      if (this.currentClass.classId) {
+        this.loadBriefGrade(this.currentClass.classId)
       }
     },
     updateChart() {
@@ -254,8 +271,8 @@ export default Vue.extend({
   },
   mounted() {},
   created() {
-    this.setInitClass()
-    this.loadBriefGrade(this.currentClass.classId)
+    const that: any = this
+    this.loadClassList((that.user as UserInfo).teacherId)
   }
 })
 </script>

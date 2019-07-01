@@ -360,7 +360,7 @@ export default Vue.extend({
           const that: any = this
           setTimeout(() => {
             this.$router.push({ path: `/workbench/${that.roleRoute}` })
-          }, 1000)
+          }, 50)
         })
         .catch(error => {})
     },

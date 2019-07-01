@@ -44,7 +44,9 @@ import {
   firstRoleRoute,
   isTourist,
   isBinded,
-  appIsLoading
+  appIsLoading,
+  currentRole,
+  roleList
 } from './store/auth/auth.paths'
 import { developing } from '@/store/global.paths'
 import {
@@ -54,6 +56,7 @@ import {
   loadUserInfoFailAction
 } from './store/auth/auth.actions'
 import { storeService } from './services/store.service'
+import { RoleVo } from './models/user.model'
 
 export default Vue.extend({
   name: 'App',
@@ -62,6 +65,20 @@ export default Vue.extend({
   },
   data() {
     return {}
+  },
+  computed: {
+    ...get(authModulePath, {
+      showTabs,
+      roleRoute,
+      firstRoleRoute,
+      isTourist,
+      isBinded,
+      currentRole,
+      roleList
+    }),
+    ...get(authModulePath, {
+      appIsLoading
+    })
   },
   created() {
     this.showAppLoading()
@@ -75,35 +92,48 @@ export default Vue.extend({
     this.loadUserInfo()
     // open when build
     this.loadSchoolInfo()
+
+    this.saveCurrentState()
+
+    // setTimeout(() => {
+    //   console.log('to home 333333333333333333333333333333')
+
+    //   this.$router.push({
+    //     name: 'home'
+    //   })
+    // }, 5000)
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {
       const that: any = this
       if (that.firstRoleRoute) {
-        // have matched workbench route
-        console.log('=== have matched workbench route')
-        this.$router.push({ path: `/workbench/${that.firstRoleRoute}` }, () => {
-          this.hideAppLoading()
-        })
+        const targetUrl = localStorage.getItem(LOCAL_STORAGE_KEYS.targetUrl)
+
+        if (targetUrl) {
+          // go to last page
+          this.$router.push(
+            {
+              path: targetUrl
+            },
+            () => {
+              this.hideAppLoading()
+            }
+          )
+        } else {
+          // go to workbench
+          // have matched workbench route
+          console.log('=== have matched workbench route')
+          this.$router.push(
+            { path: `/workbench/${that.firstRoleRoute}` },
+            () => {
+              this.hideAppLoading()
+            }
+          )
+        }
       }
     }
   },
-  computed: {
-    ...get(authModulePath, {
-      showTabs,
-      roleRoute,
-      firstRoleRoute,
-      isTourist,
-      isBinded
-    }),
-    ...get(authModulePath, {
-      appIsLoading
-    }),
-    currentRoute() {
-      const that: any = this
-      return that.$router.currentRoute.fullPath
-    }
-  },
+
   methods: {
     resolveInitUrl() {
       // parse current url
@@ -136,7 +166,48 @@ export default Vue.extend({
         xyd
       })
     },
+    restoreRole() {
+      const targetRoleCode = localStorage.getItem(
+        LOCAL_STORAGE_KEYS.targetRoleCode
+      )
+      const that: any = this
+      const roleList = (that.roleList as RoleVo[]) || []
+
+      const targetRole = roleList.filter(
+        role => role.code === parseInt(targetRoleCode)
+      )[0]
+
+      if (targetRole) {
+        storeService.store.set(authModulePath + currentRole, targetRole)
+      }
+    },
+    saveCurrentState() {
+      // save current url and role
+
+      const that: any = this
+
+      window.addEventListener('beforeunload', () => {
+        const currentRole = that.currentRole as RoleVo
+
+        const partInitPath = '/?s='
+
+        let path = this.$route.fullPath
+
+        // don't save init path
+        if (path.includes(partInitPath)) {
+          path = '/'
+        }
+
+        localStorage.setItem(LOCAL_STORAGE_KEYS.targetUrl, path)
+        localStorage.setItem(
+          LOCAL_STORAGE_KEYS.targetRoleCode,
+          currentRole.code.toString()
+        )
+      })
+    },
     checkBinding() {
+      const that: any = this
+
       userService
         .getUserInfo()
         .then(res => {
@@ -144,29 +215,64 @@ export default Vue.extend({
           console.log('TCL: checkBinding -> userInfo', userInfo)
 
           if (userInfo) {
-            // have userInfo
+            // has userInfo
             this.$store
               .dispatch(authModulePath + loadUserInfoSuccessAction, userInfo)
               .then(() => {
                 if (userInfo.roleVoList && userInfo.roleVoList.length > 0) {
                   // if binded
+
+                  this.restoreRole()
+
                   storeService.store.set(authModulePath + showTabs, true)
 
-                  const that: any = this
-
-                  // go to workbench page, setTimeout for waiting firstRoleRoute to be ready
                   if (that.firstRoleRoute) {
-                    // have matched workbench route
-                    console.log('=== have matched workbench route')
-                    this.$router.push(
-                      { path: `/workbench/${that.firstRoleRoute}` },
-                      () => {
-                        this.hideAppLoading()
-                      }
+                    const targetUrl = localStorage.getItem(
+                      LOCAL_STORAGE_KEYS.targetUrl
                     )
+
+                    if (targetUrl) {
+                      console.log('TCL: checkBinding -> targetUrl', targetUrl)
+                      // go to last page
+                      this.$router.push(
+                        {
+                          path: targetUrl
+                        },
+                        () => {
+                          console.log('9999999999999999999999')
+                          this.hideAppLoading()
+                        },
+                        () => {
+                          console.log('555555555555555555555555555555555555')
+                          this.hideAppLoading()
+
+                          this.$router.push({
+                            name: 'home'
+                          })
+                        }
+                      )
+
+                      // this.hideAppLoading()
+                    } else {
+                      // go to workbench
+                      // have matched workbench route
+                      console.log('=== have matched workbench route')
+                      this.$router.push(
+                        { path: `/workbench/${that.firstRoleRoute}` }
+                        // () => {
+                        //   this.hideAppLoading()
+                        // },
+                        // () => {
+                        //   this.hideAppLoading()
+                        // }
+                      )
+
+                      // this.hideAppLoading()
+                    }
                   } else {
                     // not have matched workbench route
                     console.log('!!! not have matched workbench route')
+                    this.$router.push({ name: 'home' })
                   }
                 } else {
                   // if not binded
@@ -178,6 +284,8 @@ export default Vue.extend({
                       this.hideAppLoading()
                     }
                   )
+
+                  // this.hideAppLoading()
                 }
               })
           } else {
@@ -191,13 +299,21 @@ export default Vue.extend({
                 this.hideAppLoading()
               }
             )
+
+            // this.hideAppLoading()
           }
         })
         .catch(error => {
-          this.$router.push({
-            name: 'binding'
-          })
-          this.hideAppLoading()
+          this.$router.push(
+            {
+              name: 'binding'
+            },
+            () => {
+              this.hideAppLoading()
+            }
+          )
+
+          // this.hideAppLoading()
         })
     },
     showAppLoading() {

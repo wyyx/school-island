@@ -110,7 +110,7 @@ export default Vue.extend({
     goToDetail() {
       this.$router.push({
         name: 'article-detail',
-        params: {
+        query: {
           id: this.article.id
         }
       })

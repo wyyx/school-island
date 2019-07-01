@@ -155,6 +155,7 @@ export default Vue.extend({
         .getBriefStudentGradeDetailForParents(student.id)
         .then(res => {
           console.log('TCL: loadStudentGrade -> res', res)
+
           this.studentGradeDetail =
             res.data.content || ({} as BriefStudentGradeForParents)
 
@@ -200,26 +201,29 @@ export default Vue.extend({
         studentId: student.id,
         type: this.currentSemister.value
       }
-      console.log('TCL: loadStudentGradeByCondition -> condition', condition)
 
-      gradeService
-        .getBriefStudentGradeDetailForParentsByCondition(condition)
-        .then(res => {
-          console.log('TCL: loadStudentGrade -> res', res)
-          this.studentGradeDetail =
-            res.data.content || ({} as BriefStudentGradeForParents)
+      if (this.currentGrade && student.id && this.currentSemister.value) {
+        console.log('TCL: loadStudentGradeByCondition -> condition', condition)
 
-          this.studentGradeDetail = {
-            ...this.studentGradeDetail,
-            achievementVos: this.studentGradeDetail.achievementVos
-          }
+        gradeService
+          .getBriefStudentGradeDetailForParentsByCondition(condition)
+          .then(res => {
+            console.log('TCL: loadStudentGrade -> res', res)
+            this.studentGradeDetail =
+              res.data.content || ({} as BriefStudentGradeForParents)
 
-          // set init data
-          this.gradeList = this.studentGradeDetail.grades
-          this.currentGrade = this.studentGradeDetail.currentGrade
+            this.studentGradeDetail = {
+              ...this.studentGradeDetail,
+              achievementVos: this.studentGradeDetail.achievementVos
+            }
 
-          this.updateChart()
-        })
+            // set init data
+            this.gradeList = this.studentGradeDetail.grades || []
+            this.currentGrade = this.studentGradeDetail.currentGrade
+
+            this.updateChart()
+          })
+      }
     },
     updateChart() {
       const that: any = this

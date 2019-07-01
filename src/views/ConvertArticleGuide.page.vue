@@ -42,7 +42,7 @@ export default Vue.extend({
     onClick() {
       this.$router.push({
         name: 'convert-article',
-        params: {
+        query: {
           articleUrl: this.articleUrl
         }
       })
