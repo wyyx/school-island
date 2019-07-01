@@ -120,7 +120,7 @@
     </div>
 
     <div class="text-xs-center">
-      <v-dialog v-model="showDevelopingDialog" width="500">
+      <v-dialog v-model="showDevelopingDialog" width="500" persistent>
         <v-card>
           <v-card-title class="subheading">
             <v-icon>info</v-icon>
@@ -180,7 +180,7 @@ export default Vue.extend({
       ],
       articles: articles,
       dialog: false,
-      showDevelopingDialog: true
+      showDevelopingDialog: false
     }
   },
   computed: {
@@ -192,9 +192,12 @@ export default Vue.extend({
   name: 'home',
   components: { Article, Developing },
   created() {
-    // this._showDialog()
+    this.showDevelopingDialog = true
     const that: any = this
     this.changeTitle()
+  },
+  destroyed() {
+    this.showDevelopingDialog = false
   },
   methods: {
     goToCreateArticle() {
@@ -225,6 +228,7 @@ export default Vue.extend({
       const route = that.isTourist
         ? '/account/tourist'
         : `/workbench/${that.roleRoute}`
+
 
       this.$router.push({
         path: route

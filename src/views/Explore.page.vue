@@ -65,7 +65,7 @@
     </div>
 
     <div class="text-xs-center">
-      <v-dialog v-model="showDevelopingDialog" width="500">
+      <v-dialog v-model="showDevelopingDialog" width="500" persistent>
         <v-card>
           <v-card-title class="subheading">
             <v-icon>info</v-icon>
@@ -96,29 +96,34 @@ import Header from '../components/Header.component.vue'
 import { get } from 'vuex-pathify'
 import { developing } from '../store/global.paths'
 import Developing from '../components/Developing.component.vue'
-import { authModulePath, isTourist } from '@/store/auth/auth.paths'
+import { authModulePath, isTourist, roleRoute } from '@/store/auth/auth.paths'
 
 export default Vue.extend({
   name: 'explore',
   data: function() {
     return {
-      showDevelopingDialog: true
+      showDevelopingDialog: false
     }
   },
   computed: {
     ...get({
       developing
     }),
-    ...get(authModulePath, { isTourist })
+    ...get(authModulePath, { isTourist, roleRoute })
   },
   components: { Developing },
   created() {
+    this.showDevelopingDialog = true
     this.changeTitle()
+  },
+  destroyed() {
+    this.showDevelopingDialog = false
   },
   methods: {
     changeTitle() {
       document.title = '发现'
     },
+
     _onClose() {
       this.showDevelopingDialog = false
 
