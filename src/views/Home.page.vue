@@ -1,13 +1,14 @@
 <template>
-  <div class="app-fill-height">
-    <div
+  <div class="app-fill-height white">
+    <!-- <div
       v-if="appIsLoading"
       class="loading-wrapper app-fill-height app-fill-width app-both-center column"
     >
       <v-progress-circular indeterminate color="accent"></v-progress-circular>
       <h3 class="subheading mt-1">正在加载数据...</h3>
-    </div>
-    <div v-else class="content-wrapper">
+    </div> -->
+
+    <div v-if="false" class="content-wrapper">
       <Developing v-if="developing"></Developing>
       <div v-else class="container pa-0">
         <div class="nav-wrapper white pa-0">
@@ -117,6 +118,30 @@
         </div>
       </div>
     </div>
+
+    <div class="text-xs-center">
+      <v-dialog v-model="showDevelopingDialog" width="500">
+        <v-card>
+          <v-card-title class="subheading">
+            <v-icon>info</v-icon>
+          </v-card-title>
+          <v-divider></v-divider>
+
+          <v-card-text>
+            此页面正在开发中，敬请期待...
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click="_onClose">
+              关闭
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -133,7 +158,8 @@ import {
   school,
   authModulePath,
   appIsLoading,
-  roleRoute
+  roleRoute,
+  isTourist
 } from '@/store/auth/auth.paths'
 import { SchoolInfo } from '../models/school.model'
 import Developing from '../components/Developing.component.vue'
@@ -153,36 +179,22 @@ export default Vue.extend({
         { src: `https://picsum.photos/id/${getRandomInt(1000)}/1920/1080` }
       ],
       articles: articles,
-      dialog: false
+      dialog: false,
+      showDevelopingDialog: true
     }
   },
   computed: {
     ...get({
       developing
     }),
-    ...get(authModulePath, { school, roleRoute }),
-    ...get(authModulePath, {
-      appIsLoading
-    })
+    ...get(authModulePath, { school, roleRoute, isTourist, appIsLoading })
   },
   name: 'home',
   components: { Article, Developing },
   created() {
-    storeService.store.set(authModulePath + appIsLoading, true)
+    // this._showDialog()
     const that: any = this
     this.changeTitle()
-    dutyService.baseUrl
-    console.log('TCL: created -> dutyService.baseUrl', dutyService.baseUrl)
-
-    this.$router.push(
-      {
-        path: `/workbench/${that.roleRoute}`
-      },
-
-      () => {
-        storeService.store.set(authModulePath + appIsLoading, false)
-      }
-    )
   },
   methods: {
     goToCreateArticle() {
@@ -199,6 +211,40 @@ export default Vue.extend({
       const that: any = this
       const schoolName = (that.school as SchoolInfo).name
       document.title = schoolName ? schoolName : ''
+    },
+    showAppLoading() {
+      storeService.store.set(authModulePath + appIsLoading, true)
+    },
+    hideAppLoading() {
+      storeService.store.set(authModulePath + appIsLoading, false)
+    },
+    _onClose() {
+      this.showDevelopingDialog = false
+
+      const that: any = this
+      const route = that.isTourist
+        ? '/account/tourist'
+        : `/workbench/${that.roleRoute}`
+
+      this.$router.push({
+        path: route
+      })
+    },
+    _showDialog() {
+      const that: any = this
+      this.showDevelopingDialog = true
+
+      setTimeout(() => {
+        this.showDevelopingDialog = false
+
+        const route = that.isTourist
+          ? '/account/tourist'
+          : `/workbench/${that.roleRoute}`
+
+        this.$router.push({
+          path: route
+        })
+      }, 2000)
     }
   }
 })

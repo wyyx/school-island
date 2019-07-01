@@ -89,19 +89,9 @@ export default Vue.extend({
     // open when build
     this.checkBinding()
     // open when build
-    this.loadUserInfo()
-    // open when build
     this.loadSchoolInfo()
 
     this.saveCurrentState()
-
-    // setTimeout(() => {
-    //   console.log('to home 333333333333333333333333333333')
-
-    //   this.$router.push({
-    //     name: 'home'
-    //   })
-    // }, 5000)
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {
@@ -111,24 +101,14 @@ export default Vue.extend({
 
         if (targetUrl) {
           // go to last page
-          this.$router.push(
-            {
-              path: targetUrl
-            },
-            () => {
-              this.hideAppLoading()
-            }
-          )
+          this.$router.push({
+            path: targetUrl
+          })
         } else {
           // go to workbench
           // have matched workbench route
           console.log('=== have matched workbench route')
-          this.$router.push(
-            { path: `/workbench/${that.firstRoleRoute}` },
-            () => {
-              this.hideAppLoading()
-            }
-          )
+          this.$router.push({ path: `/workbench/${that.firstRoleRoute}` })
         }
       }
     }
@@ -173,11 +153,15 @@ export default Vue.extend({
       const that: any = this
       const roleList = (that.roleList as RoleVo[]) || []
 
+      console.log('TCL: restoreRole -> roleList', roleList)
       const targetRole = roleList.filter(
         role => role.code === parseInt(targetRoleCode)
       )[0]
 
+      console.log('TCL: restoreRole -> targetRole', targetRole)
       if (targetRole) {
+        console.log('TCL: restoreRole ->  if (targetRole) {')
+
         storeService.store.set(authModulePath + currentRole, targetRole)
       }
     },
@@ -224,9 +208,8 @@ export default Vue.extend({
 
                   this.restoreRole()
 
-                  storeService.store.set(authModulePath + showTabs, true)
-
                   if (that.firstRoleRoute) {
+                    // have matched workbench route
                     const targetUrl = localStorage.getItem(
                       LOCAL_STORAGE_KEYS.targetUrl
                     )
@@ -234,40 +217,16 @@ export default Vue.extend({
                     if (targetUrl) {
                       console.log('TCL: checkBinding -> targetUrl', targetUrl)
                       // go to last page
-                      this.$router.push(
-                        {
-                          path: targetUrl
-                        },
-                        () => {
-                          console.log('9999999999999999999999')
-                          this.hideAppLoading()
-                        },
-                        () => {
-                          console.log('555555555555555555555555555555555555')
-                          this.hideAppLoading()
-
-                          this.$router.push({
-                            name: 'home'
-                          })
-                        }
-                      )
-
-                      // this.hideAppLoading()
+                      this.$router.push({
+                        path: targetUrl
+                      })
                     } else {
                       // go to workbench
                       // have matched workbench route
                       console.log('=== have matched workbench route')
-                      this.$router.push(
-                        { path: `/workbench/${that.firstRoleRoute}` }
-                        // () => {
-                        //   this.hideAppLoading()
-                        // },
-                        // () => {
-                        //   this.hideAppLoading()
-                        // }
-                      )
-
-                      // this.hideAppLoading()
+                      this.$router.push({
+                        path: `/workbench/${that.firstRoleRoute}`
+                      })
                     }
                   } else {
                     // not have matched workbench route
@@ -276,44 +235,29 @@ export default Vue.extend({
                   }
                 } else {
                   // if not binded
-                  this.$router.push(
-                    {
-                      name: 'binding'
-                    },
-                    () => {
-                      this.hideAppLoading()
-                    }
-                  )
-
-                  // this.hideAppLoading()
+                  this.$router.push({
+                    name: 'binding'
+                  })
                 }
               })
+
+            this.hideAppLoading()
           } else {
             // no userInfo
             this.$store.dispatch(authModulePath + loadUserInfoFailAction)
-            this.$router.push(
-              {
-                name: 'binding'
-              },
-              () => {
-                this.hideAppLoading()
-              }
-            )
+            this.$router.push({
+              name: 'binding'
+            })
 
-            // this.hideAppLoading()
+            this.hideAppLoading()
           }
         })
         .catch(error => {
-          this.$router.push(
-            {
-              name: 'binding'
-            },
-            () => {
-              this.hideAppLoading()
-            }
-          )
+          this.$router.push({
+            name: 'binding'
+          })
 
-          // this.hideAppLoading()
+          this.hideAppLoading()
         })
     },
     showAppLoading() {
@@ -323,12 +267,6 @@ export default Vue.extend({
     hideAppLoading() {
       const store: any = this.$store
       store.set(authModulePath + appIsLoading, false)
-    },
-    loadUserInfo() {
-      this.$store
-        .dispatch(authModulePath + loadUserInfoAction)
-        .then(() => {})
-        .catch(error => {})
     },
     loadSchoolInfo() {
       this.$store

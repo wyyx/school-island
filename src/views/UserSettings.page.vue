@@ -65,7 +65,9 @@ export default Vue.extend({
   },
   methods: {
     goBack() {
-      this.$router.back()
+      this.$router.push({
+        name: 'my'
+      })
     },
     changeTitle() {
       document.title = '个人中心'

@@ -25,7 +25,6 @@ export const authActions = {
   // load user info
   [loadUserInfoAction]({ dispatch, commit }) {
     return new Promise((resolve, reject) => {
-      console.log('loadUserInfoAction xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
       userService
         .getUserInfo()
         .then(res => {
@@ -34,17 +33,6 @@ export const authActions = {
 
           if (userInfo) {
             dispatch(loadUserInfoSuccessAction, res.data.content)
-
-            // set first role as default
-            const firstRole = userInfo.roleVoList && userInfo.roleVoList[0]
-            storeService.store.set(authModulePath + currentRole, firstRole)
-
-            const firstStudent =
-              userInfo.studentVoList && userInfo.studentVoList[0]
-            storeService.store.set(
-              authModulePath + currentStudent,
-              firstStudent
-            )
           } else {
             dispatch(loadUserInfoFailAction)
             reject()
@@ -58,9 +46,17 @@ export const authActions = {
         })
     })
   },
-  [loadUserInfoSuccessAction]({ dispatch, commit }, payload: UserInfo) {
+  [loadUserInfoSuccessAction]({ dispatch, commit }, userInfo: UserInfo) {
     return new Promise((resolve, reject) => {
-      commit(user, payload)
+      // set first role as default
+      const firstRole = userInfo.roleVoList && userInfo.roleVoList[0]
+      storeService.store.set(authModulePath + currentRole, firstRole)
+
+      console.log('TCL: firstRole', firstRole)
+      const firstStudent = userInfo.studentVoList && userInfo.studentVoList[0]
+      storeService.store.set(authModulePath + currentStudent, firstStudent)
+
+      commit(user, userInfo)
       resolve()
     })
   },

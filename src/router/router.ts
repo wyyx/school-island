@@ -13,7 +13,6 @@ export default new Router({
       path: '/',
       name: 'home',
       component: HomePage
-      // beforeEnter: authGuard
     },
     {
       path: '/workbench',
@@ -219,6 +218,10 @@ export default new Router({
           /* webpackChunkName: "user-settings" */ '../views/UserSettings.page.vue'
         ),
       props: route => ({ ...route.params, ...route.query })
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })

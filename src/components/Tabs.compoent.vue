@@ -1,5 +1,6 @@
 <template>
   <div app>
+    <div style="z-index: 2000">{{ bottomNav }}</div>
     <v-bottom-nav
       app
       :active.sync="bottomNav"
@@ -7,9 +8,9 @@
       absolute
       color="white"
     >
-      <v-btn color="primary" flat value="home" @click="_showDialog">
-        <span class="in-developing">首页</span>
-        <v-icon class="in-developing">home</v-icon>
+      <v-btn color="primary" flat value="home" to="/">
+        <span>首页</span>
+        <v-icon>home</v-icon>
       </v-btn>
 
       <!-- teacher tab -->
@@ -48,39 +49,15 @@
         <v-icon>face</v-icon>
       </v-btn>
 
-      <v-btn color="primary" flat value="explore" @click="_showDialog">
-        <span class="in-developing">发现</span>
-        <v-icon class="in-developing">search</v-icon>
+      <v-btn color="primary" flat value="explore" to="/explore">
+        <span>发现</span>
+        <v-icon>search</v-icon>
       </v-btn>
       <v-btn color="primary" flat value="my" :to="myRoute">
         <span>{{ isTourist ? '游客' : '账号' }}</span>
         <v-icon>account_circle</v-icon>
       </v-btn>
     </v-bottom-nav>
-
-    <div class="text-xs-center">
-      <v-dialog v-model="showDialog" width="500">
-        <v-card>
-          <v-card-title class="subheading">
-            <v-icon>info</v-icon>
-          </v-card-title>
-          <v-divider></v-divider>
-
-          <v-card-text>
-            此页面正在开发中，敬请期待...
-          </v-card-text>
-
-          <v-divider></v-divider>
-
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" flat @click="showDialog = false">
-              关闭
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </div>
   </div>
 </template>
 
@@ -106,7 +83,7 @@ export default Vue.extend({
   data: function() {
     return {
       showDialog: false,
-      bottomNav: 'workbench',
+      bottomNav: '',
       teacher: Role.Teacher,
       schoolRun: Role.SchoolRun,
       parents: Role.Parents
@@ -122,14 +99,6 @@ export default Vue.extend({
       const that: any = this
       return that.isTourist ? '/account/tourist' : '/account/my'
     }
-  },
-  methods: {
-    _showDialog() {
-      this.showDialog = true
-      setTimeout(() => {
-        this.showDialog = false
-      }, 2000)
-    }
   }
 })
 </script>
@@ -137,9 +106,5 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .v-card-title {
   padding-top: 0px;
-}
-
-.in-developing {
-  color: #757575 !important;
 }
 </style>

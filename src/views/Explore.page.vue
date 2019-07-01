@@ -1,7 +1,7 @@
 <template>
   <div class="app-fill-height">
-    <Developing v-if="developing"></Developing>
-    <div v-else class="container pa-0">
+    <Developing v-if="false"></Developing>
+    <div v-if="false" class="container pa-0">
       <!-- <Header :showBack="false" title="发现"></Header> -->
       <v-list class="list">
         <v-list-tile class="elevation-1 mb-2 list-item">
@@ -63,6 +63,30 @@
         </v-list-tile>
       </v-list>
     </div>
+
+    <div class="text-xs-center">
+      <v-dialog v-model="showDevelopingDialog" width="500">
+        <v-card>
+          <v-card-title class="subheading">
+            <v-icon>info</v-icon>
+          </v-card-title>
+          <v-divider></v-divider>
+
+          <v-card-text>
+            此页面正在开发中，敬请期待...
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" flat @click="_onClose">
+              关闭
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
@@ -72,13 +96,20 @@ import Header from '../components/Header.component.vue'
 import { get } from 'vuex-pathify'
 import { developing } from '../store/global.paths'
 import Developing from '../components/Developing.component.vue'
+import { authModulePath, isTourist } from '@/store/auth/auth.paths'
 
 export default Vue.extend({
   name: 'explore',
+  data: function() {
+    return {
+      showDevelopingDialog: true
+    }
+  },
   computed: {
     ...get({
       developing
-    })
+    }),
+    ...get(authModulePath, { isTourist })
   },
   components: { Developing },
   created() {
@@ -87,6 +118,18 @@ export default Vue.extend({
   methods: {
     changeTitle() {
       document.title = '发现'
+    },
+    _onClose() {
+      this.showDevelopingDialog = false
+
+      const that: any = this
+      const route = that.isTourist
+        ? '/account/tourist'
+        : `/workbench/${that.roleRoute}`
+
+      this.$router.push({
+        path: route
+      })
     }
   }
 })
