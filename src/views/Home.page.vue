@@ -169,26 +169,26 @@ export default Vue.extend({
   name: 'home',
   components: { Article, Developing },
   created() {
-    const that: any = this
     this.changeTitle()
-
-    storeService.store.set(authModulePath + appIsLoading, true)
-
-    this.$router.push(
-      {
-        path: `/workbench/${that.roleRoute}`
-      },
-
-      () => {
-        storeService.store.set(authModulePath + appIsLoading, false)
-      },
-
-      () => {
-        storeService.store.set(authModulePath + appIsLoading, false)
-      }
-    )
+    this.goToWorkbench()
   },
   methods: {
+    goToWorkbench() {
+      const that: any = this
+
+      storeService.store.set(authModulePath + appIsLoading, true)
+      this.$router.push(
+        {
+          path: `/workbench/${that.roleRoute}`
+        },
+        () => {
+          storeService.store.set(authModulePath + appIsLoading, false)
+        },
+        () => {
+          storeService.store.set(authModulePath + appIsLoading, false)
+        }
+      )
+    },
     goToCreateArticle() {
       this.$router.push({
         name: 'create-article'

@@ -16,19 +16,19 @@ import './styles/main.scss'
 import VuePictureSwipe from 'vue-picture-swipe'
 Vue.component('vue-picture-swipe', VuePictureSwipe)
 
-// toggle when build
-// vconsole
-import VConsole from 'vconsole'
+// // toggle when build
+// // vconsole
+// import VConsole from 'vconsole'
 
 // set moment
 import moment from 'moment'
 import { storeService } from './services/store.service'
 moment.locale('zh-CN')
 
-// toggle when build
-if (process.env.NODE_ENV === 'production') {
-  var vConsole = new VConsole()
-}
+// // toggle when build
+// if (process.env.NODE_ENV === 'production') {
+//   var vConsole = new VConsole()
+// }
 
 Vue.config.productionTip = false
 
