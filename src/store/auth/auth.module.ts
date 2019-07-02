@@ -12,6 +12,7 @@ export interface AuthState {
   isTourist: boolean
   currentRole: RoleVo
   currentStudent: Student
+  isFirstLoading: boolean
 }
 
 const initialAuthState: AuthState = {
@@ -24,7 +25,8 @@ const initialAuthState: AuthState = {
   showTabs: false,
   isTourist: false,
   currentRole: {} as RoleVo,
-  currentStudent: {} as Student
+  currentStudent: {} as Student,
+  isFirstLoading: true
 }
 
 const autoMutations = make.mutations(initialAuthState)

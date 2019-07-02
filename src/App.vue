@@ -46,7 +46,8 @@ import {
   isBinded,
   appIsLoading,
   currentRole,
-  roleList
+  roleList,
+  isFirstLoading
 } from './store/auth/auth.paths'
 import { developing } from '@/store/global.paths'
 import {
@@ -173,12 +174,12 @@ export default Vue.extend({
       window.addEventListener('beforeunload', () => {
         const currentRole = that.currentRole as RoleVo
 
-        const partInitPath = '/?s='
+        const excludePathArr = ['/?s=', '/grade-input-edit']
 
         let path = this.$route.fullPath
 
-        // don't save init path
-        if (path.includes(partInitPath)) {
+        if (excludePathArr.includes(path)) {
+          // to home page
           path = '/'
         }
 
@@ -192,6 +193,8 @@ export default Vue.extend({
     checkBinding() {
       const that: any = this
 
+      storeService.store.set(authModulePath + isFirstLoading, true)
+
       userService
         .getUserInfo()
         .then(res => {
@@ -203,6 +206,8 @@ export default Vue.extend({
             this.$store
               .dispatch(authModulePath + loadUserInfoSuccessAction, userInfo)
               .then(() => {
+                storeService.store.set(authModulePath + isFirstLoading, false)
+
                 if (userInfo.roleVoList && userInfo.roleVoList.length > 0) {
                   // if binded
 

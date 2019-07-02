@@ -9,6 +9,7 @@ export const roleList = 'user@roleVoList'
 export const currentRole = 'currentRole'
 export const currentStudent = 'currentStudent'
 export const appIsLoading = 'appIsLoading'
+export const isFirstLoading = 'isFirstLoading'
 
 // custom paths
 export const showTabs = 'showTabs'

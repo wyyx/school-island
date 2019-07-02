@@ -2,7 +2,8 @@ import {
   authModulePath,
   isBinded,
   isTourist,
-  showTabs
+  showTabs,
+  isFirstLoading
 } from '@/store/auth/auth.paths'
 
 import router from './router'
@@ -15,8 +16,11 @@ export function authGuard(to, from, next) {
   const _isTourist = storeService.store.getters[authModulePath + isTourist]
   console.log('TCL: authGuard -> _isTourist', _isTourist)
 
+  const _isFirstLoading =
+    storeService.store.getters[authModulePath + isFirstLoading]
+
   // go to binding page if binded and not tourist
-  if (!_isBinded && !_isTourist) {
+  if (!_isBinded && !_isTourist && !_isFirstLoading) {
     return router.push({ name: 'binding' })
   }
 
