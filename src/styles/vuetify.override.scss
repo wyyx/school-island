@@ -46,6 +46,30 @@ table.v-table tbody td:first-child {
   margin-top: 0px !important;
 }
 
-// .grade-input-edit-page .comment-input .v-input__slot {
-//   border: 2px solid #e0e0e0;
-// }
+.create-archive-for-student-page {
+  .v-stepper__step {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 16px;
+  }
+
+  .v-stepper__label {
+    display: block !important;
+    font-size: 12px;
+  }
+
+  .v-stepper__header {
+    height: unset !important;
+  }
+
+  .v-stepper__content {
+    padding: 0px !important;
+  }
+
+  .v-stepper__wrapper {
+    .v-card {
+      margin: 16px !important;
+      box-sizing: border-box !important;
+    }
+  }
+}

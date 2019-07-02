@@ -10,6 +10,7 @@ import router from './router'
 import { storeService } from '@/services/store.service'
 
 export function authGuard(to, from, next) {
+  // open when build
   const _isBinded = storeService.store.getters[authModulePath + isBinded]
   console.log('TCL: authGuard -> _isBinded', _isBinded)
 

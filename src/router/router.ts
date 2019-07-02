@@ -220,6 +220,26 @@ export default new Router({
       props: route => ({ ...route.params, ...route.query })
     },
     {
+      path: '/create-archive-for-student',
+      name: 'create-archive-for-student',
+      // beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "create-archive-for-student" */ '../views/CreateArchiveForStudent.page.vue'
+        ),
+      props: route => ({ ...route.params, ...route.query })
+    },
+    {
+      path: '/create-archive-for-teacher',
+      name: 'create-archive-for-teacher',
+      // beforeEnter: authGuard,
+      component: () =>
+        import(
+          /* webpackChunkName: "create-archive-for-teacher" */ '../views/CreateArchiveForStudent.page.vue'
+        ),
+      props: route => ({ ...route.params, ...route.query })
+    },
+    {
       path: '*',
       redirect: '/'
     }

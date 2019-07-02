@@ -82,6 +82,7 @@ export default Vue.extend({
     })
   },
   created() {
+    // open when build
     this.showAppLoading()
 
     this.resolveInitUrl()
@@ -91,8 +92,14 @@ export default Vue.extend({
     this.checkBinding()
     // open when build
     this.loadSchoolInfo()
+    // // open when build
+    // this.saveCurrentState()
 
-    this.saveCurrentState()
+    setTimeout(() => {
+      this.$router.push({
+        name: 'create-archive-for-student'
+      })
+    }, 2000)
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {
