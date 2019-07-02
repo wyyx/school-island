@@ -119,3 +119,6 @@ export const mockStudentGradeListForStudent = [
     ]
   }
 ]
+
+export const ID_CARD_REG = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+export const PHONE_NUMBER_REG = /^1[3456789]\d{9}$/

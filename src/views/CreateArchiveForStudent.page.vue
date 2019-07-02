@@ -4,24 +4,26 @@
     <v-stepper v-model="step">
       <v-stepper-header class="px-2">
         <v-stepper-step :complete="step > 1" step="1">
-          基础信息
+          <div class="py-1">基础信息</div>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
         <v-stepper-step :complete="step > 2" step="2">
-          监护人信息
+          <div class="py-1">监护人信息</div>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
         <v-stepper-step step="3" :complete="step > 3">
-          学生信息
+          <div class="py-1">学生信息</div>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
-        <v-stepper-step step="4" :complete="step >= 4"> 完成</v-stepper-step>
+        <v-stepper-step step="4" :complete="step >= 4">
+          <div class="py-1">完成</div>
+        </v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
@@ -37,22 +39,67 @@
             <v-card-text>
               <v-layout column nowrap>
                 <v-flex>
-                  <v-text-field label="姓名"></v-text-field>
+                  <v-text-field
+                    label="姓名"
+                    :error-messages="
+                      validated ? errors.collect('studentName') : []
+                    "
+                    v-model="studentName"
+                    v-validate="'required'"
+                    name="studentName"
+                    data-vv-as="名字"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="身份证号"></v-text-field>
+                  <v-text-field
+                    label="学生身份证号码"
+                    persistent-hint
+                    :error-messages="
+                      validated ? errors.collect('studentIdCard') : []
+                    "
+                    v-model="studentIdCard"
+                    v-validate="{
+                      required: true,
+                      length: 18,
+                      regex: ID_CARD_REG
+                    }"
+                    name="studentIdCard"
+                    data-vv-as="身份证号"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="籍贯"></v-text-field>
+                  <v-text-field
+                    label="籍贯"
+                    :error-messages="
+                      validated ? errors.collect('birthplace') : []
+                    "
+                    v-model="birthplace"
+                    v-validate="'required'"
+                    name="birthplace"
+                    data-vv-as="籍贯"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="名族"></v-text-field>
+                  <v-text-field
+                    label="民族"
+                    :error-messages="validated ? errors.collect('nation') : []"
+                    v-model="nation"
+                    v-validate="'required'"
+                    name="nation"
+                    data-vv-as="民族"
+                  ></v-text-field>
                 </v-flex>
 
                 <v-flex>
                   <v-radio-group
                     label="是否为独生子女"
                     v-model="isOnlyChild"
+                    :error-messages="
+                      validated ? errors.collect('isOnlyChild') : []
+                    "
+                    v-validate="'required'"
+                    name="isOnlyChild"
+                    data-vv-as="是否为独生子女"
                     row
                   >
                     <v-radio label="是" :value="true"></v-radio>
@@ -65,28 +112,39 @@
                     label="是否为留守儿童"
                     v-model="isLeftoverChild"
                     row
+                    :hide-details="true"
+                    :error-messages="
+                      validated ? errors.collect('isLeftoverChild') : []
+                    "
+                    v-validate="'required'"
+                    name="isLeftoverChild"
+                    data-vv-as="是否为留守儿童"
                   >
                     <v-radio label="是" :value="true"></v-radio>
                     <v-radio label="否" :value="false"></v-radio>
                   </v-radio-group>
                 </v-flex>
 
-                <v-flex xs6>
+                <v-flex class="pt-4">
                   <v-textarea
                     rows="3"
                     outline
                     auto-grow
                     label="家庭地址"
-                    value=""
+                    :error-messages="validated ? errors.collect('address') : []"
+                    v-model="address"
+                    v-validate="'required'"
+                    name="address"
+                    data-vv-as="家庭地址"
                   ></v-textarea>
                 </v-flex>
               </v-layout>
             </v-card-text>
           </v-card>
 
-          <v-layout row wrap class="pa-3 text-xs-center">
+          <v-layout row wrap class="pa-4 text-xs-center">
             <v-flex xs6>
-              <v-btn color="primary" @click="step = 2">
+              <v-btn color="primary" @click="goToNextStepper">
                 下一步
               </v-btn>
             </v-flex>
@@ -106,10 +164,30 @@
             <v-card-text>
               <v-layout column nowrap>
                 <v-flex>
-                  <v-text-field label="姓名"></v-text-field>
+                  <v-text-field
+                    label="姓名"
+                    :error-messages="
+                      validated ? errors.collect('guardianName') : []
+                    "
+                    v-model="guardianName"
+                    v-validate="'required'"
+                    name="guardianName"
+                    data-vv-as="姓名"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="电话"></v-text-field>
+                  <v-text-field
+                    label="电话"
+                    :error-messages="validated ? errors.collect('phone') : []"
+                    v-model="phone"
+                    v-validate="{
+                      required: true,
+                      length: 11,
+                      regex: PHONE_NUMBER_REG
+                    }"
+                    name="phone"
+                    data-vv-as="电话"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
                   <v-select
@@ -118,25 +196,80 @@
                     label="证件类型"
                   ></v-select>
                 </v-flex>
-
                 <v-flex>
                   <v-text-field
                     v-if="certificateType === '其他'"
                     label="证件类型名称"
+                    :error-messages="
+                      validated ? errors.collect('certificateTypeName') : []
+                    "
+                    v-model="certificateTypeName"
+                    v-validate="'required'"
+                    name="certificateTypeName"
+                    data-vv-as="证件类型名称"
                   ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="证件号码"></v-text-field>
+                  <v-text-field
+                    label="证件号码"
+                    :error-messages="
+                      validated ? errors.collect('certificateNumber') : []
+                    "
+                    v-model="certificateNumber"
+                    v-validate="
+                      certificateType === '身份证'
+                        ? {
+                            required: true,
+                            length: 18,
+                            regex: ID_CARD_REG
+                          }
+                        : { required: true }
+                    "
+                    name="certificateNumber"
+                    data-vv-as="证件号码"
+                  ></v-text-field>
                 </v-flex>
 
                 <v-flex>
-                  <v-select :items="[]" label="学历"></v-select>
+                  <v-select
+                    :items="educationBackgroundList"
+                    label="学历"
+                    :error-messages="
+                      validated ? errors.collect('educationBackground') : []
+                    "
+                    v-model="educationBackground"
+                    v-validate="'required'"
+                    name="educationBackground"
+                    data-vv-as="学历"
+                  ></v-select>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="职业"></v-text-field>
+                  <v-text-field
+                    label="职业"
+                    :error-messages="
+                      validated ? errors.collect('profession') : []
+                    "
+                    v-model="profession"
+                    v-validate="'required'"
+                    name="profession"
+                    data-vv-as="职业"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-select :items="[]" label="与学生的关系"></v-select>
+                  <v-select
+                    label="与学生的关系"
+                    v-model="relation"
+                    :items="relations"
+                    item-text="text"
+                    item-value="value"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="relation"
+                    data-vv-as="与学生的关系"
+                    :error-messages="
+                      validated && relation === 0 ? ['请选择与学生的关系'] : []
+                    "
+                  ></v-select>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -153,37 +286,112 @@
             <v-card-text>
               <v-layout column nowrap>
                 <v-flex>
-                  <v-text-field label="姓名"></v-text-field>
+                  <v-text-field
+                    label="姓名"
+                    :error-messages="
+                      validated ? errors.collect('guardianName2') : []
+                    "
+                    v-model="guardianName2"
+                    v-validate="'required'"
+                    name="guardianName2"
+                    data-vv-as="姓名"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="电话"></v-text-field>
+                  <v-text-field
+                    label="电话"
+                    :error-messages="validated ? errors.collect('phone2') : []"
+                    v-model="phone2"
+                    v-validate="{
+                      required: true,
+                      length: 11,
+                      regex: PHONE_NUMBER_REG
+                    }"
+                    name="phone2"
+                    data-vv-as="电话"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
                   <v-select
-                    v-model="certificateType"
+                    v-model="certificateType2"
                     :items="['身份证', '其他']"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
-
                 <v-flex>
                   <v-text-field
-                    v-if="certificateType === '其他'"
+                    v-if="certificateType2 === '其他'"
                     label="证件类型名称"
+                    :error-messages="
+                      validated ? errors.collect('certificateTypeName2') : []
+                    "
+                    v-model="certificateTypeName2"
+                    v-validate="'required'"
+                    name="certificateTypeName2"
+                    data-vv-as="证件类型名称"
                   ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="证件号码"></v-text-field>
+                  <v-text-field
+                    label="证件号码"
+                    :error-messages="
+                      validated ? errors.collect('certificateNumber2') : []
+                    "
+                    v-model="certificateNumber2"
+                    v-validate="
+                      certificateType === '身份证'
+                        ? {
+                            required: true,
+                            length: 18,
+                            regex: ID_CARD_REG
+                          }
+                        : { required: true }
+                    "
+                    name="certificateNumber2"
+                    data-vv-as="证件号码"
+                  ></v-text-field>
                 </v-flex>
 
                 <v-flex>
-                  <v-select :items="[]" label="学历"></v-select>
+                  <v-select
+                    :items="educationBackgroundList"
+                    label="学历"
+                    :error-messages="
+                      validated ? errors.collect('educationBackground2') : []
+                    "
+                    v-model="educationBackground2"
+                    v-validate="'required'"
+                    name="educationBackground2"
+                    data-vv-as="学历"
+                  ></v-select>
                 </v-flex>
                 <v-flex>
-                  <v-text-field label="职业"></v-text-field>
+                  <v-text-field
+                    label="职业"
+                    :error-messages="
+                      validated ? errors.collect('profession2') : []
+                    "
+                    v-model="profession2"
+                    v-validate="'required'"
+                    name="profession2"
+                    data-vv-as="职业"
+                  ></v-text-field>
                 </v-flex>
                 <v-flex>
-                  <v-select :items="[]" label="与学生的关系"></v-select>
+                  <v-select
+                    label="与学生的关系"
+                    v-model="relation2"
+                    :items="relations"
+                    item-text="text"
+                    item-value="value"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="relation2"
+                    data-vv-as="与学生的关系"
+                    :error-messages="
+                      validated && relation2 === 0 ? ['请选择与学生的关系'] : []
+                    "
+                  ></v-select>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -243,7 +451,7 @@
             </v-card-text>
           </v-card>
 
-          <v-layout row wrap class="text-xs-center pa-3">
+          <v-layout row wrap class="text-xs-center pa-4">
             <v-flex>
               <v-btn flat @click="step = 1">
                 上一步
@@ -251,7 +459,7 @@
             </v-flex>
 
             <v-flex>
-              <v-btn color="primary" @click="step = 3">
+              <v-btn color="primary" @click="goToNextStepper">
                 下一步
               </v-btn>
             </v-flex>
@@ -389,7 +597,7 @@
             </v-card-text>
           </v-card>
 
-          <v-layout row wrap class="text-xs-center">
+          <v-layout row wrap class="text-xs-center pa-4">
             <v-flex>
               <v-btn flat @click="step = 2">
                 上一步
@@ -402,12 +610,22 @@
           </v-layout>
         </v-stepper-content>
 
-        <!-- success step -->
+        <!-- 4 step 完成 -->
         <v-stepper-content step="4">
-          <v-card class="mb-4" color="grey lighten-1" height="200px"></v-card>
-          <v-btn color="primary" @click="goToHomePage">
-            回到首页
-          </v-btn>
+          <v-card flat class="mb-4" height="200px">
+            <div class="app-flex app-h-center app-v-center app-fill-height">
+              <div class="text-xs-center">
+                <v-icon color="success" size="56">check_circle_outline</v-icon>
+                <div class="title app-v-center">恭喜您，终于完成了！</div>
+              </div>
+            </div>
+          </v-card>
+
+          <div class="text-xs-center pa-4">
+            <v-btn color="primary" @click="goToHomePage">
+              回到首页
+            </v-btn>
+          </div>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
@@ -417,16 +635,71 @@
 <script lang="ts">
 import Vue from 'vue'
 import Header from '@/components/Header.component.vue'
+import { ID_CARD_REG, PHONE_NUMBER_REG } from '../configs/config'
 
 export default Vue.extend({
   components: { Header },
   data: function() {
     return {
-      step: 1,
+      ID_CARD_REG: ID_CARD_REG,
+      PHONE_NUMBER_REG: PHONE_NUMBER_REG,
+      step: 2,
+      validated: false,
+      // 学生基础信息
+      isOnlyChild: null,
+      isLeftoverChild: null,
+      studentName: '',
+      studentIdCard: '',
+      birthplace: '',
+      nation: '',
+      address: '',
+      // 第一监护人
+      relations: [
+        {
+          value: 1,
+          text: '爸爸'
+        },
+        {
+          value: 2,
+          text: '妈妈'
+        },
+        {
+          value: 3,
+          text: '爷爷'
+        },
+        {
+          value: 4,
+          text: '奶奶'
+        },
+        {
+          value: 5,
+          text: '外公'
+        },
+        {
+          value: 6,
+          text: '外婆'
+        }
+      ],
       showSecondGuardian: false,
-      isOnlyChild: false,
-      isLeftoverChild: false,
-      certificateType: '身份证'
+      guardianName: '',
+      phone: '',
+      certificateTypeList: ['身份证', '其他'],
+      certificateType: '身份证',
+      certificateTypeName: '',
+      certificateNumber: '',
+      educationBackgroundList: ['大专以下', '大专', '本科', '硕士', '博士'],
+      educationBackground: '',
+      profession: '',
+      relation: 0,
+      // 第二监护人
+      guardianName2: '',
+      phone2: '',
+      certificateType2: '身份证',
+      certificateTypeName2: '',
+      certificateNumber2: '',
+      educationBackground2: '',
+      profession2: '',
+      relation2: 0
     }
   },
   methods: {
@@ -436,6 +709,16 @@ export default Vue.extend({
     goToHomePage() {
       this.$router.push({
         name: 'home'
+      })
+    },
+    goToNextStepper() {
+      this.$validator.validate().then(valid => {
+        console.log('TCL: submit -> valid', valid)
+        this.validated = true
+
+        if (valid) {
+          this.step = this.step + 1
+        }
       })
     }
   }
