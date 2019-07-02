@@ -152,7 +152,7 @@
         </v-stepper-content>
 
         <!-- 2 stepper 监护人信息 -->
-        <v-stepper-content step="2">
+        <v-stepper-content step="2" v-if="step >= 2">
           <!-- 第一监护人 -->
           <v-card class="mb-4">
             <v-card-title primary-title>
@@ -274,6 +274,18 @@
               </v-layout>
             </v-card-text>
           </v-card>
+
+          <!-- 添加第二监护人 btn -->
+          <div class="px-3 app-flex">
+            <v-btn small fab @click="showSecondGuardian = !showSecondGuardian">
+              <v-icon color="primary" v-if="showSecondGuardian">remove</v-icon>
+              <v-icon color="primary" v-else>add</v-icon>
+            </v-btn>
+            <div class="app-both-center pr-2">
+              <span v-if="showSecondGuardian">移除第二监护人</span>
+              <span v-else>添加第二监护人</span>
+            </div>
+          </div>
 
           <!-- 第二监护人 -->
           <v-card class="mb-4" v-if="showSecondGuardian">
@@ -397,18 +409,6 @@
             </v-card-text>
           </v-card>
 
-          <!-- 添加第二监护人 btn -->
-          <div class="px-3 app-flex">
-            <v-btn small fab @click="showSecondGuardian = !showSecondGuardian">
-              <v-icon color="primary" v-if="showSecondGuardian">remove</v-icon>
-              <v-icon color="primary" v-else>add</v-icon>
-            </v-btn>
-            <div class="app-both-center pr-2">
-              <span v-if="showSecondGuardian">移除第二监护人</span>
-              <span v-else>添加第二监护人</span>
-            </div>
-          </div>
-
           <!-- 家庭扩展信息 -->
           <v-card class="mb-4">
             <v-card-title primary-title>
@@ -421,30 +421,119 @@
               <v-layout column nowrap>
                 <v-flex class="py-2">
                   <h3>1. 您的孩子上下学主要由谁接送？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <v-select
+                    v-model="pickupPerson"
+                    :items="pickupPersonList"
+                    item-text="text"
+                    item-value="value"
+                    :return-object="true"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="pickupPerson"
+                    data-vv-as="接送人"
+                    :error-messages="
+                      validated && pickupPerson === 0
+                        ? ['主要接送人是必须的']
+                        : []
+                    "
+                  ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
                   <h3>2. 您的家庭结构？（现居住状况）</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <v-select
+                    v-model="familyStructure"
+                    :items="familyStructureList"
+                    item-text="text"
+                    item-value="value"
+                    :return-object="true"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="familyStructure"
+                    data-vv-as="家庭结构"
+                    :error-messages="
+                      validated && familyStructure === 0
+                        ? ['家庭结构是必须的']
+                        : []
+                    "
+                  ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
                   <h3>3. 您的家庭有阅读习惯吗？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <v-select
+                    v-model="readingBehaviour"
+                    :items="readingBehaviourList"
+                    item-text="text"
+                    item-value="value"
+                    :return-object="true"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="readingBehaviour"
+                    data-vv-as="阅读习惯"
+                    :error-messages="
+                      validated && readingBehaviour === 0
+                        ? ['阅读习惯是必须的']
+                        : []
+                    "
+                  ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
                   <h3>4. 父亲辅导或陪护孩子的时间？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <v-select
+                    v-model="fatherCompanyTime"
+                    :items="fatherCompanyTimeList"
+                    item-text="text"
+                    item-value="value"
+                    :return-object="true"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="fatherCompanyTime"
+                    data-vv-as="父亲陪伴时间"
+                    :error-messages="
+                      validated && fatherCompanyTime === 0
+                        ? ['父亲陪伴时间是必须的']
+                        : []
+                    "
+                  ></v-select>
                 </v-flex>
+
+                <v-flex>
+                  <v-radio-group
+                    label="是否愿意加入家委会"
+                    v-model="isWillingJoinInParentsCommittee"
+                    :error-messages="
+                      validated
+                        ? errors.collect('isWillingJoinInParentsCommittee')
+                        : []
+                    "
+                    v-validate="'required'"
+                    name="isWillingJoinInParentsCommittee"
+                    data-vv-as="是否愿意加入家委会"
+                    row
+                  >
+                    <v-radio label="是" :value="true"></v-radio>
+                    <v-radio label="否" :value="false"></v-radio>
+                  </v-radio-group>
+                </v-flex>
+
                 <v-flex>
                   <h3 class="pb-3">
-                    5. 如果学校或班级需要您的帮助，您能提供哪些优势资源？
+                    6. 如果学校或班级需要您的帮助，您能提供哪些优势资源？
                   </h3>
                   <v-textarea
+                    v-model="guardianResource"
                     class="guardian-resource"
                     outline
                     rows="3"
                     auto-grow
                     placeholder="例：广告资源、教育资源、医院资源、农家乐资源、会务资源、旅游资源......  类型不限,只要有优势都可以。"
+                    v-validate="'required'"
+                    name="guardianResource"
+                    data-vv-as="可提供的优势资源"
+                    :error-messages="
+                      validated && guardianResource === ''
+                        ? ['可提供的优势资源是必须的']
+                        : []
+                    "
                   ></v-textarea>
                 </v-flex>
               </v-layout>
@@ -467,7 +556,7 @@
         </v-stepper-content>
 
         <!-- 3 stepper 学生信息 -->
-        <v-stepper-content step="3">
+        <v-stepper-content step="3" v-if="step >= 3">
           <!-- 学生信息 -->
           <v-card class="mb-4">
             <v-card-title primary-title>
@@ -603,7 +692,7 @@
                 上一步
               </v-btn>
             </v-flex>
-            <v-btn color="primary" @click="step = 4">
+            <v-btn color="primary" @click="submit">
               提交
             </v-btn>
             <v-flex> </v-flex>
@@ -611,7 +700,7 @@
         </v-stepper-content>
 
         <!-- 4 step 完成 -->
-        <v-stepper-content step="4">
+        <v-stepper-content step="4" v-if="step >= 4">
           <v-card flat class="mb-4" height="200px">
             <div class="app-flex app-h-center app-v-center app-fill-height">
               <div class="text-xs-center">
@@ -687,7 +776,28 @@ export default Vue.extend({
       certificateType: '身份证',
       certificateTypeName: '',
       certificateNumber: '',
-      educationBackgroundList: ['大专以下', '大专', '本科', '硕士', '博士'],
+      educationBackgroundList: [
+        {
+          value: 1,
+          text: '大专以下'
+        },
+        {
+          value: 2,
+          text: '大专'
+        },
+        {
+          value: 3,
+          text: '本科'
+        },
+        {
+          value: 4,
+          text: '硕士'
+        },
+        {
+          value: 5,
+          text: '博士'
+        }
+      ],
       educationBackground: '',
       profession: '',
       relation: 0,
@@ -699,7 +809,120 @@ export default Vue.extend({
       certificateNumber2: '',
       educationBackground2: '',
       profession2: '',
-      relation2: 0
+      relation2: 0,
+      // family extra info
+      pickupPersonList: [
+        {
+          value: 1,
+          text: '爸爸'
+        },
+        {
+          value: 2,
+          text: '妈妈'
+        },
+        {
+          value: 3,
+          text: '爷爷'
+        },
+        {
+          value: 4,
+          text: '奶奶'
+        },
+        {
+          value: 5,
+          text: '外公'
+        },
+        {
+          value: 6,
+          text: '外婆'
+        },
+        {
+          value: 7,
+          text: '其他'
+        }
+      ],
+      pickupPerson: 0,
+      familyStructureList: [
+        {
+          value: 1,
+          text: '三代同堂（父母与子女）'
+        },
+        {
+          value: 2,
+          text: '核心家庭（自己与子女）'
+        },
+        {
+          value: 3,
+          text: '其他类型'
+        }
+      ],
+      familyStructure: 0,
+      readingBehaviourList: [
+        {
+          value: 1,
+          text: '每天阅读'
+        },
+        {
+          value: 2,
+          text: '每周两、三次'
+        },
+        {
+          value: 3,
+          text: '偶尔'
+        },
+        {
+          value: 4,
+          text: '基本不读'
+        }
+      ],
+      readingBehaviour: 0,
+      fatherCompanyTimeList: [
+        {
+          value: 1,
+          text: '每天小于10分钟'
+        },
+        {
+          value: 2,
+          text: '每天大于1个小时'
+        },
+        {
+          value: 3,
+          text: '每周1-2小时'
+        },
+        {
+          value: 4,
+          text: '每月1-2小时'
+        }
+      ],
+      fatherCompanyTime: 0,
+      guardianResource: '',
+      isWillingJoinInParentsCommittee: null,
+      parentsCommitteeRoleList: [
+        {
+          value: 1,
+          text: '会长'
+        },
+        {
+          value: 2,
+          text: '副会长'
+        },
+        {
+          value: 3,
+          text: '采购家委'
+        },
+        {
+          value: 4,
+          text: '财务家委'
+        },
+        {
+          value: 5,
+          text: '文娱家委'
+        },
+        {
+          value: 6,
+          text: '信息技术'
+        }
+      ]
     }
   },
   methods: {
@@ -713,11 +936,22 @@ export default Vue.extend({
     },
     goToNextStepper() {
       this.$validator.validate().then(valid => {
-        console.log('TCL: submit -> valid', valid)
+        console.log('TCL: goToNextStepper -> valid', valid)
         this.validated = true
 
         if (valid) {
           this.step = this.step + 1
+          this.validated = false
+        }
+      })
+    },
+    submit() {
+      this.$validator.validate().then(valid => {
+        console.log('TCL: valid', valid)
+        this.validated = true
+
+        if (valid) {
+          console.log('post backend api')
         }
       })
     }
