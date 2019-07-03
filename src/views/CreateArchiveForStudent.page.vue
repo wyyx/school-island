@@ -3,15 +3,17 @@
     <Header title="建立学生档案" @back="goBack"></Header>
 
     <v-stepper v-model="step">
-      <v-stepper-header class="px-2">
+      <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1">
-          <div class="py-1">基础信息</div>
+          <!-- <div class="py-1">基础信息</div> -->
+          基础信息
         </v-stepper-step>
 
         <v-divider></v-divider>
 
         <v-stepper-step :complete="step > 2" step="2">
-          <div class="py-1">监护人信息</div>
+          <!-- <div class="py-1">监护人信息</div> -->
+          监护人信息
         </v-stepper-step>
 
         <v-divider></v-divider>
@@ -146,8 +148,8 @@
           </v-card>
 
           <v-layout row wrap class="pa-4 text-xs-center">
-            <v-flex xs6>
-              <v-btn color="primary" @click="goToNextStepper">
+            <v-flex xs6 class="px-2">
+              <v-btn color="primary" block large @click="goToNextStepper">
                 下一步
               </v-btn>
             </v-flex>
@@ -195,7 +197,7 @@
                 <v-flex>
                   <v-select
                     v-model="certificateType"
-                    :items="['身份证', '其他']"
+                    :items="certificateTypeList"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
@@ -329,7 +331,7 @@
                 <v-flex>
                   <v-select
                     v-model="certificateType2"
-                    :items="['身份证', '其他']"
+                    :items="certificateTypeList"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
@@ -422,7 +424,7 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>1. 您的孩子上下学主要由谁接送？</h3>
                   <v-select
                     v-model="pickupPerson"
@@ -438,7 +440,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>2. 您的家庭结构？（现居住状况）</h3>
                   <v-select
                     v-model="familyStructure"
@@ -454,7 +456,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>3. 您的家庭有阅读习惯吗？</h3>
                   <v-select
                     v-model="readingBehaviour"
@@ -470,7 +472,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>4. 父亲辅导或陪护孩子的时间？</h3>
                   <v-select
                     v-model="fatherCompanyTime"
@@ -551,14 +553,14 @@
           </v-card>
 
           <v-layout row wrap class="text-xs-center pa-4">
-            <v-flex>
-              <v-btn flat @click="step = 1">
+            <v-flex class="px-2">
+              <v-btn flat block large @click="step = 1">
                 上一步
               </v-btn>
             </v-flex>
 
-            <v-flex>
-              <v-btn color="primary" @click="goToNextStepper">
+            <v-flex class="px-2">
+              <v-btn block color="primary" large @click="goToNextStepper">
                 下一步
               </v-btn>
             </v-flex>
@@ -701,7 +703,7 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>1. 孩子性格怎样？</h3>
                   <v-select
                     v-model="personality"
@@ -714,7 +716,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>2. 孩子会主动收拾玩具，并归类放好吗?</h3>
                   <v-select
                     v-model="doUp"
@@ -727,7 +729,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>3. 家庭作业完成时间？</h3>
                   <v-select
                     v-model="homeworkFinishTime"
@@ -740,7 +742,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>4. 课外主要去培训机构补习什么？</h3>
                   <v-select
                     class="app-chips"
@@ -761,7 +763,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>5. 孩子接触电子设备时间（电视、手机、平板、）？</h3>
                   <v-select
                     v-model="touchElectronicDeviceTime"
@@ -776,7 +778,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3 class="pb-3">6. 曾上过的幼儿园名称？</h3>
                   <v-textarea
                     v-model="kindergarten"
@@ -787,7 +789,7 @@
                     placeholder="输入全称，例如：成都市天府新区红太阳幼儿园"
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>7. 孩子是否在校吃午餐？</h3>
                   <v-radio-group
                     v-model="isEatLunchAtSchool"
@@ -803,7 +805,7 @@
                     <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3>8. 孩子曾患过哪种疾病？</h3>
                   <v-select
                     class="app-chips"
@@ -822,7 +824,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3 class="pb-3">9. 孩子对哪些食物、药物过敏？</h3>
                   <v-textarea
                     v-model="allergy"
@@ -836,7 +838,7 @@
                     data-vv-as="此选项"
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3 class="pb-3">10. 孩子兴趣、爱好、特长？有哪些不足？</h3>
                   <v-textarea
                     v-model="speciality"
@@ -852,7 +854,7 @@
                     data-vv-as="此选项"
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-2">
+                <v-flex class="py-4">
                   <h3 class="pb-3">11. 您对孩子教育期望？</h3>
                   <v-textarea
                     v-model="expectation"
@@ -873,15 +875,16 @@
           </v-card>
 
           <v-layout row wrap class="text-xs-center pa-4">
-            <v-flex>
-              <v-btn flat @click="step = 2">
+            <v-flex class="px-2">
+              <v-btn flat block large @click="step = 2">
                 上一步
               </v-btn>
             </v-flex>
-            <v-btn color="primary" @click="submit">
-              提交
-            </v-btn>
-            <v-flex> </v-flex>
+            <v-flex class="px-2">
+              <v-btn color="primary" block large @click="submit">
+                提交
+              </v-btn>
+            </v-flex>
           </v-layout>
         </v-stepper-content>
 
@@ -1294,7 +1297,7 @@ export default Vue.extend({
           text: '其他'
         }
       ],
-      trainingSubject: [] as string[] | string,
+      trainingSubject: [] as string[],
       touchElectronicDeviceTimeList: [
         {
           value: 1,
@@ -1362,7 +1365,7 @@ export default Vue.extend({
           text: '其他'
         }
       ],
-      disease: [] as string[] | string,
+      disease: [] as string[],
       allergy: '',
       speciality: '',
       expectation: '',
@@ -1454,6 +1457,15 @@ export default Vue.extend({
       this.guardianName = firstGuardian.parentsName
       this.phone = firstGuardian.phone
       this.certificateType = firstGuardian.papersType
+
+      // 新增证件类型
+      if (
+        !this.certificateTypeList.includes(firstGuardian.papersType) &&
+        firstGuardian.papersType
+      ) {
+        this.certificateTypeList.push(firstGuardian.papersType)
+      }
+
       this.certificateTypeName = firstGuardian.papersType
       this.certificateNumber = firstGuardian.parentsIdCard
       this.educationBackground = firstGuardian.educationDiploma
@@ -1488,11 +1500,11 @@ export default Vue.extend({
       this.personality = firstStudentInfo.characterChild
       this.doUp = firstStudentInfo.cleanToy
       this.homeworkFinishTime = firstStudentInfo.homeworkFinish
-      this.trainingSubject = firstStudentInfo.extraTutoringContent
+      this.trainingSubject = firstStudentInfo.extraTutoringContent || []
       this.touchElectronicDeviceTime = firstStudentInfo.touchPhoneTime
       this.kindergarten = firstStudentInfo.kindergarten
       this.isEatLunchAtSchool = firstStudentInfo.lunchAtSchool
-      this.disease = firstStudentInfo.sickenIllness
+      this.disease = firstStudentInfo.sickenIllness || []
       this.allergy = firstStudentInfo.foodAndMedicineAllergy
       this.speciality = firstStudentInfo.trait
       this.expectation = firstStudentInfo.hope
@@ -1565,12 +1577,11 @@ export default Vue.extend({
           params.characterChild = this.personality
           params.cleanToy = this.doUp
           params.homeworkFinish = this.homeworkFinishTime
-          params.extraTutoringContent = (this
-            .trainingSubject as string[]).join()
+          params.extraTutoringContent = this.trainingSubject
           params.touchPhoneTime = this.touchElectronicDeviceTime
           params.kindergarten = this.kindergarten
           params.lunchAtSchool = this.isEatLunchAtSchool
-          params.sickenIllness = (this.disease as string[]).join()
+          params.sickenIllness = this.disease
           params.foodAndMedicineAllergy = this.allergy
           params.trait = this.speciality
           params.hope = this.expectation

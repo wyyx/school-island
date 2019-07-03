@@ -16,7 +16,7 @@ export interface AddStudentAndParentsInfoCollectionParams {
   childName: string
   cleanToy: number
   committeePosition: number
-  extraTutoringContent: string[] | string
+  extraTutoringContent: string[]
   eyesight: number
   familyConstruction: number
   fatherAccompany: number
@@ -38,7 +38,7 @@ export interface AddStudentAndParentsInfoCollectionParams {
   readHabit: number
   resource: string
   rightEye: string
-  sickenIllness: string[] | string
+  sickenIllness: string[]
   sleepTime: number
   stayHomeChild: number
   touchPhoneTime: number

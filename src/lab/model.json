@@ -6,84 +6,18 @@
         {
           "studentType": 2,
           "childName": "陈佳依",
-          "childIdCard": "510107201008180263",
-          "nativePlace": "四川省成都市",
-          "nation": "汉族",
-          "onlyChild": 1,
-          "stayHomeChild": 1,
-          "homeAddress": "天府四街",
-          "weight": 30.0,
-          "eyesight": 1,
-          "leftEye": "4.1",
-          "sleepTime": 1,
-          "getUpTime": 1,
-          "kindergarten": "红红火火幼儿园",
-          "characterChild": 1,
-          "homeworkFinish": 1,
-          "extraTutoringContent": [
-            "体育",
-            "书法",
-            "编程",
-            "语文",
-            "美术",
-            "舞蹈",
-            "其他"
-          ],
-          "touchPhoneTime": 1,
-          "lunchAtSchool": 1,
-          "sickenIllness": ["水痘", "皮肤病"],
-          "foodAndMedicineAllergy": "吃饭",
-          "trait": "",
-          "hope": "希望越来越好",
-          "majorConvoy": 3,
-          "familyConstruction": 1,
-          "readHabit": 1,
-          "fatherAccompany": 1,
-          "resource": "",
-          "parentCommittee": 1,
-          "committeePosition": 1,
-          "parents": [
-            {
-              "parentsName": "郭嵩阳",
-              "phone": "18582730524",
-              "papersType": "身份证",
-              "parentsIdCard": "51382119960524901X",
-              "educationDiploma": 1,
-              "professionPosition": "java开发高级攻城狮",
-              "withStudentRelation": 1
-            }
-          ]
+          "childIdCard": "510107201008180263"
+        },
+        {
+          "studentType": 1,
+          "childName": "杨紫涵",
+          "childIdCard": "510122201001110143"
         }
       ]
     },
     {
       "userType": 2,
-      "entity": {
-        "name": "何燕妮",
-        "idCard": "510723199501104080",
-        "nativePlace": "四川程度",
-        "nation": "熊人族",
-        "politics": 1,
-        "maritalStatus": 1,
-        "homeAddress": "成都最豪华的酒店",
-        "phone": "18582730524",
-        "emergencyContact": "警察",
-        "emergencyContactPhone": "11012011911",
-        "firstEducationDiploma": 3,
-        "firstEducationMajor": "理学",
-        "firstEducationSchool": "北京大学",
-        "highestEducationDiploma": 0,
-        "graduateTime": "2019-07-01T00:00:00.000+0800",
-        "workTime": "2019-07-01T00:00:00.000+0800",
-        "mandarinLevel": 1,
-        "englishLevel": 1,
-        "computerLevel": 1,
-        "teachingSubject": "语文",
-        "workRecord": "没有",
-        "professionalTitle": 1,
-        "beGoodAt": "擅长吃",
-        "selfIntroduction": "我很6"
-      }
+      "entity": [{ "name": "何燕妮", "idCard": "510723199501104080" }]
     }
   ],
   "status": "OK",
