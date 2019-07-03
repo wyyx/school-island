@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper create-archive-for-student-page">
     <Header title="建立学生档案" @back="goBack"></Header>
+
     <v-stepper v-model="step">
       <v-stepper-header class="px-2">
         <v-stepper-step :complete="step > 1" step="1">
@@ -104,8 +105,8 @@
                     data-vv-as="是否为独生子女"
                     row
                   >
-                    <v-radio label="是" :value="true"></v-radio>
-                    <v-radio label="否" :value="false"></v-radio>
+                    <v-radio label="是" :value="1"></v-radio>
+                    <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                 </v-flex>
 
@@ -122,8 +123,8 @@
                     name="isLeftoverChild"
                     data-vv-as="是否为留守儿童"
                   >
-                    <v-radio label="是" :value="true"></v-radio>
-                    <v-radio label="否" :value="false"></v-radio>
+                    <v-radio label="是" :value="1"></v-radio>
+                    <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                 </v-flex>
 
@@ -508,8 +509,8 @@
                     data-vv-as="是否愿意加入家委会"
                     row
                   >
-                    <v-radio label="是" :value="true"></v-radio>
-                    <v-radio label="否" :value="false"></v-radio>
+                    <v-radio label="是" :value="1"></v-radio>
+                    <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                   <v-select
                     v-if="isWillingJoinInParentsCommittee"
@@ -588,6 +589,10 @@
                     type="number"
                     label="身高"
                     suffix="厘米"
+                    v-validate="'required'"
+                    name="height"
+                    data-vv-as="身高"
+                    :error-messages="validated ? errors.collect('height') : []"
                   ></v-text-field>
                 </v-flex>
                 <v-flex>
@@ -596,6 +601,10 @@
                     type="number"
                     label="体重"
                     suffix="公斤"
+                    v-validate="'required'"
+                    name="weight"
+                    data-vv-as="体重"
+                    :error-messages="validated ? errors.collect('weight') : []"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -606,6 +615,12 @@
                     v-model="visionLevel"
                     :items="visionLevelList"
                     label="视力"
+                    v-validate="'required'"
+                    name="visionLevel"
+                    data-vv-as="视力"
+                    :error-messages="
+                      validated && visionLevel === 0 ? ['视力是必须的'] : []
+                    "
                   ></v-select>
                 </v-flex>
               </v-layout>
@@ -617,6 +632,14 @@
                       v-model="visionScoreLeftEye"
                       :items="visionScoreList"
                       label="左眼/五分记法"
+                      v-validate="'required'"
+                      name="visionScoreLeftEye"
+                      data-vv-as="左眼视力"
+                      :error-messages="
+                        validated && visionScoreLeftEye === ''
+                          ? ['左眼视力是必须的']
+                          : []
+                      "
                     ></v-select>
                   </v-flex>
                 </v-flex>
@@ -626,6 +649,14 @@
                       v-model="visionScoreRightEye"
                       :items="visionScoreList"
                       label="右眼/五分记法"
+                      v-validate="'required'"
+                      name="visionScoreRightEye"
+                      data-vv-as="右眼视力"
+                      :error-messages="
+                        validated && visionScoreRightEye === ''
+                          ? ['右眼视力是必须的']
+                          : []
+                      "
                     ></v-select>
                   </v-flex>
                 </v-flex>
@@ -638,6 +669,14 @@
                       v-model="sleepAtTime"
                       :items="sleepAtTimeList"
                       label="睡觉"
+                      v-validate="'required'"
+                      name="sleepAtTime"
+                      data-vv-as="睡觉时间"
+                      :error-messages="
+                        validated && sleepAtTime === 0
+                          ? ['睡觉时间是必须的']
+                          : []
+                      "
                     ></v-select>
                   </v-flex>
                 </v-flex>
@@ -647,6 +686,14 @@
                       v-model="getUpAtTime"
                       :items="getUpAtTimeList"
                       label="起床"
+                      v-validate="'required'"
+                      name="getUpAtTime"
+                      data-vv-as="起床时间"
+                      :error-messages="
+                        validated && getUpAtTime === 0
+                          ? ['起床时间是必须的']
+                          : []
+                      "
                     ></v-select>
                   </v-flex>
                 </v-flex>
@@ -670,6 +717,11 @@
                     v-model="personality"
                     :items="personalityList"
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="personality"
+                    :error-messages="
+                      validated && personality === 0 ? ['此选项是必须的'] : []
+                    "
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
@@ -678,6 +730,11 @@
                     v-model="doUp"
                     :items="doUpList"
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="doUp"
+                    :error-messages="
+                      validated && doUp === 0 ? ['此选项是必须的'] : []
+                    "
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
@@ -686,6 +743,13 @@
                     v-model="homeworkFinishTime"
                     :items="homeworkFinishTimeList"
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="homeworkFinishTime"
+                    :error-messages="
+                      validated && homeworkFinishTime === 0
+                        ? ['此选项是必须的']
+                        : []
+                    "
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
@@ -700,6 +764,13 @@
                     multiple
                     deletable-chips
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="trainingSubject"
+                    :error-messages="
+                      validated && trainingSubject.length < 1
+                        ? ['此选项是必须的']
+                        : []
+                    "
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
@@ -708,6 +779,13 @@
                     v-model="touchElectronicDeviceTime"
                     :items="touchElectronicDeviceTimeList"
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="touchElectronicDeviceTime"
+                    :error-messages="
+                      validated && touchElectronicDeviceTime === 0
+                        ? ['此选项是必须的']
+                        : []
+                    "
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
@@ -732,8 +810,8 @@
                     data-vv-as="是否在校吃午餐"
                     row
                   >
-                    <v-radio label="是" :value="true"></v-radio>
-                    <v-radio label="否" :value="false"></v-radio>
+                    <v-radio label="是" :value="1"></v-radio>
+                    <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                 </v-flex>
                 <v-flex class="py-2">
@@ -748,6 +826,11 @@
                     multiple
                     deletable-chips
                     placeholder="请选择"
+                    v-validate="'required'"
+                    name="disease"
+                    :error-messages="
+                      validated && disease.length < 1 ? ['此选项是必须的'] : []
+                    "
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
@@ -758,6 +841,10 @@
                     outline
                     rows="3"
                     auto-grow
+                    v-validate="'required'"
+                    :error-messages="validated ? errors.collect('allergy') : []"
+                    name="allergy"
+                    data-vv-as="此选项"
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-2">
@@ -768,6 +855,12 @@
                     outline
                     rows="3"
                     auto-grow
+                    v-validate="'required'"
+                    :error-messages="
+                      validated ? errors.collect('speciality') : []
+                    "
+                    name="speciality"
+                    data-vv-as="此选项"
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-2">
@@ -778,6 +871,12 @@
                     outline
                     rows="3"
                     auto-grow
+                    v-validate="'required'"
+                    :error-messages="
+                      validated ? errors.collect('expectation') : []
+                    "
+                    name="expectation"
+                    data-vv-as="此选项"
                   ></v-textarea>
                 </v-flex>
               </v-layout>
@@ -1202,7 +1301,7 @@ export default Vue.extend({
           text: '其他'
         }
       ],
-      trainingSubject: [],
+      trainingSubject: [] as string[] | string,
       touchElectronicDeviceTimeList: [
         {
           value: 1,
@@ -1270,7 +1369,7 @@ export default Vue.extend({
           text: '其他'
         }
       ],
-      disease: [],
+      disease: [] as string[] | string,
       allergy: '',
       speciality: '',
       expectation: '',
@@ -1325,14 +1424,12 @@ export default Vue.extend({
       })
     },
     goToNextStepper() {
-      this.step = this.step + 1
-
       this.$validator.validate().then(valid => {
         console.log('TCL: goToNextStepper -> valid', valid)
         this.validated = true
 
         if (valid) {
-          // this.step = this.step + 1
+          this.step = this.step + 1
           this.validated = false
         }
       })
@@ -1357,8 +1454,8 @@ export default Vue.extend({
       this.studentName = firstStudentInfo.childName
       this.birthplace = firstStudentInfo.nativePlace
       this.nation = firstStudentInfo.nation
-      this.isOnlyChild = firstStudentInfo.onlyChild > 0 ? true : false
-      this.isLeftoverChild = firstStudentInfo.stayHomeChild > 0 ? true : false
+      this.isOnlyChild = firstStudentInfo.onlyChild
+      this.isLeftoverChild = firstStudentInfo.stayHomeChild
       this.address = firstStudentInfo.homeAddress
       // 第一监护人信息
       this.guardianName = firstGuardian.parentsName
@@ -1401,8 +1498,7 @@ export default Vue.extend({
       this.trainingSubject = firstStudentInfo.extraTutoringContent
       this.touchElectronicDeviceTime = firstStudentInfo.touchPhoneTime
       this.kindergarten = firstStudentInfo.kindergarten
-      this.isEatLunchAtSchool =
-        firstStudentInfo.lunchAtSchool > 0 ? true : false
+      this.isEatLunchAtSchool = firstStudentInfo.lunchAtSchool
       this.disease = firstStudentInfo.sickenIllness
       this.allergy = firstStudentInfo.foodAndMedicineAllergy
       this.speciality = firstStudentInfo.trait
@@ -1418,7 +1514,88 @@ export default Vue.extend({
 
           const params = {} as AddStudentAndParentsInfoCollectionParams
 
-          archiveService.addStudentAndParentsInfoCollection(params)
+          const that: any = this
+          const firstStudentInfo = that.firstStudentInfo as AddStudentAndParentsInfoCollectionParams
+
+          // 学生类型
+          params.studentType = firstStudentInfo.studentType
+          // 基本信息
+          params.childIdCard = this.studentIdCard
+          params.childName = this.studentName
+          params.nativePlace = this.birthplace
+          params.nation = this.nation
+          params.onlyChild = this.isOnlyChild
+          params.stayHomeChild = this.isLeftoverChild
+          params.homeAddress = this.address
+          // 第一监护人信息
+          const firstGuardian = {} as Parent
+          firstGuardian.parentsName = this.guardianName
+          firstGuardian.phone = this.phone
+          firstGuardian.papersType = this.certificateType
+          firstGuardian.papersType = this.certificateTypeName
+          firstGuardian.parentsIdCard = this.certificateNumber
+          firstGuardian.educationDiploma = this.educationBackground
+          firstGuardian.professionPosition = this.profession
+          firstGuardian.withStudentRelation = this.relation
+          // 第二监护人信息
+          const secondGuardian = {} as Parent
+          secondGuardian.parentsName = this.guardianName
+          secondGuardian.phone = this.phone
+          secondGuardian.papersType = this.certificateType
+          secondGuardian.papersType = this.certificateTypeName
+          secondGuardian.parentsIdCard = this.certificateNumber
+          secondGuardian.educationDiploma = this.educationBackground
+          secondGuardian.professionPosition = this.profession
+          secondGuardian.withStudentRelation = this.relation
+          // set parents
+          params.parents = this.showSecondGuardian
+            ? [firstGuardian, secondGuardian]
+            : [firstGuardian]
+
+          // 家庭扩展信息
+          params.majorConvoy = this.pickupPerson
+          params.familyConstruction = this.familyStructure
+          params.readHabit = this.readingBehaviour
+          params.fatherAccompany = this.fatherCompanyTime
+          params.parentCommittee = this.isWillingJoinInParentsCommittee
+          params.committeePosition = this.parentsCommitteeRole
+          params.resource = this.guardianResource
+          // 学生信息
+          params.height = this.height
+          params.weight = this.weight
+          params.eyesight = this.visionLevel
+          params.leftEye = this.visionScoreLeftEye
+          params.rightEye = this.visionScoreRightEye
+          params.sleepTime = this.sleepAtTime
+          params.getUpTime = this.getUpAtTime
+          // 学生扩展信息
+          params.characterChild = this.personality
+          params.cleanToy = this.doUp
+          params.homeworkFinish = this.homeworkFinishTime
+          params.extraTutoringContent = (this
+            .trainingSubject as string[]).join()
+          params.touchPhoneTime = this.touchElectronicDeviceTime
+          params.kindergarten = this.kindergarten
+          params.lunchAtSchool = this.isEatLunchAtSchool
+          params.sickenIllness = (this.disease as string[]).join()
+          params.foodAndMedicineAllergy = this.allergy
+          params.trait = this.speciality
+          params.hope = this.expectation
+
+          console.log('TCL: submit -> params', params)
+
+          archiveService
+            .addStudentAndParentsInfoCollection(params)
+            .then(res => {
+              console.log(
+                'TCL: addStudentAndParentsInfoCollection submit -> res',
+                res
+              )
+
+              if (res.data.content) {
+                this.step = 4
+              }
+            })
         }
       })
     },

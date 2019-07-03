@@ -20,7 +20,7 @@ export class ArchiveService {
   ) {
     return this.httpConfigService.httpSercvice.post<
       AddStudentAndParentsInfoCollectionResponse
-    >(this.baseUrl + '/w/collect/child-and-parents')
+    >(this.baseUrl + '/w/collect/child-and-parents', params)
   }
 }
 

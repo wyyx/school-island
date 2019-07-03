@@ -18,7 +18,7 @@ export interface AddStudentAndParentsInfoCollectionParams {
   childName: string
   cleanToy: number
   committeePosition: number
-  extraTutoringContent: string[]
+  extraTutoringContent: string[] | string
   eyesight: number
   familyConstruction: number
   fatherAccompany: number
@@ -40,7 +40,7 @@ export interface AddStudentAndParentsInfoCollectionParams {
   readHabit: number
   resource: string
   rightEye: string
-  sickenIllness: string[]
+  sickenIllness: string[] | string
   sleepTime: number
   stayHomeChild: number
   touchPhoneTime: number
@@ -97,7 +97,7 @@ export const firstGuardianVoToApiMap = {
   relation: 'withStudentRelation'
 }
 
-export const apiTofirstGuardianVoMap = reverseKeyMap(firstGuardianVoMap)
+export const apiTofirstGuardianVoMap = reverseKeyMap(firstGuardianVoToApiMap)
 
 export const secondGuardianVoToApiMap = {
   guardianName2: 'parentsName',

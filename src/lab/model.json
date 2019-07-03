@@ -1,6 +1,86 @@
 {
-  "content": 0,
-  "errorCode": "string",
-  "errorMsg": "string",
-  "status": "string"
+  "content": [
+    {
+      "userType": 1,
+      "entity": [
+        {
+          "studentType": 1,
+          "childName": "杨紫涵",
+          "childIdCard": "510122201001110143",
+          "nativePlace": "四川省成都市",
+          "nation": "维吾尔族",
+          "onlyChild": 0,
+          "stayHomeChild": 0,
+          "homeAddress": "春天里",
+          "height": 120.0,
+          "weight": 40.0,
+          "eyesight": 1,
+          "leftEye": "5.2",
+          "rightEye": "5.2",
+          "sleepTime": 1,
+          "getUpTime": 1,
+          "kindergarten": "",
+          "characterChild": 1,
+          "cleanToy": 1,
+          "homeworkFinish": 1,
+          "extraTutoringContent": ["体育"],
+          "touchPhoneTime": 1,
+          "lunchAtSchool": 1,
+          "sickenIllness": ["五"],
+          "foodAndMedicineAllergy": "饭",
+          "trait": "很聪明，也很淘气",
+          "hope": "希望越来越好",
+          "majorConvoy": 3,
+          "familyConstruction": 1,
+          "readHabit": 1,
+          "fatherAccompany": 1,
+          "resource": "我有很多资源",
+          "parents": [
+            {
+              "parentsName": "郭嵩阳",
+              "phone": "18582730524",
+              "papersType": "身份证",
+              "parentsIdCard": "51382119960524901X",
+              "educationDiploma": 1,
+              "professionPosition": "java开发高级攻城狮",
+              "withStudentRelation": 1,
+              "parentCommittee": 0,
+              "committeePosition": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "userType": 2,
+      "entity": {
+        "name": "何燕妮",
+        "idCard": "510723199501104080",
+        "nativePlace": "四川程度",
+        "nation": "熊人族",
+        "politics": 1,
+        "maritalStatus": 1,
+        "homeAddress": "成都最豪华的酒店",
+        "phone": "18582730524",
+        "emergencyContact": "警察",
+        "emergencyContactPhone": "11012011911",
+        "firstEducationDiploma": 3,
+        "firstEducationMajor": "理学",
+        "firstEducationSchool": "北京大学",
+        "highestEducationDiploma": 0,
+        "graduateTime": "2019-07-01T00:00:00.000+0800",
+        "workTime": "2019-07-01T00:00:00.000+0800",
+        "mandarinLevel": 1,
+        "englishLevel": 1,
+        "computerLevel": 1,
+        "teachingSubject": "语文",
+        "workRecord": "没有",
+        "professionalTitle": 1,
+        "beGoodAt": "擅长吃",
+        "selfIntroduction": "我很6"
+      }
+    }
+  ],
+  "status": "OK",
+  "errorCode": "0"
 }
