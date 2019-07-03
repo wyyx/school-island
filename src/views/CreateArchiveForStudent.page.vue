@@ -1332,7 +1332,7 @@ export default Vue.extend({
         this.validated = true
 
         if (valid) {
-          this.step = this.step + 1
+          // this.step = this.step + 1
           this.validated = false
         }
       })
@@ -1416,9 +1416,9 @@ export default Vue.extend({
         if (valid) {
           console.log('post backend api')
 
-          // archiveService.addStudentAndParentsInfoCollection({
+          const params = {} as AddStudentAndParentsInfoCollectionParams
 
-          // })
+          archiveService.addStudentAndParentsInfoCollection(params)
         }
       })
     },
