@@ -1,5 +1,6 @@
 {
-  "content": { "weekScore": 9.4, "scores": [-0.2, 0, 0, -0.2, -0.2] },
-  "status": "OK",
-  "errorCode": "0"
+  "content": 0,
+  "errorCode": "string",
+  "errorMsg": "string",
+  "status": "string"
 }

@@ -47,6 +47,7 @@
                     v-model="studentName"
                     v-validate="'required'"
                     name="studentName"
+                    :value="firstStudentInfo.studentName"
                     data-vv-as="名字"
                   ></v-text-field>
                 </v-flex>
@@ -77,6 +78,7 @@
                     v-validate="'required'"
                     name="birthplace"
                     data-vv-as="籍贯"
+                    :value="firstStudentInfo.nativePlace"
                   ></v-text-field>
                 </v-flex>
                 <v-flex>
@@ -496,9 +498,9 @@
                   ></v-select>
                 </v-flex>
 
-                <v-flex>
+                <v-flex v-if="isNewStudent">
+                  <h3>5. 您是否愿意加入家委会？</h3>
                   <v-radio-group
-                    label="是否愿意加入家委会"
                     v-model="isWillingJoinInParentsCommittee"
                     :error-messages="
                       validated
@@ -513,11 +515,29 @@
                     <v-radio label="是" :value="true"></v-radio>
                     <v-radio label="否" :value="false"></v-radio>
                   </v-radio-group>
+                  <v-select
+                    v-if="isWillingJoinInParentsCommittee"
+                    v-model="parentsCommitteeRole"
+                    :items="parentsCommitteeRoleList"
+                    item-text="text"
+                    item-value="value"
+                    :return-object="true"
+                    placeholder="请选择"
+                    v-validate="'required'"
+                    name="parentsCommitteeRole"
+                    data-vv-as="请选择家委会角色"
+                    :error-messages="
+                      validated && parentsCommitteeRole === 0
+                        ? ['家委会角色是必须的']
+                        : []
+                    "
+                  ></v-select>
                 </v-flex>
 
                 <v-flex>
                   <h3 class="pb-3">
-                    6. 如果学校或班级需要您的帮助，您能提供哪些优势资源？
+                    <span v-if="isNewStudent">6</span> <span v-else>5</span>.
+                    如果学校或班级需要您的帮助，您能提供哪些优势资源？
                   </h3>
                   <v-textarea
                     v-model="guardianResource"
@@ -585,19 +605,31 @@
 
               <v-layout row nowrap>
                 <v-flex xs6 class="pr-3">
-                  <v-select :items="[]" label="视力"></v-select>
+                  <v-select
+                    v-model="visionLevel"
+                    :items="visionLevelList"
+                    label="视力"
+                  ></v-select>
                 </v-flex>
               </v-layout>
 
               <v-layout row nowrap>
                 <v-flex class="pr-3">
                   <v-flex class="pr-3">
-                    <v-select :items="[]" label="左眼/五分记法"></v-select>
+                    <v-select
+                      v-model="visionScoreLeftEye"
+                      :items="visionScoreList"
+                      label="左眼/五分记法"
+                    ></v-select>
                   </v-flex>
                 </v-flex>
                 <v-flex>
                   <v-flex>
-                    <v-select :items="[]" label="右眼/五分记法"></v-select>
+                    <v-select
+                      v-model="visionScoreRightEye"
+                      :items="visionScoreList"
+                      label="右眼/五分记法"
+                    ></v-select>
                   </v-flex>
                 </v-flex>
               </v-layout>
@@ -605,12 +637,12 @@
               <v-layout row nowrap>
                 <v-flex class="pr-3">
                   <v-flex class="pr-3">
-                    <v-select :items="[]" label="睡觉"></v-select>
+                    <v-select :items="sleepAtTimeList" label="睡觉"></v-select>
                   </v-flex>
                 </v-flex>
                 <v-flex>
                   <v-flex>
-                    <v-select :items="[]" label="起床"></v-select>
+                    <v-select :items="wakeUpAtTimeList" label="起床"></v-select>
                   </v-flex>
                 </v-flex>
               </v-layout>
@@ -628,7 +660,52 @@
             <v-card-text>
               <v-layout column nowrap>
                 <v-flex class="py-2">
-                  <h3 class="pb-3">1. 曾上过的幼儿园名称？</h3>
+                  <h3>1. 孩子性格怎样？</h3>
+                  <v-select
+                    v-model="personality"
+                    :items="personalityList"
+                    placeholder="请选择"
+                  ></v-select>
+                </v-flex>
+                <v-flex class="py-2">
+                  <h3>2. 孩子会主动收拾玩具，并归类放好吗?</h3>
+                  <v-select
+                    v-model="doUp"
+                    :items="doUpList"
+                    placeholder="请选择"
+                  ></v-select>
+                </v-flex>
+                <v-flex class="py-2">
+                  <h3>3. 家庭作业完成时间？</h3>
+                  <v-select
+                    v-model="homeworkFinishTime"
+                    :items="homeworkFinishTimeList"
+                    placeholder="请选择"
+                  ></v-select>
+                </v-flex>
+                <v-flex class="py-2">
+                  <h3>4. 课外主要去培训机构补习什么？</h3>
+                  <v-select
+                    class="app-chips"
+                    v-model="trainingSubject"
+                    :items="trainingSubjectList"
+                    attach
+                    chips
+                    multiple
+                    deletable-chips
+                    placeholder="请选择"
+                  ></v-select>
+                </v-flex>
+                <v-flex class="py-2">
+                  <h3>5. 孩子接触电子设备时间（电视、手机、平板、）？</h3>
+                  <v-select
+                    v-model="touchElectronicDeviceTime"
+                    :items="touchElectronicDeviceTimeList"
+                    placeholder="请选择"
+                  ></v-select>
+                </v-flex>
+                <v-flex class="py-2">
+                  <h3 class="pb-3">6. 曾上过的幼儿园名称？</h3>
                   <v-textarea
                     class="kindergarten-name"
                     outline
@@ -638,45 +715,58 @@
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-2">
-                  <h3>2. 孩子性格怎样？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
-                </v-flex>
-                <v-flex class="py-2">
-                  <h3>3. 孩子会主动收拾玩具，并归类放好吗?</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
-                </v-flex>
-                <v-flex class="py-2">
-                  <h3>4. 家庭作业完成时间？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
-                </v-flex>
-                <v-flex class="py-2">
-                  <h3>5. 课外主要去培训机构补习什么？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
-                </v-flex>
-                <v-flex class="py-2">
-                  <h3>6. 孩子接触电子设备时间（电视、手机、平板、）？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
-                </v-flex>
-                <v-flex class="py-2">
                   <h3>7. 孩子是否在校吃午餐？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <v-radio-group
+                    v-model="isEatLunchAtSchool"
+                    :error-messages="
+                      validated ? errors.collect('isEatLunchAtSchool') : []
+                    "
+                    v-validate="'required'"
+                    name="isEatLunchAtSchool"
+                    data-vv-as="是否在校吃午餐"
+                    row
+                  >
+                    <v-radio label="是" :value="true"></v-radio>
+                    <v-radio label="否" :value="false"></v-radio>
+                  </v-radio-group>
                 </v-flex>
                 <v-flex class="py-2">
                   <h3>8. 孩子曾换过哪种疾病？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <v-select
+                    class="app-chips"
+                    v-model="disease"
+                    :items="diseaseList"
+                    attach
+                    chips
+                    multiple
+                    deletable-chips
+                    placeholder="请选择"
+                  ></v-select>
                 </v-flex>
                 <v-flex class="py-2">
-                  <h3>9. 孩子对哪些食物、药物过敏？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <h3 class="pb-3">9. 孩子对哪些食物、药物过敏？</h3>
+                  <v-textarea
+                    v-model="allergy"
+                    class="app-textarea"
+                    outline
+                    rows="3"
+                    auto-grow
+                  ></v-textarea>
                 </v-flex>
                 <v-flex class="py-2">
-                  <h3>10. 孩子兴趣、爱好、特长？有哪些不足？</h3>
-                  <v-select :items="[]" placeholder="请选择"></v-select>
+                  <h3 class="pb-3">10. 孩子兴趣、爱好、特长？有哪些不足？</h3>
+                  <v-textarea
+                    v-model="speciality"
+                    class="app-textarea"
+                    outline
+                    rows="3"
+                    auto-grow
+                  ></v-textarea>
                 </v-flex>
                 <v-flex class="py-2">
                   <h3 class="pb-3">11. 您对孩子教育期望？</h3>
                   <v-textarea
-                    class="expectation-to-children"
+                    class="app-textarea"
                     outline
                     rows="3"
                     auto-grow
@@ -725,6 +815,13 @@
 import Vue from 'vue'
 import Header from '@/components/Header.component.vue'
 import { ID_CARD_REG, PHONE_NUMBER_REG } from '../configs/config'
+import { archiveService } from '../services/archive.service'
+import {
+  AddStudentAndParentsInfoCollectionParams,
+  UnfinishedInfoCollection,
+  InfoCollectionUserTypes,
+  InfoCollectionStudentTypes
+} from '../models/archive.model'
 
 export default Vue.extend({
   components: { Header },
@@ -732,7 +829,7 @@ export default Vue.extend({
     return {
       ID_CARD_REG: ID_CARD_REG,
       PHONE_NUMBER_REG: PHONE_NUMBER_REG,
-      step: 2,
+      step: 1,
       validated: false,
       // 学生基础信息
       isOnlyChild: null,
@@ -810,7 +907,7 @@ export default Vue.extend({
       educationBackground2: '',
       profession2: '',
       relation2: 0,
-      // family extra info
+      // 家庭扩展信息
       pickupPersonList: [
         {
           value: 1,
@@ -922,8 +1019,287 @@ export default Vue.extend({
           value: 6,
           text: '信息技术'
         }
-      ]
+      ],
+      parentsCommitteeRole: 0,
+      // 学生信息
+      visionLevelList: [
+        {
+          value: 1,
+          text: '正常'
+        },
+        {
+          value: 2,
+          text: '近视'
+        },
+        {
+          value: 3,
+          text: '闪光'
+        },
+        {
+          value: 4,
+          text: '弱视'
+        }
+      ],
+      visionLevel: 0,
+      visionScoreList: [
+        '4.0',
+        '4.1',
+        '4.2',
+        '4.3',
+        '4.4',
+        '4.5',
+        '4.6',
+        '4.7',
+        '4.8',
+        '4.9',
+        '5.0',
+        '5.1',
+        '5.2'
+      ],
+      visionScoreLeftEye: 0,
+      visionScoreRightEye: 0,
+      sleepAtTimeList: [
+        {
+          value: 1,
+          text: '20:30-21:00'
+        },
+        {
+          value: 2,
+          text: '21:00-21:30'
+        },
+        {
+          value: 3,
+          text: '21:30-22:00'
+        },
+        {
+          value: 4,
+          text: '22:00以后'
+        }
+      ],
+      sleepAtTime: 0,
+      wakeUpAtTimeList: [
+        {
+          value: 1,
+          text: '6:30前'
+        },
+        {
+          value: 2,
+          text: '6:30-6:50'
+        },
+        {
+          value: 3,
+          text: '6:50-7:10'
+        },
+        {
+          value: 4,
+          text: '7:10-7:30'
+        },
+        {
+          value: 5,
+          text: '7:30以后'
+        }
+      ],
+      personalityList: [
+        {
+          value: 1,
+          text: '活跃'
+        },
+        {
+          value: 2,
+          text: '腼腆'
+        },
+        {
+          value: 3,
+          text: '好动'
+        },
+        {
+          value: 4,
+          text: '文静'
+        }
+      ],
+      personality: 0,
+      doUpList: [
+        {
+          value: 1,
+          text: '主动收拾'
+        },
+        {
+          value: 2,
+          text: '需要提醒'
+        },
+        {
+          value: 3,
+          text: '不会'
+        }
+      ],
+      doUp: 0,
+      homeworkFinishTimeList: [
+        {
+          value: 1,
+          text: '18:00前'
+        },
+        {
+          value: 2,
+          text: '19:00前'
+        },
+        {
+          value: 3,
+          text: '20:00前'
+        },
+        {
+          value: 4,
+          text: '21:00前'
+        },
+        {
+          value: 5,
+          text: '22:00前'
+        }
+      ],
+      homeworkFinishTime: 0,
+      trainingSubjectList: [
+        {
+          value: 1,
+          text: '语文'
+        },
+        {
+          value: 2,
+          text: '数学'
+        },
+        {
+          value: 3,
+          text: '英语'
+        },
+        {
+          value: 4,
+          text: '美术'
+        },
+        {
+          value: 5,
+          text: '音乐'
+        },
+        {
+          value: 6,
+          text: '舞蹈'
+        },
+        {
+          value: 7,
+          text: '跆拳道'
+        },
+        {
+          value: 8,
+          text: '其他'
+        }
+      ],
+      trainingSubject: 0,
+      touchElectronicDeviceTimeList: [
+        {
+          value: 1,
+          text: '几乎不接触'
+        },
+        {
+          value: 2,
+          text: '单次小于10分钟，且每周小于3次'
+        },
+        {
+          value: 3,
+          text: '单次小于30分钟，且每周小于5次'
+        },
+        {
+          value: 4,
+          text: '单次大于30分钟，且每周大于5次'
+        }
+      ],
+      touchElectronicDeviceTime: 0,
+      isEatLunchAtSchool: null,
+      diseaseList: [
+        {
+          value: 1,
+          text: '无'
+        },
+        {
+          value: 2,
+          text: '水痘'
+        },
+        {
+          value: 3,
+          text: '皮肤病'
+        },
+        {
+          value: 4,
+          text: '肝炎'
+        },
+        {
+          value: 5,
+          text: '肺炎'
+        },
+        {
+          value: 6,
+          text: '哮喘'
+        },
+        {
+          value: 7,
+          text: '胃病'
+        },
+        {
+          value: 8,
+          text: '骨折'
+        },
+        {
+          value: 9,
+          text: '癫痫'
+        },
+        {
+          value: 10,
+          text: '荨麻疹'
+        },
+        {
+          value: 11,
+          text: '其他'
+        }
+      ],
+      disease: 0,
+      allergy: '',
+      speciality: '',
+      unfinishedInfoCollectionList: [] as UnfinishedInfoCollection[]
     }
+  },
+  computed: {
+    firstStudentInfo() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const studentInfoCollection = unfinishedInfoCollectionList.filter(
+        studentInfo => studentInfo.userType === InfoCollectionUserTypes.Student
+      )[0]
+
+      const firstStudentInfo =
+        studentInfoCollection &&
+        studentInfoCollection.entity &&
+        studentInfoCollection.entity[0]
+
+      console.log('TCL: firstStudentInfo -> firstStudentInfo', firstStudentInfo)
+
+      return (
+        firstStudentInfo || ({} as AddStudentAndParentsInfoCollectionParams)
+      )
+    },
+    isNewStudent() {
+      const firstStudentInfo = this
+        .firstStudentInfo as AddStudentAndParentsInfoCollectionParams
+      const infoCollectionStudentType = firstStudentInfo.studentType
+
+      console.log(
+        'TCL: isNewStudent -> infoCollectionStudentType',
+        infoCollectionStudentType
+      )
+
+      return infoCollectionStudentType === InfoCollectionStudentTypes.NewStudent
+        ? true
+        : false
+    }
+  },
+  created() {
+    this.getUnfinishedInfoCollection()
   },
   methods: {
     goBack() {
@@ -935,6 +1311,8 @@ export default Vue.extend({
       })
     },
     goToNextStepper() {
+      this.step = this.step + 1
+
       this.$validator.validate().then(valid => {
         console.log('TCL: goToNextStepper -> valid', valid)
         this.validated = true
@@ -945,6 +1323,13 @@ export default Vue.extend({
         }
       })
     },
+    fillForm() {
+      const that: any = this
+      const firstStudentInfo = that.firstStudentInfo as AddStudentAndParentsInfoCollectionParams
+
+      this.birthplace = firstStudentInfo.nativePlace
+      this.guardianResource = firstStudentInfo.resource
+    },
     submit() {
       this.$validator.validate().then(valid => {
         console.log('TCL: valid', valid)
@@ -952,7 +1337,19 @@ export default Vue.extend({
 
         if (valid) {
           console.log('post backend api')
+
+          // archiveService.addStudentAndParentsInfoCollection({
+
+          // })
         }
+      })
+    },
+    getUnfinishedInfoCollection() {
+      archiveService.getUnfinishedInfoCollection().then(res => {
+        console.log('TCL: getUnfinishedInfoCollection -> res', res)
+        this.unfinishedInfoCollectionList = res.data.content || []
+
+        this.fillForm()
       })
     }
   }

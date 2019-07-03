@@ -92,8 +92,16 @@ table.v-table tbody td:first-child {
     line-height: 24px !important;
   }
 
-  .expectation-to-children textarea {
+  .app-textarea textarea {
     margin-top: 0px !important;
     line-height: 24px !important;
+  }
+
+  .app-chips {
+    .v-chip {
+      background-color: white;
+      box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
+    }
   }
 }
