@@ -428,7 +428,6 @@
                     :items="pickupPersonList"
                     item-text="text"
                     item-value="value"
-                    :return-object="true"
                     placeholder="请选择"
                     v-validate="'required'"
                     name="pickupPerson"
@@ -447,7 +446,6 @@
                     :items="familyStructureList"
                     item-text="text"
                     item-value="value"
-                    :return-object="true"
                     placeholder="请选择"
                     v-validate="'required'"
                     name="familyStructure"
@@ -466,7 +464,6 @@
                     :items="readingBehaviourList"
                     item-text="text"
                     item-value="value"
-                    :return-object="true"
                     placeholder="请选择"
                     v-validate="'required'"
                     name="readingBehaviour"
@@ -485,7 +482,6 @@
                     :items="fatherCompanyTimeList"
                     item-text="text"
                     item-value="value"
-                    :return-object="true"
                     placeholder="请选择"
                     v-validate="'required'"
                     name="fatherCompanyTime"
@@ -521,7 +517,6 @@
                     :items="parentsCommitteeRoleList"
                     item-text="text"
                     item-value="value"
-                    :return-object="true"
                     placeholder="请选择"
                     v-validate="'required'"
                     name="parentsCommitteeRole"
@@ -589,6 +584,7 @@
               <v-layout row nowrap>
                 <v-flex class="pr-3">
                   <v-text-field
+                    v-model="height"
                     type="number"
                     label="身高"
                     suffix="厘米"
@@ -596,6 +592,7 @@
                 </v-flex>
                 <v-flex>
                   <v-text-field
+                    v-model="weight"
                     type="number"
                     label="体重"
                     suffix="公斤"
@@ -637,12 +634,20 @@
               <v-layout row nowrap>
                 <v-flex class="pr-3">
                   <v-flex class="pr-3">
-                    <v-select :items="sleepAtTimeList" label="睡觉"></v-select>
+                    <v-select
+                      v-model="sleepAtTime"
+                      :items="sleepAtTimeList"
+                      label="睡觉"
+                    ></v-select>
                   </v-flex>
                 </v-flex>
                 <v-flex>
                   <v-flex>
-                    <v-select :items="wakeUpAtTimeList" label="起床"></v-select>
+                    <v-select
+                      v-model="getUpAtTime"
+                      :items="getUpAtTimeList"
+                      label="起床"
+                    ></v-select>
                   </v-flex>
                 </v-flex>
               </v-layout>
@@ -689,6 +694,7 @@
                     class="app-chips"
                     v-model="trainingSubject"
                     :items="trainingSubjectList"
+                    item-value="text"
                     attach
                     chips
                     multiple
@@ -736,6 +742,7 @@
                     class="app-chips"
                     v-model="disease"
                     :items="diseaseList"
+                    item-value="text"
                     attach
                     chips
                     multiple
@@ -766,6 +773,7 @@
                 <v-flex class="py-2">
                   <h3 class="pb-3">11. 您对孩子教育期望？</h3>
                   <v-textarea
+                    v-model="expectation"
                     class="app-textarea"
                     outline
                     rows="3"
@@ -820,7 +828,8 @@ import {
   AddStudentAndParentsInfoCollectionParams,
   UnfinishedInfoCollection,
   InfoCollectionUserTypes,
-  InfoCollectionStudentTypes
+  InfoCollectionStudentTypes,
+  Parent
 } from '../models/archive.model'
 
 export default Vue.extend({
@@ -895,7 +904,7 @@ export default Vue.extend({
           text: '博士'
         }
       ],
-      educationBackground: '',
+      educationBackground: 0,
       profession: '',
       relation: 0,
       // 第二监护人
@@ -904,7 +913,7 @@ export default Vue.extend({
       certificateType2: '身份证',
       certificateTypeName2: '',
       certificateNumber2: '',
-      educationBackground2: '',
+      educationBackground2: 0,
       profession2: '',
       relation2: 0,
       // 家庭扩展信息
@@ -1022,6 +1031,8 @@ export default Vue.extend({
       ],
       parentsCommitteeRole: 0,
       // 学生信息
+      height: null,
+      weight: null,
       visionLevelList: [
         {
           value: 1,
@@ -1056,8 +1067,8 @@ export default Vue.extend({
         '5.1',
         '5.2'
       ],
-      visionScoreLeftEye: 0,
-      visionScoreRightEye: 0,
+      visionScoreLeftEye: '',
+      visionScoreRightEye: '',
       sleepAtTimeList: [
         {
           value: 1,
@@ -1077,7 +1088,7 @@ export default Vue.extend({
         }
       ],
       sleepAtTime: 0,
-      wakeUpAtTimeList: [
+      getUpAtTimeList: [
         {
           value: 1,
           text: '6:30前'
@@ -1099,6 +1110,7 @@ export default Vue.extend({
           text: '7:30以后'
         }
       ],
+      getUpAtTime: 0,
       personalityList: [
         {
           value: 1,
@@ -1132,7 +1144,7 @@ export default Vue.extend({
           text: '不会'
         }
       ],
-      doUp: 0,
+      doUp: 2,
       homeworkFinishTimeList: [
         {
           value: 1,
@@ -1190,7 +1202,7 @@ export default Vue.extend({
           text: '其他'
         }
       ],
-      trainingSubject: 0,
+      trainingSubject: [],
       touchElectronicDeviceTimeList: [
         {
           value: 1,
@@ -1210,6 +1222,7 @@ export default Vue.extend({
         }
       ],
       touchElectronicDeviceTime: 0,
+      kindergarten: '',
       isEatLunchAtSchool: null,
       diseaseList: [
         {
@@ -1257,9 +1270,10 @@ export default Vue.extend({
           text: '其他'
         }
       ],
-      disease: 0,
+      disease: [],
       allergy: '',
       speciality: '',
+      expectation: '',
       unfinishedInfoCollectionList: [] as UnfinishedInfoCollection[]
     }
   },
@@ -1326,9 +1340,73 @@ export default Vue.extend({
     fillForm() {
       const that: any = this
       const firstStudentInfo = that.firstStudentInfo as AddStudentAndParentsInfoCollectionParams
+      const firstGuardian =
+        (firstStudentInfo.parents && firstStudentInfo.parents[0]) ||
+        ({} as Parent)
+      const secondGuardian =
+        (firstStudentInfo.parents && firstStudentInfo.parents[1]) ||
+        ({} as Parent)
 
+      // show secondGuardian inputs if has secondGuardian
+      if (secondGuardian.parentsName) {
+        this.showSecondGuardian = true
+      }
+
+      // 基本信息
+      this.studentIdCard = firstStudentInfo.childIdCard
+      this.studentName = firstStudentInfo.childName
       this.birthplace = firstStudentInfo.nativePlace
+      this.nation = firstStudentInfo.nation
+      this.isOnlyChild = firstStudentInfo.onlyChild > 0 ? true : false
+      this.isLeftoverChild = firstStudentInfo.stayHomeChild > 0 ? true : false
+      this.address = firstStudentInfo.homeAddress
+      // 第一监护人信息
+      this.guardianName = firstGuardian.parentsName
+      this.phone = firstGuardian.phone
+      this.certificateType = firstGuardian.papersType
+      this.certificateTypeName = firstGuardian.papersType
+      this.certificateNumber = firstGuardian.parentsIdCard
+      this.educationBackground = firstGuardian.educationDiploma
+      this.profession = firstGuardian.professionPosition
+      this.relation = firstGuardian.withStudentRelation
+      // 第二监护人信息
+      this.guardianName2 = secondGuardian.parentsName
+      this.phone2 = secondGuardian.phone
+      this.certificateType2 = secondGuardian.papersType
+      this.certificateTypeName2 = firstGuardian.papersType
+      this.certificateNumber2 = secondGuardian.parentsIdCard
+      this.educationBackground2 = secondGuardian.educationDiploma
+      this.profession2 = firstGuardian.professionPosition
+      this.relation2 = secondGuardian.withStudentRelation
+      // 家庭扩展信息
+      this.pickupPerson = firstStudentInfo.majorConvoy
+      this.familyStructure = firstStudentInfo.familyConstruction
+      this.readingBehaviour = firstStudentInfo.readHabit
+      this.fatherCompanyTime = firstStudentInfo.fatherAccompany
+      this.isWillingJoinInParentsCommittee = firstStudentInfo.parentCommittee
+      this.parentsCommitteeRole = firstStudentInfo.committeePosition
       this.guardianResource = firstStudentInfo.resource
+      // 学生信息
+      this.height = firstStudentInfo.height
+      this.weight = firstStudentInfo.weight
+      this.visionLevel = firstStudentInfo.eyesight
+      this.visionScoreLeftEye = firstStudentInfo.leftEye
+      this.visionScoreRightEye = firstStudentInfo.rightEye
+      this.sleepAtTime = firstStudentInfo.sleepTime
+      this.getUpAtTime = firstStudentInfo.getUpTime
+      // 学生扩展信息
+      this.personality = firstStudentInfo.characterChild
+      this.doUp = firstStudentInfo.cleanToy
+      this.homeworkFinishTime = firstStudentInfo.homeworkFinish
+      this.trainingSubject = firstStudentInfo.extraTutoringContent
+      this.touchElectronicDeviceTime = firstStudentInfo.touchPhoneTime
+      this.kindergarten = firstStudentInfo.kindergarten
+      this.isEatLunchAtSchool =
+        firstStudentInfo.lunchAtSchool > 0 ? true : false
+      this.disease = firstStudentInfo.sickenIllness
+      this.allergy = firstStudentInfo.foodAndMedicineAllergy
+      this.speciality = firstStudentInfo.trait
+      this.expectation = firstStudentInfo.hope
     },
     submit() {
       this.$validator.validate().then(valid => {
