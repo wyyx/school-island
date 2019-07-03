@@ -5,27 +5,25 @@
     <v-stepper v-model="step">
       <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1">
-          <!-- <div class="py-1">基础信息</div> -->
-          基础信息
+          <span class="py-1">基础信息</span>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
         <v-stepper-step :complete="step > 2" step="2">
-          <!-- <div class="py-1">监护人信息</div> -->
-          监护人信息
+          <span class="py-1">监护人信息</span>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
         <v-stepper-step step="3" :complete="step > 3">
-          <div class="py-1">学生信息</div>
+          <span class="py-1">学生信息</span>
         </v-stepper-step>
 
         <v-divider></v-divider>
 
         <v-stepper-step step="4" :complete="step >= 4">
-          <div class="py-1">完成</div>
+          <span class="py-1">完成</span>
         </v-stepper-step>
       </v-stepper-header>
 
@@ -900,9 +898,11 @@
           </v-card>
 
           <div class="text-xs-center pa-4">
-            <v-btn color="primary" @click="goToHomePage">
-              回到首页
-            </v-btn>
+            <div class="text-xs-center px-2">
+              <v-btn color="primary" large block @click="goToHomePage">
+                回到首页
+              </v-btn>
+            </div>
           </div>
         </v-stepper-content>
       </v-stepper-items>
