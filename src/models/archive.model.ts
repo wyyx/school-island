@@ -6,11 +6,9 @@ export interface GetUnfinishedInfoCollectionResponse {
 }
 
 export interface UnfinishedInfoCollection {
-  entity: AddStudentAndParentsInfoCollectionParams
+  entity: any
   userType: number
 }
-
-export interface AddStudentAndParentsInfoCollectionParams {}
 
 export interface AddStudentAndParentsInfoCollectionParams {
   characterChild: number
@@ -47,6 +45,33 @@ export interface AddStudentAndParentsInfoCollectionParams {
   trait: string
   weight: number
   studentType?: number
+}
+
+export interface AddTeacherInfoCollectionParams {
+  beGoodAt: string
+  computerLevel: number
+  emergencyContact: string
+  emergencyContactPhone: string
+  englishLevel: number
+  firstEducationDiploma: number
+  firstEducationMajor: string
+  firstEducationSchool: string
+  graduateTime: string
+  highestEducationDiploma: number
+  homeAddress: string
+  idCard: string
+  mandarinLevel: number
+  maritalStatus: number
+  name: string
+  nation: string
+  nativePlace: string
+  phone: string
+  politics: number
+  professionalTitle: number
+  selfIntroduction: string
+  teachingSubject: string
+  workRecord: string
+  workTime: string
 }
 
 export interface Parent {

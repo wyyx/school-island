@@ -1378,7 +1378,7 @@ export default Vue.extend({
         studentInfo => studentInfo.userType === InfoCollectionUserTypes.Student
       )[0]
 
-      const firstStudentInfo =
+      const firstStudentInfo: AddStudentAndParentsInfoCollectionParams =
         studentInfoCollection &&
         studentInfoCollection.entity &&
         studentInfoCollection.entity[0]

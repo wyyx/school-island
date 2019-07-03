@@ -107,10 +107,18 @@
     </v-card>
 
     <v-card class="pa-2">
-      <v-btn color="accent" @click="goToStudentInfoCollectionPage">
+      <v-btn
+        color="accent"
+        @click="goToStudentInfoCollectionPage"
+        v-if="hasUnfinishedStudentInfoCollection"
+      >
         学生信息采集
       </v-btn>
-      <v-btn color="accent" @click="goToTeacherInfoCollectionPage">
+      <v-btn
+        color="accent"
+        @click="goToTeacherInfoCollectionPage"
+        v-if="teacherInfo.name"
+      >
         老师信息采集
       </v-btn>
     </v-card>
@@ -134,7 +142,8 @@ import { archiveService } from '../services/archive.service'
 import {
   UnfinishedInfoCollection,
   InfoCollectionUserTypes,
-  AddStudentAndParentsInfoCollectionParams
+  AddStudentAndParentsInfoCollectionParams,
+  AddTeacherInfoCollectionParams
 } from '../models/archive.model'
 
 export default Vue.extend({
@@ -157,7 +166,7 @@ export default Vue.extend({
       const that: any = this
       return that.user.studentVoList || []
     },
-    firstStudentInfo() {
+    hasUnfinishedStudentInfoCollection() {
       const that: any = this
       const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
 
@@ -165,14 +174,15 @@ export default Vue.extend({
         studentInfo => studentInfo.userType === InfoCollectionUserTypes.Student
       )[0]
 
-      const firstStudentInfo: AddStudentAndParentsInfoCollectionParams =
-        studentInfoCollection &&
-        studentInfoCollection.entity &&
-        studentInfoCollection.entity[0]
+      const studentInfoList: AddStudentAndParentsInfoCollectionParams[] =
+        (studentInfoCollection && studentInfoCollection.entity) || []
 
-      return (
-        firstStudentInfo || ({} as AddStudentAndParentsInfoCollectionParams)
+      console.log(
+        'TCL: hasUnfinishedStudentInfoCollection -> studentInfoList',
+        studentInfoList
       )
+
+      return studentInfoList.length > 0 ? true : false
     },
     teacherInfo() {
       const that: any = this
@@ -182,12 +192,12 @@ export default Vue.extend({
         info => info.userType === InfoCollectionUserTypes.Teacher
       )[0]
 
-      const teacherInfo: AddStudentAndParentsInfoCollectionParams =
+      const teacherInfo: AddTeacherInfoCollectionParams =
         teacherInfoCollection &&
         teacherInfoCollection.entity &&
         teacherInfoCollection.entity[0]
 
-      return teacherInfo || ({} as AddStudentAndParentsInfoCollectionParams)
+      return teacherInfo || ({} as AddTeacherInfoCollectionParams)
     }
   },
   created() {
@@ -231,6 +241,18 @@ export default Vue.extend({
     getUnfinishedInfoCollection() {
       archiveService.getUnfinishedInfoCollection().then(res => {
         this.unfinishedInfoCollectionList = res.data.content || []
+
+        const that: any = this
+        that.firstStudentInfo
+        console.log(
+          'TCL: getUnfinishedInfoCollection -> that.firstStudentInfo',
+          that.firstStudentInfo
+        )
+        that.teacherInfo
+        console.log(
+          'TCL: getUnfinishedInfoCollection -> that.teacherInfo',
+          that.teacherInfo
+        )
       })
     }
   }
