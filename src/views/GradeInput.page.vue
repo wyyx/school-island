@@ -86,8 +86,8 @@
               <span
                 class="app-grow"
                 :class="{
-                  'success--text': props.item.state === 1,
-                  'red--text': props.item.state === 0
+                  'success--text': props.item.state === 0,
+                  'red--text': props.item.state !== 0
                 }"
               >
                 {{ props.item.state | gradeStateFilter }}

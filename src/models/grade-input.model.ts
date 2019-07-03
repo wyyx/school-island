@@ -25,8 +25,8 @@ export const EXAM_TYPES = [
 ]
 
 export enum GradeStateTypes {
-  unfinished = 0,
-  finished = 1
+  unfinished = 100,
+  finished = 0
 }
 
 export const GRADE_STATE = [

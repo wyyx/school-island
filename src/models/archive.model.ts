@@ -76,7 +76,17 @@ export enum InfoCollectionStudentTypes {
   OldStudent = 2
 }
 
-export const firstGuardianVoMap = {
+function reverseKeyMap(obj) {
+  let reverseObj = {}
+
+  Object.keys(obj).forEach(key => {
+    reverseObj[obj[key]] = key
+  })
+
+  return reverseObj
+}
+
+export const firstGuardianVoToApiMap = {
   guardianName: 'parentsName',
   phone: 'phone',
   certificateType: 'papersType',
@@ -87,7 +97,9 @@ export const firstGuardianVoMap = {
   relation: 'withStudentRelation'
 }
 
-export const secondGuardianVoMap = {
+export const apiTofirstGuardianVoMap = reverseKeyMap(firstGuardianVoMap)
+
+export const secondGuardianVoToApiMap = {
   guardianName2: 'parentsName',
   phone2: 'phone',
   certificateType2: 'papersType',
@@ -98,7 +110,9 @@ export const secondGuardianVoMap = {
   relation2: 'withStudentRelation'
 }
 
-export const studentInfoVoMap = {
+export const apiToSecondGuardianVoMap = reverseKeyMap(secondGuardianVoToApiMap)
+
+export const studentInfoVoToApiMap = {
   studentIdCard: 'childIdCard',
   studentName: 'childName',
   birthplace: 'nativePlace',
@@ -132,3 +146,5 @@ export const studentInfoVoMap = {
   speciality: 'trait',
   expectation: 'hope'
 }
+
+export const apiToStudentInfoVoMap = reverseKeyMap(studentInfoVoToApiMap)
