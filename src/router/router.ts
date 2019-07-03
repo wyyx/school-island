@@ -235,7 +235,7 @@ export default new Router({
       // beforeEnter: authGuard,
       component: () =>
         import(
-          /* webpackChunkName: "create-archive-for-teacher" */ '../views/CreateArchiveForStudent.page.vue'
+          /* webpackChunkName: "create-archive-for-teacher" */ '../views/CreateArchiveForTeacher.page.vue'
         ),
       props: route => ({ ...route.params, ...route.query })
     },

@@ -92,14 +92,8 @@ export default Vue.extend({
     this.checkBinding()
     // open when build
     this.loadSchoolInfo()
-    // // open when build
-    // this.saveCurrentState()
-
-    setTimeout(() => {
-      this.$router.push({
-        name: 'create-archive-for-student'
-      })
-    }, 2000)
+    // open when build
+    this.saveCurrentState()
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {

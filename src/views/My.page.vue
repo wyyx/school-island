@@ -105,6 +105,15 @@
         </v-flex>
       </v-layout>
     </v-card>
+
+    <v-card class="pa-2">
+      <v-btn color="accent" @click="goToStudentInfoCollectionPage">
+        学生信息采集
+      </v-btn>
+      <v-btn color="accent" @click="goToTeacherInfoCollectionPage">
+        老师信息采集
+      </v-btn>
+    </v-card>
   </div>
 </template>
 
@@ -121,12 +130,19 @@ import {
 } from '../store/auth/auth.paths'
 import { RoleVo, Student, RoleType, parentsTypes } from '../models/user.model'
 import { storeService } from '../services/store.service'
+import { archiveService } from '../services/archive.service'
+import {
+  UnfinishedInfoCollection,
+  InfoCollectionUserTypes,
+  AddStudentAndParentsInfoCollectionParams
+} from '../models/archive.model'
 
 export default Vue.extend({
   name: 'my',
   data: function() {
     return {
-      roleType: RoleType
+      roleType: RoleType,
+      unfinishedInfoCollectionList: [] as UnfinishedInfoCollection[]
     }
   },
   components: {},
@@ -140,10 +156,43 @@ export default Vue.extend({
     studentList() {
       const that: any = this
       return that.user.studentVoList || []
+    },
+    firstStudentInfo() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const studentInfoCollection = unfinishedInfoCollectionList.filter(
+        studentInfo => studentInfo.userType === InfoCollectionUserTypes.Student
+      )[0]
+
+      const firstStudentInfo: AddStudentAndParentsInfoCollectionParams =
+        studentInfoCollection &&
+        studentInfoCollection.entity &&
+        studentInfoCollection.entity[0]
+
+      return (
+        firstStudentInfo || ({} as AddStudentAndParentsInfoCollectionParams)
+      )
+    },
+    teacherInfo() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const teacherInfoCollection = unfinishedInfoCollectionList.filter(
+        info => info.userType === InfoCollectionUserTypes.Teacher
+      )[0]
+
+      const teacherInfo: AddStudentAndParentsInfoCollectionParams =
+        teacherInfoCollection &&
+        teacherInfoCollection.entity &&
+        teacherInfoCollection.entity[0]
+
+      return teacherInfo || ({} as AddStudentAndParentsInfoCollectionParams)
     }
   },
   created() {
     this.changeTitle()
+    this.getUnfinishedInfoCollection()
   },
   methods: {
     changeTitle() {
@@ -152,6 +201,16 @@ export default Vue.extend({
     goToUserSettingsPage() {
       this.$router.push({
         name: 'user-settings'
+      })
+    },
+    goToStudentInfoCollectionPage() {
+      this.$router.push({
+        name: 'create-archive-for-student'
+      })
+    },
+    goToTeacherInfoCollectionPage() {
+      this.$router.push({
+        name: 'create-archive-for-teacher'
       })
     },
     goToBindingPage() {
@@ -168,6 +227,11 @@ export default Vue.extend({
       )[0]
 
       return parentsType ? parentsType.text : ''
+    },
+    getUnfinishedInfoCollection() {
+      archiveService.getUnfinishedInfoCollection().then(res => {
+        this.unfinishedInfoCollectionList = res.data.content || []
+      })
     }
   }
 })

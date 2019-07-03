@@ -270,7 +270,7 @@
                     name="relation"
                     data-vv-as="与学生的关系"
                     :error-messages="
-                      validated && relation === 0 ? ['请选择与学生的关系'] : []
+                      validated && !relation ? ['请选择与学生的关系'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -404,7 +404,7 @@
                     name="relation2"
                     data-vv-as="与学生的关系"
                     :error-messages="
-                      validated && relation2 === 0 ? ['请选择与学生的关系'] : []
+                      validated && !relation2 ? ['请选择与学生的关系'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -434,9 +434,7 @@
                     name="pickupPerson"
                     data-vv-as="接送人"
                     :error-messages="
-                      validated && pickupPerson === 0
-                        ? ['主要接送人是必须的']
-                        : []
+                      validated && !pickupPerson ? ['主要接送人是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -452,9 +450,7 @@
                     name="familyStructure"
                     data-vv-as="家庭结构"
                     :error-messages="
-                      validated && familyStructure === 0
-                        ? ['家庭结构是必须的']
-                        : []
+                      validated && !familyStructure ? ['家庭结构是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -470,9 +466,7 @@
                     name="readingBehaviour"
                     data-vv-as="阅读习惯"
                     :error-messages="
-                      validated && readingBehaviour === 0
-                        ? ['阅读习惯是必须的']
-                        : []
+                      validated && !readingBehaviour ? ['阅读习惯是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -488,7 +482,7 @@
                     name="fatherCompanyTime"
                     data-vv-as="父亲陪伴时间"
                     :error-messages="
-                      validated && fatherCompanyTime === 0
+                      validated && !fatherCompanyTime
                         ? ['父亲陪伴时间是必须的']
                         : []
                     "
@@ -523,7 +517,7 @@
                     name="parentsCommitteeRole"
                     data-vv-as="请选择家委会角色"
                     :error-messages="
-                      validated && parentsCommitteeRole === 0
+                      validated && !parentsCommitteeRole
                         ? ['家委会角色是必须的']
                         : []
                     "
@@ -546,7 +540,7 @@
                     name="guardianResource"
                     data-vv-as="可提供的优势资源"
                     :error-messages="
-                      validated && guardianResource === ''
+                      validated && !guardianResource
                         ? ['可提供的优势资源是必须的']
                         : []
                     "
@@ -619,7 +613,7 @@
                     name="visionLevel"
                     data-vv-as="视力"
                     :error-messages="
-                      validated && visionLevel === 0 ? ['视力是必须的'] : []
+                      validated && !visionLevel ? ['视力是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -636,7 +630,7 @@
                       name="visionScoreLeftEye"
                       data-vv-as="左眼视力"
                       :error-messages="
-                        validated && visionScoreLeftEye === ''
+                        validated && !visionScoreLeftEye
                           ? ['左眼视力是必须的']
                           : []
                       "
@@ -653,7 +647,7 @@
                       name="visionScoreRightEye"
                       data-vv-as="右眼视力"
                       :error-messages="
-                        validated && visionScoreRightEye === ''
+                        validated && !visionScoreRightEye
                           ? ['右眼视力是必须的']
                           : []
                       "
@@ -673,9 +667,7 @@
                       name="sleepAtTime"
                       data-vv-as="睡觉时间"
                       :error-messages="
-                        validated && sleepAtTime === 0
-                          ? ['睡觉时间是必须的']
-                          : []
+                        validated && !sleepAtTime ? ['睡觉时间是必须的'] : []
                       "
                     ></v-select>
                   </v-flex>
@@ -690,9 +682,7 @@
                       name="getUpAtTime"
                       data-vv-as="起床时间"
                       :error-messages="
-                        validated && getUpAtTime === 0
-                          ? ['起床时间是必须的']
-                          : []
+                        validated && !getUpAtTime ? ['起床时间是必须的'] : []
                       "
                     ></v-select>
                   </v-flex>
@@ -720,7 +710,7 @@
                     v-validate="'required'"
                     name="personality"
                     :error-messages="
-                      validated && personality === 0 ? ['此选项是必须的'] : []
+                      validated && !personality ? ['此选项是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -733,7 +723,7 @@
                     v-validate="'required'"
                     name="doUp"
                     :error-messages="
-                      validated && doUp === 0 ? ['此选项是必须的'] : []
+                      validated && !doUp ? ['此选项是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -746,9 +736,7 @@
                     v-validate="'required'"
                     name="homeworkFinishTime"
                     :error-messages="
-                      validated && homeworkFinishTime === 0
-                        ? ['此选项是必须的']
-                        : []
+                      validated && !homeworkFinishTime ? ['此选项是必须的'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -782,7 +770,7 @@
                     v-validate="'required'"
                     name="touchElectronicDeviceTime"
                     :error-messages="
-                      validated && touchElectronicDeviceTime === 0
+                      validated && !touchElectronicDeviceTime
                         ? ['此选项是必须的']
                         : []
                     "
@@ -791,6 +779,7 @@
                 <v-flex class="py-2">
                   <h3 class="pb-3">6. 曾上过的幼儿园名称？</h3>
                   <v-textarea
+                    v-model="kindergarten"
                     class="kindergarten-name"
                     outline
                     rows="2"
@@ -815,7 +804,7 @@
                   </v-radio-group>
                 </v-flex>
                 <v-flex class="py-2">
-                  <h3>8. 孩子曾换过哪种疾病？</h3>
+                  <h3>8. 孩子曾患过哪种疾病？</h3>
                   <v-select
                     class="app-chips"
                     v-model="disease"
@@ -1298,6 +1287,10 @@ export default Vue.extend({
         },
         {
           value: 8,
+          text: '体育'
+        },
+        {
+          value: 9,
           text: '其他'
         }
       ],
