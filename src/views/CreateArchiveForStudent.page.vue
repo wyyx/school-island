@@ -39,11 +39,13 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="姓名"
                     :error-messages="
-                      validated ? errors.collect('studentName') : []
+                      validated && errors.collect('studentName').length > 0
+                        ? ['名字未填写']
+                        : []
                     "
                     v-model="studentName"
                     v-validate="'required'"
@@ -52,7 +54,7 @@
                     data-vv-as="名字"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="学生身份证号码"
                     persistent-hint
@@ -69,11 +71,13 @@
                     data-vv-as="身份证号"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="籍贯"
                     :error-messages="
-                      validated ? errors.collect('birthplace') : []
+                      validated && errors.collect('birthplace').length > 0
+                        ? ['籍贯未填写']
+                        : []
                     "
                     v-model="birthplace"
                     v-validate="'required'"
@@ -82,10 +86,14 @@
                     :value="firstStudentInfo.nativePlace"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="民族"
-                    :error-messages="validated ? errors.collect('nation') : []"
+                    :error-messages="
+                      validated && errors.collect('nation').length > 0
+                        ? ['民族未填写']
+                        : []
+                    "
                     v-model="nation"
                     v-validate="'required'"
                     name="nation"
@@ -93,12 +101,14 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex>
+                <v-flex class="py-1">
                   <v-radio-group
                     label="是否为独生子女"
                     v-model="isOnlyChild"
                     :error-messages="
-                      validated ? errors.collect('isOnlyChild') : []
+                      validated && errors.collect('isOnlyChild').length > 0
+                        ? ['此项未填写']
+                        : []
                     "
                     v-validate="'required'"
                     name="isOnlyChild"
@@ -115,9 +125,10 @@
                     label="是否为留守儿童"
                     v-model="isLeftoverChild"
                     row
-                    :hide-details="true"
                     :error-messages="
-                      validated ? errors.collect('isLeftoverChild') : []
+                      validated && errors.collect('isLeftoverChild').length > 0
+                        ? ['此项未填写']
+                        : []
                     "
                     v-validate="'required'"
                     name="isLeftoverChild"
@@ -134,7 +145,11 @@
                     outline
                     auto-grow
                     label="家庭地址"
-                    :error-messages="validated ? errors.collect('address') : []"
+                    :error-messages="
+                      validated && errors.collect('address').length > 0
+                        ? ['家庭地址未填写']
+                        : []
+                    "
                     v-model="address"
                     v-validate="'required'"
                     name="address"
@@ -146,6 +161,7 @@
           </v-card>
 
           <v-layout row wrap class="pa-4 text-xs-center">
+            <v-spacer></v-spacer>
             <v-flex xs6 class="px-2">
               <v-btn color="primary" block large @click="goToNextStepper">
                 下一步
@@ -166,11 +182,13 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="姓名"
                     :error-messages="
-                      validated ? errors.collect('guardianName') : []
+                      validated && errors.collect('guardianName').length > 0
+                        ? ['姓名未填写']
+                        : []
                     "
                     v-model="guardianName"
                     v-validate="'required'"
@@ -178,9 +196,9 @@
                     data-vv-as="姓名"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
-                    label="电话"
+                    label="手机"
                     :error-messages="validated ? errors.collect('phone') : []"
                     v-model="phone"
                     v-validate="{
@@ -192,19 +210,22 @@
                     data-vv-as="电话"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-select
                     v-model="certificateType"
                     :items="certificateTypeList"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     v-if="certificateType === '其他'"
                     label="证件类型名称"
                     :error-messages="
-                      validated ? errors.collect('certificateTypeName') : []
+                      validated &&
+                      errors.collect('certificateTypeName').length > 0
+                        ? ['证件类型名称未填写']
+                        : []
                     "
                     v-model="certificateTypeName"
                     v-validate="'required'"
@@ -212,7 +233,10 @@
                     data-vv-as="证件类型名称"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+
+          
+
+                <v-flex class="py-1">
                   <v-text-field
                     label="证件号码"
                     :error-messages="
@@ -233,12 +257,12 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex>
+                <v-flex class="py-1">
                   <v-select
                     :items="educationBackgroundList"
                     label="学历"
                     :error-messages="
-                      validated ? errors.collect('educationBackground') : []
+                      validated && !educationBackground ? ['学历未填写'] : []
                     "
                     v-model="educationBackground"
                     v-validate="'required'"
@@ -246,11 +270,13 @@
                     data-vv-as="学历"
                   ></v-select>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="职业"
                     :error-messages="
-                      validated ? errors.collect('profession') : []
+                      validated && errors.collect('profession').length > 0
+                        ? ['职业未填写']
+                        : []
                     "
                     v-model="profession"
                     v-validate="'required'"
@@ -258,7 +284,8 @@
                     data-vv-as="职业"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
+                  <h1>{{ relation }}</h1>
                   <v-select
                     label="与学生的关系"
                     v-model="relation"
@@ -270,7 +297,7 @@
                     name="relation"
                     data-vv-as="与学生的关系"
                     :error-messages="
-                      validated && !relation ? ['请选择与学生的关系'] : []
+                      validated && !relation ? ['与学生的关系未填写'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -300,11 +327,13 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="姓名"
                     :error-messages="
-                      validated ? errors.collect('guardianName2') : []
+                      validated && errors.collect('guardianName2').length > 0
+                        ? ['姓名未填写']
+                        : []
                     "
                     v-model="guardianName2"
                     v-validate="'required'"
@@ -312,10 +341,14 @@
                     data-vv-as="姓名"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="电话"
-                    :error-messages="validated ? errors.collect('phone2') : []"
+                    :error-messages="
+                      validated && errors.collect('phone2').length > 0
+                        ? ['电话未填写']
+                        : []
+                    "
                     v-model="phone2"
                     v-validate="{
                       required: true,
@@ -326,19 +359,22 @@
                     data-vv-as="电话"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-select
                     v-model="certificateType2"
                     :items="certificateTypeList"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     v-if="certificateType2 === '其他'"
                     label="证件类型名称"
                     :error-messages="
-                      validated ? errors.collect('certificateTypeName2') : []
+                      validated &&
+                      errors.collect('certificateTypeName2').length > 0
+                        ? ['证件类型名称未填写']
+                        : []
                     "
                     v-model="certificateTypeName2"
                     v-validate="'required'"
@@ -346,10 +382,10 @@
                     data-vv-as="证件类型名称"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="证件号码"
-                    :error-messages="
+                   :error-messages="
                       validated ? errors.collect('certificateNumber2') : []
                     "
                     v-model="certificateNumber2"
@@ -367,12 +403,12 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex>
+                <v-flex class="py-1">
                   <v-select
                     :items="educationBackgroundList"
                     label="学历"
                     :error-messages="
-                      validated ? errors.collect('educationBackground2') : []
+                      validated && !educationBackground2 ? ['学历未填写'] : []
                     "
                     v-model="educationBackground2"
                     v-validate="'required'"
@@ -380,11 +416,13 @@
                     data-vv-as="学历"
                   ></v-select>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-text-field
                     label="职业"
                     :error-messages="
-                      validated ? errors.collect('profession2') : []
+                      validated && errors.collect('profession2').length > 0
+                        ? ['职业未填写']
+                        : []
                     "
                     v-model="profession2"
                     v-validate="'required'"
@@ -392,7 +430,7 @@
                     data-vv-as="职业"
                   ></v-text-field>
                 </v-flex>
-                <v-flex>
+                <v-flex class="py-1">
                   <v-select
                     label="与学生的关系"
                     v-model="relation2"
@@ -404,7 +442,9 @@
                     name="relation2"
                     data-vv-as="与学生的关系"
                     :error-messages="
-                      validated && !relation2 ? ['请选择与学生的关系'] : []
+                      validated && errors.collect('relation2').length > 0
+                        ? ['与学生的关系未填写']
+                        : []
                     "
                   ></v-select>
                 </v-flex>
@@ -434,7 +474,7 @@
                     name="pickupPerson"
                     data-vv-as="接送人"
                     :error-messages="
-                      validated && !pickupPerson ? ['主要接送人是必须的'] : []
+                      validated && !pickupPerson ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -450,7 +490,7 @@
                     name="familyStructure"
                     data-vv-as="家庭结构"
                     :error-messages="
-                      validated && !familyStructure ? ['家庭结构是必须的'] : []
+                      validated && !familyStructure ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -466,7 +506,7 @@
                     name="readingBehaviour"
                     data-vv-as="阅读习惯"
                     :error-messages="
-                      validated && !readingBehaviour ? ['阅读习惯是必须的'] : []
+                      validated && !readingBehaviour ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -482,9 +522,7 @@
                     name="fatherCompanyTime"
                     data-vv-as="父亲陪伴时间"
                     :error-messages="
-                      validated && !fatherCompanyTime
-                        ? ['父亲陪伴时间是必须的']
-                        : []
+                      validated && !fatherCompanyTime ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -494,8 +532,10 @@
                   <v-radio-group
                     v-model="isWillingJoinInParentsCommittee"
                     :error-messages="
-                      validated
-                        ? errors.collect('isWillingJoinInParentsCommittee')
+                      validated &&
+                      errors.collect('isWillingJoinInParentsCommittee').length >
+                        0
+                        ? ['此项未完成']
                         : []
                     "
                     v-validate="'required'"
@@ -517,9 +557,7 @@
                     name="parentsCommitteeRole"
                     data-vv-as="请选择家委会角色"
                     :error-messages="
-                      validated && !parentsCommitteeRole
-                        ? ['家委会角色是必须的']
-                        : []
+                      validated && !parentsCommitteeRole ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -540,9 +578,7 @@
                     name="guardianResource"
                     data-vv-as="可提供的优势资源"
                     :error-messages="
-                      validated && !guardianResource
-                        ? ['可提供的优势资源是必须的']
-                        : []
+                      validated && !guardianResource ? ['此项未完成'] : []
                     "
                   ></v-textarea>
                 </v-flex>
@@ -586,7 +622,11 @@
                     v-validate="'required'"
                     name="height"
                     data-vv-as="身高"
-                    :error-messages="validated ? errors.collect('height') : []"
+                    :error-messages="
+                      validated && errors.collect('height').length > 0
+                        ? ['身高未填写']
+                        : []
+                    "
                   ></v-text-field>
                 </v-flex>
                 <v-flex>
@@ -598,7 +638,11 @@
                     v-validate="'required'"
                     name="weight"
                     data-vv-as="体重"
-                    :error-messages="validated ? errors.collect('weight') : []"
+                    :error-messages="
+                      validated && errors.collect('weight').length > 0
+                        ? ['体重未填写']
+                        : []
+                    "
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -613,7 +657,9 @@
                     name="visionLevel"
                     data-vv-as="视力"
                     :error-messages="
-                      validated && !visionLevel ? ['视力是必须的'] : []
+                      validated && errors.collect('visionLevel').length > 0
+                        ? ['视力未填写']
+                        : []
                     "
                   ></v-select>
                 </v-flex>
@@ -630,8 +676,9 @@
                       name="visionScoreLeftEye"
                       data-vv-as="左眼视力"
                       :error-messages="
-                        validated && !visionScoreLeftEye
-                          ? ['左眼视力是必须的']
+                        validated &&
+                        errors.collect('visionScoreLeftEye').length > 0
+                          ? ['左眼视力未填写']
                           : []
                       "
                     ></v-select>
@@ -647,8 +694,9 @@
                       name="visionScoreRightEye"
                       data-vv-as="右眼视力"
                       :error-messages="
-                        validated && !visionScoreRightEye
-                          ? ['右眼视力是必须的']
+                        validated &&
+                        errors.collect('visionScoreRightEye').length > 0
+                          ? ['右眼视力未填写']
                           : []
                       "
                     ></v-select>
@@ -667,7 +715,9 @@
                       name="sleepAtTime"
                       data-vv-as="睡觉时间"
                       :error-messages="
-                        validated && !sleepAtTime ? ['睡觉时间是必须的'] : []
+                        validated && errors.collect('sleepAtTime').length > 0
+                          ? ['睡觉时间未填写']
+                          : []
                       "
                     ></v-select>
                   </v-flex>
@@ -682,7 +732,9 @@
                       name="getUpAtTime"
                       data-vv-as="起床时间"
                       :error-messages="
-                        validated && !getUpAtTime ? ['起床时间是必须的'] : []
+                        validated && errors.collect('getUpAtTime').length > 0
+                          ? ['起床时间未填写']
+                          : []
                       "
                     ></v-select>
                   </v-flex>
@@ -710,7 +762,7 @@
                     v-validate="'required'"
                     name="personality"
                     :error-messages="
-                      validated && !personality ? ['此选项是必须的'] : []
+                      validated && !personality ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -722,9 +774,7 @@
                     placeholder="请选择"
                     v-validate="'required'"
                     name="doUp"
-                    :error-messages="
-                      validated && !doUp ? ['此选项是必须的'] : []
-                    "
+                    :error-messages="validated && !doUp ? ['此项未完成'] : []"
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-4">
@@ -736,7 +786,7 @@
                     v-validate="'required'"
                     name="homeworkFinishTime"
                     :error-messages="
-                      validated && !homeworkFinishTime ? ['此选项是必须的'] : []
+                      validated && !homeworkFinishTime ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -756,7 +806,7 @@
                     name="trainingSubject"
                     :error-messages="
                       validated && trainingSubject.length < 1
-                        ? ['此选项是必须的']
+                        ? ['此项未完成']
                         : []
                     "
                   ></v-select>
@@ -771,7 +821,7 @@
                     name="touchElectronicDeviceTime"
                     :error-messages="
                       validated && !touchElectronicDeviceTime
-                        ? ['此选项是必须的']
+                        ? ['此项未完成']
                         : []
                     "
                   ></v-select>
@@ -785,6 +835,11 @@
                     rows="2"
                     auto-grow
                     placeholder="输入全称，例如：成都市天府新区红太阳幼儿园"
+                    v-validate="'required'"
+                    name="kindergarten"
+                    :error-messages="
+                      validated && !kindergarten ? ['此项未填写'] : []
+                    "
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-4">
@@ -792,7 +847,10 @@
                   <v-radio-group
                     v-model="isEatLunchAtSchool"
                     :error-messages="
-                      validated ? errors.collect('isEatLunchAtSchool') : []
+                      validated &&
+                      errors.collect('isEatLunchAtSchool').length > 0
+                        ? ['此项未完成']
+                        : []
                     "
                     v-validate="'required'"
                     name="isEatLunchAtSchool"
@@ -818,7 +876,7 @@
                     v-validate="'required'"
                     name="disease"
                     :error-messages="
-                      validated && disease.length < 1 ? ['此选项是必须的'] : []
+                      validated && disease.length < 1 ? ['此项未完成'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -831,9 +889,11 @@
                     rows="3"
                     auto-grow
                     v-validate="'required'"
-                    :error-messages="validated ? errors.collect('allergy') : []"
+                    :error-messages="
+                      validated && allergy.length < 1 ? ['此项未完成'] : []
+                    "
                     name="allergy"
-                    data-vv-as="此选项"
+                    data-vv-as="此项"
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-4">
@@ -846,10 +906,10 @@
                     auto-grow
                     v-validate="'required'"
                     :error-messages="
-                      validated ? errors.collect('speciality') : []
+                      validated && !speciality ? ['此项未填写'] : []
                     "
                     name="speciality"
-                    data-vv-as="此选项"
+                    data-vv-as="此项"
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-4">
@@ -862,10 +922,10 @@
                     auto-grow
                     v-validate="'required'"
                     :error-messages="
-                      validated ? errors.collect('expectation') : []
+                      validated && !expectation ? ['此项未填写'] : []
                     "
                     name="expectation"
-                    data-vv-as="此选项"
+                    data-vv-as="此项"
                   ></v-textarea>
                 </v-flex>
               </v-layout>
@@ -892,7 +952,9 @@
             <div class="app-flex app-h-center app-v-center app-fill-height">
               <div class="text-xs-center">
                 <v-icon color="success" size="56">check_circle_outline</v-icon>
-                <div class="title app-v-center">恭喜您，终于完成了！</div>
+                <div class="title app-v-center">
+                  恭喜您，信息录入完成了！谢谢您的支持！
+                </div>
               </div>
             </div>
           </v-card>
@@ -976,22 +1038,18 @@ export default Vue.extend({
       educationBackgroundList: [
         {
           value: 1,
-          text: '大专以下'
+          text: '大专及以下'
         },
         {
           value: 2,
-          text: '大专'
-        },
-        {
-          value: 3,
           text: '本科'
         },
         {
-          value: 4,
+          value: 3,
           text: '硕士'
         },
         {
-          value: 5,
+          value: 4,
           text: '博士'
         }
       ],
@@ -1608,7 +1666,7 @@ export default Vue.extend({
         console.log('TCL: getUnfinishedInfoCollection -> res', res)
         this.unfinishedInfoCollectionList = res.data.content || []
 
-        this.fillForm()
+        // this.fillForm()
       })
     }
   }
