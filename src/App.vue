@@ -58,6 +58,12 @@ import {
 } from './store/auth/auth.actions'
 import { storeService } from './services/store.service'
 import { RoleVo } from './models/user.model'
+import {
+  UnfinishedInfoCollection,
+  InfoCollectionUserTypes,
+  AddStudentAndParentsInfoCollectionParams
+} from './models/archive.model'
+import { archiveService } from './services/archive.service'
 
 export default Vue.extend({
   name: 'App',
@@ -65,7 +71,9 @@ export default Vue.extend({
     AppTabs
   },
   data() {
-    return {}
+    return {
+      unfinishedInfoCollectionList: [] as UnfinishedInfoCollection[]
+    }
   },
   computed: {
     ...get(authModulePath, {
@@ -79,7 +87,25 @@ export default Vue.extend({
     }),
     ...get(authModulePath, {
       appIsLoading
-    })
+    }),
+    hasUnfinishedStudentInfoCollection() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const studentInfoCollection = unfinishedInfoCollectionList.filter(
+        studentInfo => studentInfo.userType === InfoCollectionUserTypes.Student
+      )[0]
+
+      const studentInfoList: AddStudentAndParentsInfoCollectionParams[] =
+        (studentInfoCollection && studentInfoCollection.entity) || []
+
+      console.log(
+        'TCL: hasUnfinishedStudentInfoCollection -> studentInfoList',
+        studentInfoList
+      )
+
+      return studentInfoList.length > 0 ? true : false
+    }
   },
   created() {
     // open when build
@@ -94,6 +120,12 @@ export default Vue.extend({
     this.loadSchoolInfo()
     // open when build
     this.saveCurrentState()
+
+    // setTimeout(() => {
+    //   this.$router.push({
+    //     name: 'create-archive-for-student'
+    //   })
+    // }, 2000)
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {
@@ -113,10 +145,36 @@ export default Vue.extend({
           this.$router.push({ path: `/workbench/${that.firstRoleRoute}` })
         }
       }
+    },
+    hasUnfinishedStudentInfoCollection(newVal, oldVal) {
+      const that: any = this
+
+      if (newVal) {
+        that.$router.push({
+          name: 'create-archive-for-student'
+        })
+      }
     }
   },
 
   methods: {
+    getUnfinishedInfoCollection() {
+      archiveService.getUnfinishedInfoCollection().then(res => {
+        this.unfinishedInfoCollectionList = res.data.content || []
+
+        const that: any = this
+        that.firstStudentInfo
+        console.log(
+          'TCL: getUnfinishedInfoCollection -> that.firstStudentInfo',
+          that.firstStudentInfo
+        )
+        that.teacherInfo
+        console.log(
+          'TCL: getUnfinishedInfoCollection -> that.teacherInfo',
+          that.teacherInfo
+        )
+      })
+    },
     resolveInitUrl() {
       // parse current url
       const currentUrl = window.location.href
@@ -207,6 +265,8 @@ export default Vue.extend({
             this.$store
               .dispatch(authModulePath + loadUserInfoSuccessAction, userInfo)
               .then(() => {
+                this.getUnfinishedInfoCollection()
+
                 storeService.store.set(authModulePath + isFirstLoading, false)
 
                 if (userInfo.roleVoList && userInfo.roleVoList.length > 0) {

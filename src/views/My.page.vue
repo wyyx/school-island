@@ -106,7 +106,7 @@
       </v-layout>
     </v-card>
 
-    <v-card class="pa-2">
+    <v-card class="pa-2" v-if="false">
       <v-btn
         color="accent"
         @click="goToStudentInfoCollectionPage"
@@ -114,11 +114,7 @@
       >
         学生信息采集
       </v-btn>
-      <v-btn
-        color="accent"
-        @click="goToTeacherInfoCollectionPage"
-        v-if="teacherInfo.name"
-      >
+      <v-btn color="accent" @click="goToTeacherInfoCollectionPage" v-if="false">
         老师信息采集
       </v-btn>
     </v-card>

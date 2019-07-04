@@ -4,20 +4,57 @@
       "userType": 1,
       "entity": [
         {
-          "studentType": 2,
-          "childName": "陈佳依",
-          "childIdCard": "510107201008180263"
-        },
-        {
           "studentType": 1,
-          "childName": "杨紫涵",
-          "childIdCard": "510122201001110143"
+          "childName": "马永豪",
+          "childIdCard": "511602201307033913",
+          "nativePlace": "四川成都",
+          "nation": "汉族",
+          "onlyChild": 0,
+          "stayHomeChild": 0,
+          "homeAddress": "成都市天府新区华阳南湖大道333号4栋1单元6楼601号",
+          "height": 119.0,
+          "weight": 19.0,
+          "eyesight": 1,
+          "sleepTime": 1,
+          "getUpTime": 3,
+          "kindergarten": "成都市天府新区红樱美幼儿园",
+          "characterChild": 3,
+          "cleanToy": 2,
+          "homeworkFinish": 1,
+          "extraTutoringContent": [""],
+          "lunchAtSchool": 0,
+          "sickenIllness": [""],
+          "foodAndMedicineAllergy": "无",
+          "majorConvoy": 5,
+          "readHabit": 3,
+          "resource": "无",
+          "parentCommittee": 0,
+          "parents": [
+            {
+              "parentsName": "程明丽",
+              "phone": "13568906247",
+              "papersType": "身份证",
+              "parentsIdCard": "513622198108153923",
+              "educationDiploma": 1,
+              "professionPosition": "美容",
+              "withStudentRelation": 2
+            },
+            {
+              "parentsName": "马华斌",
+              "phone": "15308218583",
+              "papersType": "身份证",
+              "parentsIdCard": "512925197608223916",
+              "educationDiploma": 1,
+              "professionPosition": "建筑",
+              "withStudentRelation": 1
+            }
+          ]
         }
       ]
     },
     {
       "userType": 2,
-      "entity": [{ "name": "何燕妮", "idCard": "510723199501104080" }]
+      "entity": [{ "name": "宋佳", "idCard": "511024199212310389" }]
     }
   ],
   "status": "OK",

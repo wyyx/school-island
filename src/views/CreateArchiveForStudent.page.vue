@@ -2,20 +2,55 @@
   <div class="wrapper create-archive-for-student-page">
     <Header title="建立学生档案" @back="goBack"></Header>
 
+    <!-- guide card -->
     <div class="pa-2 mt-3" v-if="showGuideCard">
       <v-card class="pa-2">
         <img src="../assets/students.svg" width="100%" height="300px" />
         <v-card-text>
-          <h3 class="subheading">
+          <h3 class="headline info-collection-guild">
             为了让老师更好的了解您孩子的成长信息，因材施教并建立个人学籍档案，请家长们认真填写哦！
           </h3>
         </v-card-text>
-        <v-card-actions>
+        <v-card-actions class="py-3">
           <v-layout row wrap justify-center>
             <v-flex xs6 class="text-xs-center">
+              <v-btn flat large xs6 @click="goBack">
+                <span class="pr-1">下次再填</span>
+              </v-btn>
+            </v-flex>
+            <v-flex>
               <v-btn large xs6 color="primary" @click="goToFillForm">
                 <span class="pr-1">去填写</span>
                 <v-icon>arrow_right_alt </v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
+      </v-card>
+    </div>
+
+    <!-- success card -->
+    <div class="pa-2 mt-3" v-if="showSuccessCard">
+      <v-card class="mb-4 pa-2">
+        <img src="../assets/firework.svg" height="120px" width="100%" />
+        <div class="app-flex app-h-center app-v-center app-fill-height">
+          <div class="text-xs-center">
+            <div class="info-collection-success-btn-wrapper">
+              <v-icon color="success" size="72">
+                check
+              </v-icon>
+            </div>
+
+            <div class="subheading app-v-center">
+              已完成！感谢您的支持！
+            </div>
+          </div>
+        </div>
+        <v-card-actions class="py-3">
+          <v-layout row wrap justify-center>
+            <v-flex xs6 class="text-xs-center">
+              <v-btn large xs6 color="accent" @click="goToWorkbenchPage">
+                <span class="pr-1">回到首页</span>
               </v-btn>
             </v-flex>
           </v-layout>
@@ -41,11 +76,11 @@
           <span class="py-1">学生信息</span>
         </v-stepper-step>
 
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider> -->
 
-        <v-stepper-step step="4" :complete="step >= 4">
+        <!-- <v-stepper-step step="4" :complete="step >= 4">
           <span class="py-1">完成</span>
-        </v-stepper-step>
+        </v-stepper-step> -->
       </v-stepper-header>
 
       <v-stepper-items>
@@ -62,6 +97,8 @@
               <v-layout column nowrap>
                 <v-flex class="py-1">
                   <v-text-field
+                    :disabled="true"
+                    :readonly="true"
                     label="姓名"
                     :error-messages="
                       validated && errors.collect('studentName').length > 0
@@ -77,6 +114,8 @@
                 </v-flex>
                 <v-flex class="py-1">
                   <v-text-field
+                    :disabled="true"
+                    :readonly="true"
                     label="学生身份证号码"
                     persistent-hint
                     :error-messages="
@@ -222,6 +261,8 @@
                     label="手机"
                     :error-messages="validated ? errors.collect('phone') : []"
                     v-model="phone"
+                    :counter="11"
+                    maxlength="11"
                     v-validate="{
                       required: true,
                       length: 11,
@@ -362,6 +403,8 @@
                 <v-flex class="py-1">
                   <v-text-field
                     label="电话"
+                    :counter="11"
+                    maxlength="11"
                     :error-messages="validated ? errors.collect('phone2') : []"
                     v-model="phone2"
                     v-validate="{
@@ -800,6 +843,7 @@
                 </v-flex>
                 <v-flex class="py-4">
                   <h3>4. 课外主要去培训机构补习什么？</h3>
+                  <!-- <h1>{{ trainingSubject }}</h1> -->
                   <v-select
                     class="app-chips"
                     v-model="trainingSubject"
@@ -959,7 +1003,7 @@
         </v-stepper-content>
 
         <!-- 4 step 完成 -->
-        <v-stepper-content step="4" v-if="step >= 4">
+        <!-- <v-stepper-content step="4" v-if="step >= 4">
           <v-card flat class="mb-4">
             <img src="../assets/firework.svg" height="120px" width="100%" />
             <div class="app-flex app-h-center app-v-center app-fill-height">
@@ -979,9 +1023,21 @@
               </v-btn>
             </div>
           </div>
-        </v-stepper-content>
+        </v-stepper-content> -->
       </v-stepper-items>
     </v-stepper>
+
+    <v-snackbar
+      :top="true"
+      v-model="showSnackbar"
+      :color="color"
+      :timeout="2000"
+    >
+      {{ message }}
+      <v-btn dark flat @click="showSnackbar = false">
+        关闭
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -997,12 +1053,17 @@ import {
   InfoCollectionStudentTypes,
   Parent
 } from '../models/archive.model'
+import { snackbarMixin } from '../mixins/snackbar.mixin'
+import { get } from 'vuex-pathify'
+import { authModulePath, roleRoute } from '../store/auth/auth.paths'
 
 export default Vue.extend({
+  mixins: [snackbarMixin],
   components: { Header },
   data: function() {
     return {
       showGuideCard: true,
+      showSuccessCard: false,
       showStepper: false,
       ID_CARD_REG: ID_CARD_REG,
       PHONE_NUMBER_REG: PHONE_NUMBER_REG,
@@ -1446,6 +1507,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    ...get(authModulePath, {
+      roleRoute
+    }),
     firstStudentInfo() {
       const that: any = this
       const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
@@ -1492,11 +1556,18 @@ export default Vue.extend({
         name: 'home'
       })
     },
+    goToWorkbenchPage() {
+      const that: any = this
+      this.$router.push({
+        path: `/workbench/${that.roleRoute}`
+      })
+    },
     goToFillForm() {
       this.showGuideCard = false
       this.showStepper = true
     },
     goToNextStepper() {
+      const that: any = this
       this.$validator.validate().then(valid => {
         console.log('TCL: goToNextStepper -> valid', valid)
         this.validated = true
@@ -1504,6 +1575,8 @@ export default Vue.extend({
         if (valid) {
           this.step = this.step + 1
           this.validated = false
+        } else {
+          that.showFailMessage('您有未完成的选项！')
         }
       })
     },
@@ -1533,17 +1606,20 @@ export default Vue.extend({
       // 第一监护人信息
       this.guardianName = firstGuardian.parentsName
       this.phone = firstGuardian.phone
-      this.certificateType = firstGuardian.papersType
 
-      // 新增证件类型
-      if (
-        !this.certificateTypeList.includes(firstGuardian.papersType) &&
+      console.log(
+        'TCL: fillForm -> firstGuardian.papersType',
         firstGuardian.papersType
-      ) {
-        this.certificateTypeList.push(firstGuardian.papersType)
+      )
+
+      if (firstGuardian.papersType === '身份证') {
+        console.log('uuuuuuuuuuu')
+        this.certificateType = firstGuardian.papersType
+      } else {
+        this.certificateType = '其他'
+        this.certificateTypeName = firstGuardian.papersType
       }
 
-      this.certificateTypeName = firstGuardian.papersType
       this.certificateNumber = firstGuardian.parentsIdCard
       this.educationBackground = firstGuardian.educationDiploma
       this.profession = firstGuardian.professionPosition
@@ -1587,6 +1663,7 @@ export default Vue.extend({
       this.expectation = firstStudentInfo.hope
     },
     submit() {
+      const that: any = this
       this.$validator.validate().then(valid => {
         console.log('TCL: valid', valid)
         this.validated = true
@@ -1596,7 +1673,6 @@ export default Vue.extend({
 
           const params = {} as AddStudentAndParentsInfoCollectionParams
 
-          const that: any = this
           const firstStudentInfo = that.firstStudentInfo as AddStudentAndParentsInfoCollectionParams
 
           // 学生类型
@@ -1613,22 +1689,27 @@ export default Vue.extend({
           const firstGuardian = {} as Parent
           firstGuardian.parentsName = this.guardianName
           firstGuardian.phone = this.phone
-          firstGuardian.papersType = this.certificateType
-          firstGuardian.papersType = this.certificateTypeName
+
+          if (this.certificateType === '其他') {
+            firstGuardian.papersType = this.certificateTypeName
+          } else {
+            firstGuardian.papersType = this.certificateType
+          }
+
           firstGuardian.parentsIdCard = this.certificateNumber
           firstGuardian.educationDiploma = this.educationBackground
           firstGuardian.professionPosition = this.profession
           firstGuardian.withStudentRelation = this.relation
           // 第二监护人信息
           const secondGuardian = {} as Parent
-          secondGuardian.parentsName = this.guardianName
-          secondGuardian.phone = this.phone
-          secondGuardian.papersType = this.certificateType
-          secondGuardian.papersType = this.certificateTypeName
-          secondGuardian.parentsIdCard = this.certificateNumber
-          secondGuardian.educationDiploma = this.educationBackground
-          secondGuardian.professionPosition = this.profession
-          secondGuardian.withStudentRelation = this.relation
+          secondGuardian.parentsName = this.guardianName2
+          secondGuardian.phone = this.phone2
+          secondGuardian.papersType = this.certificateType2
+          secondGuardian.papersType = this.certificateTypeName2
+          secondGuardian.parentsIdCard = this.certificateNumber2
+          secondGuardian.educationDiploma = this.educationBackground2
+          secondGuardian.professionPosition = this.profession2
+          secondGuardian.withStudentRelation = this.relation2
           // set parents
           params.parents = this.showSecondGuardian
             ? [firstGuardian, secondGuardian]
@@ -1674,9 +1755,17 @@ export default Vue.extend({
               )
 
               if (res.data.content) {
-                this.step = 4
+                this.showSuccessCard = true
+                this.showStepper = false
+              } else {
+                const message = res.data.errorMsg
+                  ? res.data.errorMsg
+                  : '出现未知错误，请稍后再试！'
+                that.showFailMessage(message)
               }
             })
+        } else {
+          that.showFailMessage('您有未完成的选项！')
         }
       })
     },
@@ -1692,4 +1781,13 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.info-collection-success-btn-wrapper {
+  position: relative;
+  padding-bottom: 24px;
+}
+
+.info-collection-guild {
+  line-height: 3rem !important;
+}
+</style>
