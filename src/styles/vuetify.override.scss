@@ -48,26 +48,29 @@ table.v-table tbody td:first-child {
 }
 
 .create-archive-for-student-page {
+  .v-stepper {
+    padding-top: 56px;
+  }
+
   .v-card__title {
     padding-top: 16px !important;
   }
 
-  .v-stepper__step {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  // .v-stepper__label {
-  //   display: unset !important;
-  // }
-
   .v-stepper__header {
-    box-shadow: unset !important;
-    // height: 56px !important;
+    height: 56px !important;
+    position: fixed;
+    width: 100%;
+    z-index: 20;
+    top: 48px;
+    background-color: white;
   }
 
   .v-stepper__content {
     padding: 0px !important;
+  }
+
+  .v-stepper__step {
+    height: 56px !important;
   }
 
   .v-stepper__wrapper {
@@ -101,4 +104,33 @@ table.v-table tbody td:first-child {
   //       0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
   //   }
   // }
+}
+
+// .v-text-field > .v-input__control > .v-input__slot:before {
+//   border-color: rgba(0, 0, 0, 0.42);
+//   border-top-color: rgba(0, 0, 0, 0.42);
+//   border-right-color: rgba(0, 0, 0, 0.42);
+//   border-bottom-color: rgba(218, 16, 16, 0.42) !important;
+//   border-left-color: rgba(0, 0, 0, 0.42);
+// }
+
+.theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
+  border: 1px solid rgba(0, 0, 0, 0.54);
+  border-top-color: rgba(0, 0, 0, 0.54);
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-right-color: rgba(0, 0, 0, 0.54);
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-bottom-color: rgba(0, 0, 0, 0.54);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-left-color: rgba(0, 0, 0, 0.54);
+  border-left-style: solid;
+  border-left-width: 1px;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
 }

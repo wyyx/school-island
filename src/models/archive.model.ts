@@ -16,7 +16,7 @@ export interface AddStudentAndParentsInfoCollectionParams {
   childName: string
   cleanToy: number
   committeePosition: number
-  extraTutoringContent: string[]
+  extraTutoringContent: string
   eyesight: number
   familyConstruction: number
   fatherAccompany: number

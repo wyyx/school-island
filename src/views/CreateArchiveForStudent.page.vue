@@ -3,7 +3,7 @@
     <Header title="建立学生档案" @back="goBack"></Header>
 
     <!-- guide card -->
-    <div class="pa-2 mt-3" v-if="showGuideCard">
+    <div class="pa-2 my-3" v-if="showGuideCard">
       <v-card class="pa-2">
         <img src="../assets/students.svg" width="100%" height="300px" />
         <v-card-text>
@@ -30,7 +30,7 @@
     </div>
 
     <!-- success card -->
-    <div class="pa-2 mt-3" v-if="showSuccessCard">
+    <div class="pa-2 my-3" v-if="showSuccessCard">
       <v-card class="mb-4 pa-2">
         <img src="../assets/firework.svg" height="120px" width="100%" />
         <div class="app-flex app-h-center app-v-center app-fill-height">
@@ -95,24 +95,24 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     :disabled="true"
                     :readonly="true"
-                    label="姓名"
+                    label="学生姓名"
                     :error-messages="
                       validated && errors.collect('studentName').length > 0
-                        ? ['名字未填写']
+                        ? ['学生姓名未填写']
                         : []
                     "
                     v-model="studentName"
                     v-validate="'required'"
                     name="studentName"
                     :value="firstStudentInfo.studentName"
-                    data-vv-as="名字"
+                    data-vv-as="学生姓名"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     :disabled="true"
                     :readonly="true"
@@ -131,7 +131,7 @@
                     data-vv-as="身份证号"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="籍贯"
                     :error-messages="
@@ -146,7 +146,7 @@
                     :value="firstStudentInfo.nativePlace"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="民族"
                     :error-messages="
@@ -161,7 +161,7 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex class="py-1">
+                <v-flex>
                   <v-radio-group
                     label="是否为独生子女"
                     v-model="isOnlyChild"
@@ -242,7 +242,7 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="姓名"
                     :error-messages="
@@ -256,7 +256,7 @@
                     data-vv-as="姓名"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="手机"
                     :error-messages="validated ? errors.collect('phone') : []"
@@ -272,14 +272,14 @@
                     data-vv-as="电话"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-select
                     v-model="certificateType"
                     :items="certificateTypeList"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     v-if="certificateType === '其他'"
                     label="证件类型名称"
@@ -296,7 +296,7 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="证件号码"
                     :error-messages="
@@ -317,7 +317,7 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex class="py-1">
+                <v-flex>
                   <v-select
                     :items="educationBackgroundList"
                     label="学历"
@@ -330,7 +330,7 @@
                     data-vv-as="学历"
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="职业"
                     :error-messages="
@@ -344,7 +344,7 @@
                     data-vv-as="职业"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-select
                     label="与学生的关系"
                     v-model="relation"
@@ -386,7 +386,7 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="姓名"
                     :error-messages="
@@ -400,7 +400,7 @@
                     data-vv-as="姓名"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="电话"
                     :counter="11"
@@ -416,14 +416,14 @@
                     data-vv-as="电话"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-select
                     v-model="certificateType2"
                     :items="certificateTypeList"
                     label="证件类型"
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     v-if="certificateType2 === '其他'"
                     label="证件类型名称"
@@ -439,7 +439,7 @@
                     data-vv-as="证件类型名称"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="证件号码"
                     :error-messages="
@@ -460,7 +460,7 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex class="py-1">
+                <v-flex>
                   <v-select
                     :items="educationBackgroundList"
                     label="学历"
@@ -473,7 +473,7 @@
                     data-vv-as="学历"
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-text-field
                     label="职业"
                     :error-messages="
@@ -487,7 +487,7 @@
                     data-vv-as="职业"
                   ></v-text-field>
                 </v-flex>
-                <v-flex class="py-1">
+                <v-flex>
                   <v-select
                     label="与学生的关系"
                     v-model="relation2"
@@ -517,7 +517,7 @@
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>1. 您的孩子上下学主要由谁接送？</h3>
                   <v-select
                     v-model="pickupPerson"
@@ -533,7 +533,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>2. 您的家庭结构？（现居住状况）</h3>
                   <v-select
                     v-model="familyStructure"
@@ -549,7 +549,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>3. 您的家庭有阅读习惯吗？</h3>
                   <v-select
                     v-model="readingBehaviour"
@@ -565,7 +565,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>4. 父亲辅导或陪护孩子的时间？</h3>
                   <v-select
                     v-model="fatherCompanyTime"
@@ -582,7 +582,7 @@
                   ></v-select>
                 </v-flex>
 
-                <v-flex v-if="isNewStudent">
+                <v-flex v-if="isNewStudent" class="py-3">
                   <h3>5. 您是否愿意加入家委会？</h3>
                   <v-radio-group
                     v-model="isWillingJoinInParentsCommittee"
@@ -618,7 +618,7 @@
                 </v-flex>
 
                 <v-flex>
-                  <h3 class="pb-3">
+                  <h3 class="pb-2">
                     <span v-if="isNewStudent">6</span> <span v-else>5</span>.
                     如果学校或班级需要您的帮助，您能提供哪些优势资源？
                   </h3>
@@ -626,7 +626,7 @@
                     v-model="guardianResource"
                     class="guardian-resource"
                     outline
-                    rows="3"
+                    rows="4"
                     auto-grow
                     placeholder="例：广告资源、教育资源、医院资源、农家乐资源、会务资源、旅游资源......  类型不限,只要有优势都可以。"
                     v-validate="'required'"
@@ -656,13 +656,13 @@
           </v-layout>
         </v-stepper-content>
 
-        <!-- 3 stepper 学生信息 -->
+        <!-- 3 stepper 学生基础信息 -->
         <v-stepper-content step="3" v-if="step >= 3">
           <!-- 学生信息 -->
           <v-card class="mb-4">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0 font-weight-bold">学生信息</h3>
+                <h3 class="title mb-0 font-weight-bold">学生扩展信息</h3>
               </div>
             </v-card-title>
 
@@ -796,15 +796,15 @@
 
           <!-- 学生扩展信息 -->
           <v-card class="mb-4">
-            <v-card-title primary-title>
+            <!-- <v-card-title primary-title>
               <div>
                 <h3 class="title mb-0 font-weight-bold">学生扩展信息</h3>
               </div>
-            </v-card-title>
+            </v-card-title> -->
 
             <v-card-text>
               <v-layout column nowrap>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>1. 孩子性格怎样？</h3>
                   <v-select
                     v-model="personality"
@@ -817,7 +817,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>2. 孩子会主动收拾玩具，并归类放好吗?</h3>
                   <v-select
                     v-model="doUp"
@@ -828,7 +828,7 @@
                     :error-messages="validated && !doUp ? ['此项未选择'] : []"
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>3. 家庭作业完成时间？</h3>
                   <v-select
                     v-model="homeworkFinishTime"
@@ -841,29 +841,23 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
-                  <h3>4. 课外主要去培训机构补习什么？</h3>
-                  <!-- <h1>{{ trainingSubject }}</h1> -->
-                  <v-select
-                    class="app-chips"
+                <v-flex class="py-3">
+                  <h3 class="pb-2">4. 课外主要去培训机构补习什么？</h3>
+                  <v-textarea
                     v-model="trainingSubject"
-                    :items="trainingSubjectList"
-                    item-value="text"
-                    attach
-                    chips
-                    multiple
-                    deletable-chips
-                    placeholder="请选择"
+                    class="app-textarea"
+                    outline
+                    rows="3"
+                    auto-grow
+                    placeholder="例如：语文、数学、音乐、篮球、书法..."
                     v-validate="'required'"
                     name="trainingSubject"
                     :error-messages="
-                      validated && trainingSubject.length < 1
-                        ? ['此项未选择']
-                        : []
+                      validated && !trainingSubject ? ['此项未填写'] : []
                     "
-                  ></v-select>
+                  ></v-textarea>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-3">
                   <h3>5. 孩子接触电子设备时间（电视、手机、平板、）？</h3>
                   <v-select
                     v-model="touchElectronicDeviceTime"
@@ -878,8 +872,8 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4" v-if="isNewStudent">
-                  <h3 class="pb-3">6. 曾上过的幼儿园名称？</h3>
+                <v-flex class="py-3" v-if="isNewStudent">
+                  <h3 class="pb-2">6. 曾上过的幼儿园名称？</h3>
                   <v-textarea
                     v-model="kindergarten"
                     class="kindergarten-name"
@@ -894,7 +888,7 @@
                     "
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-4" v-if="isNewStudent">
+                <v-flex class="py-3" v-if="isNewStudent">
                   <h3>7. 孩子是否在校吃午餐？</h3>
                   <v-radio-group
                     v-model="isEatLunchAtSchool"
@@ -913,7 +907,7 @@
                     <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                 </v-flex>
-                <v-flex class="py-4" v-if="isNewStudent">
+                <v-flex class="py-3" v-if="isNewStudent">
                   <h3>8. 孩子曾患过哪种疾病？</h3>
                   <v-select
                     class="app-chips"
@@ -932,8 +926,8 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4" v-if="isNewStudent">
-                  <h3 class="pb-3">9. 孩子对哪些食物、药物过敏？</h3>
+                <v-flex class="py-3" v-if="isNewStudent">
+                  <h3 class="pb-2">9. 孩子对哪些食物、药物过敏？</h3>
                   <v-textarea
                     v-model="allergy"
                     class="app-textarea"
@@ -948,8 +942,8 @@
                     data-vv-as="此项"
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-4" v-if="isNewStudent">
-                  <h3 class="pb-3">10. 孩子兴趣、爱好、特长？有哪些不足？</h3>
+                <v-flex class="py-3" v-if="isNewStudent">
+                  <h3 class="pb-2">10. 孩子兴趣、爱好、特长？有哪些不足？</h3>
                   <v-textarea
                     v-model="speciality"
                     class="app-textarea"
@@ -964,8 +958,8 @@
                     data-vv-as="此项"
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-4">
-                  <h3 class="pb-3">
+                <v-flex class="py-3">
+                  <h3 class="pb-2">
                     <span v-if="isNewStudent">11</span>
                     <span v-else>6</span>
                     <span> .您对孩子教育期望？</span>
@@ -1393,45 +1387,7 @@ export default Vue.extend({
         }
       ],
       homeworkFinishTime: 0,
-      trainingSubjectList: [
-        {
-          value: 1,
-          text: '语文'
-        },
-        {
-          value: 2,
-          text: '数学'
-        },
-        {
-          value: 3,
-          text: '英语'
-        },
-        {
-          value: 4,
-          text: '美术'
-        },
-        {
-          value: 5,
-          text: '音乐'
-        },
-        {
-          value: 6,
-          text: '舞蹈'
-        },
-        {
-          value: 7,
-          text: '跆拳道'
-        },
-        {
-          value: 8,
-          text: '体育'
-        },
-        {
-          value: 9,
-          text: '其他'
-        }
-      ],
-      trainingSubject: [] as string[],
+      trainingSubject: '',
       touchElectronicDeviceTimeList: [
         {
           value: 1,
@@ -1624,14 +1580,21 @@ export default Vue.extend({
       this.educationBackground = firstGuardian.educationDiploma
       this.profession = firstGuardian.professionPosition
       this.relation = firstGuardian.withStudentRelation
+
       // 第二监护人信息
       this.guardianName2 = secondGuardian.parentsName
       this.phone2 = secondGuardian.phone
-      this.certificateType2 = secondGuardian.papersType
-      this.certificateTypeName2 = firstGuardian.papersType
+
+      if (secondGuardian.papersType === '身份证') {
+        this.certificateType2 = secondGuardian.papersType
+      } else {
+        this.certificateType2 = '其他'
+        this.certificateTypeName2 = secondGuardian.papersType
+      }
+
       this.certificateNumber2 = secondGuardian.parentsIdCard
       this.educationBackground2 = secondGuardian.educationDiploma
-      this.profession2 = firstGuardian.professionPosition
+      this.profession2 = secondGuardian.professionPosition
       this.relation2 = secondGuardian.withStudentRelation
       // 家庭扩展信息
       this.pickupPerson = firstStudentInfo.majorConvoy
@@ -1653,7 +1616,7 @@ export default Vue.extend({
       this.personality = firstStudentInfo.characterChild
       this.doUp = firstStudentInfo.cleanToy
       this.homeworkFinishTime = firstStudentInfo.homeworkFinish
-      this.trainingSubject = firstStudentInfo.extraTutoringContent || []
+      this.trainingSubject = firstStudentInfo.extraTutoringContent
       this.touchElectronicDeviceTime = firstStudentInfo.touchPhoneTime
       this.kindergarten = firstStudentInfo.kindergarten
       this.isEatLunchAtSchool = firstStudentInfo.lunchAtSchool
@@ -1700,12 +1663,24 @@ export default Vue.extend({
           firstGuardian.educationDiploma = this.educationBackground
           firstGuardian.professionPosition = this.profession
           firstGuardian.withStudentRelation = this.relation
+
           // 第二监护人信息
           const secondGuardian = {} as Parent
           secondGuardian.parentsName = this.guardianName2
           secondGuardian.phone = this.phone2
-          secondGuardian.papersType = this.certificateType2
-          secondGuardian.papersType = this.certificateTypeName2
+
+          // 第二监护人信息
+          this.guardianName2 = secondGuardian.parentsName
+          this.phone2 = secondGuardian.phone
+
+          if (this.certificateType2 === '其他') {
+            secondGuardian.papersType = this.certificateTypeName2
+          } else {
+            secondGuardian.papersType = this.certificateType2
+          }
+
+          secondGuardian.parentsIdCard = this.certificateNumber2
+
           secondGuardian.parentsIdCard = this.certificateNumber2
           secondGuardian.educationDiploma = this.educationBackground2
           secondGuardian.professionPosition = this.profession2
