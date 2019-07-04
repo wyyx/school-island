@@ -234,8 +234,6 @@
                   ></v-text-field>
                 </v-flex>
 
-          
-
                 <v-flex class="py-1">
                   <v-text-field
                     label="证件号码"
@@ -262,7 +260,7 @@
                     :items="educationBackgroundList"
                     label="学历"
                     :error-messages="
-                      validated && !educationBackground ? ['学历未填写'] : []
+                      validated && !educationBackground ? ['学历未选择'] : []
                     "
                     v-model="educationBackground"
                     v-validate="'required'"
@@ -285,7 +283,6 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex class="py-1">
-                  <h1>{{ relation }}</h1>
                   <v-select
                     label="与学生的关系"
                     v-model="relation"
@@ -297,7 +294,7 @@
                     name="relation"
                     data-vv-as="与学生的关系"
                     :error-messages="
-                      validated && !relation ? ['与学生的关系未填写'] : []
+                      validated && !relation ? ['与学生的关系未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -344,11 +341,7 @@
                 <v-flex class="py-1">
                   <v-text-field
                     label="电话"
-                    :error-messages="
-                      validated && errors.collect('phone2').length > 0
-                        ? ['电话未填写']
-                        : []
-                    "
+                    :error-messages="validated ? errors.collect('phone2') : []"
                     v-model="phone2"
                     v-validate="{
                       required: true,
@@ -385,12 +378,12 @@
                 <v-flex class="py-1">
                   <v-text-field
                     label="证件号码"
-                   :error-messages="
+                    :error-messages="
                       validated ? errors.collect('certificateNumber2') : []
                     "
                     v-model="certificateNumber2"
                     v-validate="
-                      certificateType === '身份证'
+                      certificateType2 === '身份证'
                         ? {
                             required: true,
                             length: 18,
@@ -408,7 +401,7 @@
                     :items="educationBackgroundList"
                     label="学历"
                     :error-messages="
-                      validated && !educationBackground2 ? ['学历未填写'] : []
+                      validated && !educationBackground2 ? ['学历未选择'] : []
                     "
                     v-model="educationBackground2"
                     v-validate="'required'"
@@ -442,9 +435,7 @@
                     name="relation2"
                     data-vv-as="与学生的关系"
                     :error-messages="
-                      validated && errors.collect('relation2').length > 0
-                        ? ['与学生的关系未填写']
-                        : []
+                      validated && !relation2 ? ['与学生的关系未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -474,7 +465,7 @@
                     name="pickupPerson"
                     data-vv-as="接送人"
                     :error-messages="
-                      validated && !pickupPerson ? ['此项未完成'] : []
+                      validated && !pickupPerson ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -490,7 +481,7 @@
                     name="familyStructure"
                     data-vv-as="家庭结构"
                     :error-messages="
-                      validated && !familyStructure ? ['此项未完成'] : []
+                      validated && !familyStructure ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -506,7 +497,7 @@
                     name="readingBehaviour"
                     data-vv-as="阅读习惯"
                     :error-messages="
-                      validated && !readingBehaviour ? ['此项未完成'] : []
+                      validated && !readingBehaviour ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -522,7 +513,7 @@
                     name="fatherCompanyTime"
                     data-vv-as="父亲陪伴时间"
                     :error-messages="
-                      validated && !fatherCompanyTime ? ['此项未完成'] : []
+                      validated && !fatherCompanyTime ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -535,7 +526,7 @@
                       validated &&
                       errors.collect('isWillingJoinInParentsCommittee').length >
                         0
-                        ? ['此项未完成']
+                        ? ['此项未选择']
                         : []
                     "
                     v-validate="'required'"
@@ -557,7 +548,7 @@
                     name="parentsCommitteeRole"
                     data-vv-as="请选择家委会角色"
                     :error-messages="
-                      validated && !parentsCommitteeRole ? ['此项未完成'] : []
+                      validated && !parentsCommitteeRole ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -578,7 +569,7 @@
                     name="guardianResource"
                     data-vv-as="可提供的优势资源"
                     :error-messages="
-                      validated && !guardianResource ? ['此项未完成'] : []
+                      validated && !guardianResource ? ['此项未填写'] : []
                     "
                   ></v-textarea>
                 </v-flex>
@@ -657,15 +648,17 @@
                     name="visionLevel"
                     data-vv-as="视力"
                     :error-messages="
-                      validated && errors.collect('visionLevel').length > 0
-                        ? ['视力未填写']
-                        : []
+                      validated && !visionLevel ? ['视力未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
               </v-layout>
 
-              <v-layout row nowrap>
+              <v-layout
+                row
+                nowrap
+                v-if="visionLevel !== 1 && visionLevel !== 0"
+              >
                 <v-flex class="pr-3">
                   <v-flex class="pr-3">
                     <v-select
@@ -676,9 +669,8 @@
                       name="visionScoreLeftEye"
                       data-vv-as="左眼视力"
                       :error-messages="
-                        validated &&
-                        errors.collect('visionScoreLeftEye').length > 0
-                          ? ['左眼视力未填写']
+                        validated && !visionScoreLeftEye
+                          ? ['左眼视力未选择']
                           : []
                       "
                     ></v-select>
@@ -694,9 +686,8 @@
                       name="visionScoreRightEye"
                       data-vv-as="右眼视力"
                       :error-messages="
-                        validated &&
-                        errors.collect('visionScoreRightEye').length > 0
-                          ? ['右眼视力未填写']
+                        validated && !visionScoreRightEye
+                          ? ['右眼视力未选择']
                           : []
                       "
                     ></v-select>
@@ -715,9 +706,7 @@
                       name="sleepAtTime"
                       data-vv-as="睡觉时间"
                       :error-messages="
-                        validated && errors.collect('sleepAtTime').length > 0
-                          ? ['睡觉时间未填写']
-                          : []
+                        validated && !sleepAtTime ? ['睡觉时间未选择'] : []
                       "
                     ></v-select>
                   </v-flex>
@@ -732,9 +721,7 @@
                       name="getUpAtTime"
                       data-vv-as="起床时间"
                       :error-messages="
-                        validated && errors.collect('getUpAtTime').length > 0
-                          ? ['起床时间未填写']
-                          : []
+                        validated && !getUpAtTime ? ['起床时间未选择'] : []
                       "
                     ></v-select>
                   </v-flex>
@@ -762,7 +749,7 @@
                     v-validate="'required'"
                     name="personality"
                     :error-messages="
-                      validated && !personality ? ['此项未完成'] : []
+                      validated && !personality ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -774,7 +761,7 @@
                     placeholder="请选择"
                     v-validate="'required'"
                     name="doUp"
-                    :error-messages="validated && !doUp ? ['此项未完成'] : []"
+                    :error-messages="validated && !doUp ? ['此项未选择'] : []"
                   ></v-select>
                 </v-flex>
                 <v-flex class="py-4">
@@ -786,7 +773,7 @@
                     v-validate="'required'"
                     name="homeworkFinishTime"
                     :error-messages="
-                      validated && !homeworkFinishTime ? ['此项未完成'] : []
+                      validated && !homeworkFinishTime ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -806,7 +793,7 @@
                     name="trainingSubject"
                     :error-messages="
                       validated && trainingSubject.length < 1
-                        ? ['此项未完成']
+                        ? ['此项未选择']
                         : []
                     "
                   ></v-select>
@@ -821,7 +808,7 @@
                     name="touchElectronicDeviceTime"
                     :error-messages="
                       validated && !touchElectronicDeviceTime
-                        ? ['此项未完成']
+                        ? ['此项未选择']
                         : []
                     "
                   ></v-select>
@@ -849,7 +836,7 @@
                     :error-messages="
                       validated &&
                       errors.collect('isEatLunchAtSchool').length > 0
-                        ? ['此项未完成']
+                        ? ['此项未选择']
                         : []
                     "
                     v-validate="'required'"
@@ -876,7 +863,7 @@
                     v-validate="'required'"
                     name="disease"
                     :error-messages="
-                      validated && disease.length < 1 ? ['此项未完成'] : []
+                      validated && disease.length < 1 ? ['此项未选择'] : []
                     "
                   ></v-select>
                 </v-flex>
@@ -890,7 +877,7 @@
                     auto-grow
                     v-validate="'required'"
                     :error-messages="
-                      validated && allergy.length < 1 ? ['此项未完成'] : []
+                      validated && !allergy ? ['此项未填写'] : []
                     "
                     name="allergy"
                     data-vv-as="此项"
@@ -1293,7 +1280,7 @@ export default Vue.extend({
           text: '不会'
         }
       ],
-      doUp: 2,
+      doUp: 0,
       homeworkFinishTimeList: [
         {
           value: 1,

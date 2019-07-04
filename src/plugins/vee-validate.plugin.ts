@@ -17,6 +17,9 @@ const dict = {
     phone: {
       required: '手机号码未填写'
     },
+    phone2: {
+      required: '手机号码未填写'
+    },
     certificateNumber: {
       required: '监护人身份证号码未填写'
     },
