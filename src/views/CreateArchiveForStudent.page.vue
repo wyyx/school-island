@@ -2,7 +2,28 @@
   <div class="wrapper create-archive-for-student-page">
     <Header title="建立学生档案" @back="goBack"></Header>
 
-    <v-stepper v-model="step">
+    <div class="pa-2 mt-3" v-if="showGuideCard">
+      <v-card class="pa-2">
+        <img src="../assets/students.svg" width="100%" height="300px" />
+        <v-card-text>
+          <h3 class="subheading">
+            为了让老师更好的了解您孩子的成长信息，因材施教并建立个人学籍档案，请家长们认真填写哦！
+          </h3>
+        </v-card-text>
+        <v-card-actions>
+          <v-layout row wrap justify-center>
+            <v-flex xs6 class="text-xs-center">
+              <v-btn large xs6 color="primary" @click="goToFillForm">
+                <span class="pr-1">去填写</span>
+                <v-icon>arrow_right_alt </v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-card-actions>
+      </v-card>
+    </div>
+
+    <v-stepper v-model="step" v-if="showStepper">
       <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1">
           <span class="py-1">基础信息</span>
@@ -33,7 +54,7 @@
           <v-card class="mb-4">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0">基础信息</h3>
+                <h3 class="title mb-0 font-weight-bold">基础信息</h3>
               </div>
             </v-card-title>
 
@@ -176,7 +197,7 @@
           <v-card class="mb-4">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0">第一监护人</h3>
+                <h3 class="title mb-0 font-weight-bold">第一监护人</h3>
               </div>
             </v-card-title>
 
@@ -303,7 +324,7 @@
           </v-card>
 
           <!-- 添加第二监护人 btn -->
-          <div class="px-3 app-flex">
+          <div class="px-3 mb-4 app-flex">
             <v-btn small fab @click="showSecondGuardian = !showSecondGuardian">
               <v-icon color="primary" v-if="showSecondGuardian">remove</v-icon>
               <v-icon color="primary" v-else>add</v-icon>
@@ -318,7 +339,7 @@
           <v-card class="mb-4" v-if="showSecondGuardian">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0">第二监护人</h3>
+                <h3 class="title mb-0 font-weight-bold">第二监护人</h3>
               </div>
             </v-card-title>
 
@@ -447,7 +468,7 @@
           <v-card class="mb-4">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0">家庭扩展信息</h3>
+                <h3 class="title mb-0 font-weight-bold">家庭扩展信息</h3>
               </div>
             </v-card-title>
 
@@ -598,7 +619,7 @@
           <v-card class="mb-4">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0">学生信息</h3>
+                <h3 class="title mb-0 font-weight-bold">学生信息</h3>
               </div>
             </v-card-title>
 
@@ -734,7 +755,7 @@
           <v-card class="mb-4">
             <v-card-title primary-title>
               <div>
-                <h3 class="title mb-0">学生扩展信息</h3>
+                <h3 class="title mb-0 font-weight-bold">学生扩展信息</h3>
               </div>
             </v-card-title>
 
@@ -813,7 +834,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-4" v-if="isNewStudent">
                   <h3 class="pb-3">6. 曾上过的幼儿园名称？</h3>
                   <v-textarea
                     v-model="kindergarten"
@@ -829,7 +850,7 @@
                     "
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-4" v-if="isNewStudent">
                   <h3>7. 孩子是否在校吃午餐？</h3>
                   <v-radio-group
                     v-model="isEatLunchAtSchool"
@@ -848,7 +869,7 @@
                     <v-radio label="否" :value="0"></v-radio>
                   </v-radio-group>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-4" v-if="isNewStudent">
                   <h3>8. 孩子曾患过哪种疾病？</h3>
                   <v-select
                     class="app-chips"
@@ -867,7 +888,7 @@
                     "
                   ></v-select>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-4" v-if="isNewStudent">
                   <h3 class="pb-3">9. 孩子对哪些食物、药物过敏？</h3>
                   <v-textarea
                     v-model="allergy"
@@ -883,7 +904,7 @@
                     data-vv-as="此项"
                   ></v-textarea>
                 </v-flex>
-                <v-flex class="py-4">
+                <v-flex class="py-4" v-if="isNewStudent">
                   <h3 class="pb-3">10. 孩子兴趣、爱好、特长？有哪些不足？</h3>
                   <v-textarea
                     v-model="speciality"
@@ -900,7 +921,11 @@
                   ></v-textarea>
                 </v-flex>
                 <v-flex class="py-4">
-                  <h3 class="pb-3">11. 您对孩子教育期望？</h3>
+                  <h3 class="pb-3">
+                    <span v-if="isNewStudent">11</span>
+                    <span v-else>6</span>
+                    <span> .您对孩子教育期望？</span>
+                  </h3>
                   <v-textarea
                     v-model="expectation"
                     class="app-textarea"
@@ -935,11 +960,12 @@
 
         <!-- 4 step 完成 -->
         <v-stepper-content step="4" v-if="step >= 4">
-          <v-card flat class="mb-4" height="200px">
+          <v-card flat class="mb-4">
+            <img src="../assets/firework.svg" height="120px" width="100%" />
             <div class="app-flex app-h-center app-v-center app-fill-height">
               <div class="text-xs-center">
-                <v-icon color="success" size="56">check_circle_outline</v-icon>
-                <div class="title app-v-center">
+                <v-icon color="success" size="72">check</v-icon>
+                <div class="subheading app-v-center">
                   恭喜您，信息录入完成了！谢谢您的支持！
                 </div>
               </div>
@@ -948,7 +974,7 @@
 
           <div class="text-xs-center pa-4">
             <div class="text-xs-center px-2">
-              <v-btn color="primary" large block @click="goToHomePage">
+              <v-btn color="accent" large block @click="goToHomePage">
                 回到首页
               </v-btn>
             </div>
@@ -976,6 +1002,8 @@ export default Vue.extend({
   components: { Header },
   data: function() {
     return {
+      showGuideCard: true,
+      showStepper: false,
       ID_CARD_REG: ID_CARD_REG,
       PHONE_NUMBER_REG: PHONE_NUMBER_REG,
       step: 1,
@@ -1464,6 +1492,10 @@ export default Vue.extend({
         name: 'home'
       })
     },
+    goToFillForm() {
+      this.showGuideCard = false
+      this.showStepper = true
+    },
     goToNextStepper() {
       this.$validator.validate().then(valid => {
         console.log('TCL: goToNextStepper -> valid', valid)
@@ -1653,7 +1685,7 @@ export default Vue.extend({
         console.log('TCL: getUnfinishedInfoCollection -> res', res)
         this.unfinishedInfoCollectionList = res.data.content || []
 
-        // this.fillForm()
+        this.fillForm()
       })
     }
   }
