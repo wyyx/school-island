@@ -117,14 +117,14 @@
         @click="goToStudentInfoCollectionPage"
         v-if="hasUnfinishedStudentInfoCollection"
       >
-        学生信息采集
+        建立学生档案
       </v-btn>
       <v-btn
         color="accent"
         @click="goToTeacherInfoCollectionPage"
         v-if="hasUnfinishedTeacherInfoCollection"
       >
-        老师信息采集
+        建立老师档案
       </v-btn>
     </v-card>
   </div>

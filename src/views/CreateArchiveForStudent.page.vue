@@ -5,10 +5,12 @@
     <!-- guide card -->
     <div class="pa-2 my-2" v-if="showGuideCard">
       <v-card class="pa-2">
-        <img src="../assets/students.svg" width="100%" height="300px" />
+        <div class="app-both-center">
+          <img src="../assets/archive_folder.svg" width="50%" height="250px" />
+        </div>
         <v-card-text>
           <h3 class="headline info-collection-guild">
-            为了让老师更好的了解您孩子的成长信息，因材施教并建立个人学籍档案，请家长们认真填写哦！
+            为了便于学校的档案管理，请尽快完善您的学籍档案！
           </h3>
         </v-card-text>
         <v-card-actions class="py-3">
