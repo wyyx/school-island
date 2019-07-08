@@ -590,7 +590,7 @@
                     :key="index"
                   >
                     <v-card
-                      v-if="experienceModelItem['show_' + index]"
+                      v-if="experienceModelItem['show']"
                       flat
                       class="grey lighten-3 pa-2 work-experience"
                     >
@@ -602,9 +602,7 @@
                           <v-layout row nowrap>
                             <v-flex class="pr-3">
                               <v-menu
-                                v-model="
-                                  experienceModelItem['startDateMenu_' + index]
-                                "
+                                v-model="experienceModelItem['startDateMenu']"
                                 :close-on-content-click="false"
                                 :nudge-right="40"
                                 lazy
@@ -615,9 +613,7 @@
                               >
                                 <template v-slot:activator="{ on }">
                                   <v-text-field
-                                    v-model="
-                                      experienceModelItem['startDate_' + index]
-                                    "
+                                    v-model="experienceModelItem['startDate']"
                                     label="开始时间"
                                     append-icon="event"
                                     readonly
@@ -635,17 +631,13 @@
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
-                                  v-model="
-                                    experienceModelItem['startDate_' + index]
-                                  "
+                                  v-model="experienceModelItem['startDate']"
                                   no-title
                                   scrollable
                                   locale="zh-cn"
                                   type="month"
                                   @input="
-                                    experienceModelItem[
-                                      'startDateMenu_' + index
-                                    ] = false
+                                    experienceModelItem['startDateMenu'] = false
                                   "
                                 >
                                 </v-date-picker>
@@ -654,9 +646,7 @@
 
                             <v-flex class="pr-3">
                               <v-menu
-                                v-model="
-                                  experienceModelItem['endDateMenu_' + index]
-                                "
+                                v-model="experienceModelItem['endDateMenu']"
                                 :close-on-content-click="false"
                                 :nudge-right="40"
                                 lazy
@@ -667,9 +657,7 @@
                               >
                                 <template v-slot:activator="{ on }">
                                   <v-text-field
-                                    v-model="
-                                      experienceModelItem['endDate_' + index]
-                                    "
+                                    v-model="experienceModelItem['endDate']"
                                     label="结束"
                                     append-icon="event"
                                     readonly
@@ -687,17 +675,13 @@
                                   ></v-text-field>
                                 </template>
                                 <v-date-picker
-                                  v-model="
-                                    experienceModelItem['endDate_' + index]
-                                  "
+                                  v-model="experienceModelItem['endDate']"
                                   no-title
                                   scrollable
                                   locale="zh-cn"
                                   type="month"
                                   @input="
-                                    experienceModelItem[
-                                      'endDateMenu_' + index
-                                    ] = false
+                                    experienceModelItem['endDateMenu'] = false
                                   "
                                 >
                                 </v-date-picker>
@@ -715,7 +699,7 @@
                                     ? ['学校未填写']
                                     : []
                                 "
-                                v-model="experienceModelItem['school_' + index]"
+                                v-model="experienceModelItem['school']"
                                 v-validate="'required'"
                                 :name="'school_' + index"
                                 data-vv-as="学校"
@@ -732,11 +716,7 @@
                                     ? ['任教科目未填写']
                                     : []
                                 "
-                                v-model="
-                                  experienceModelItem[
-                                    'teachingSubject_' + index
-                                  ]
-                                "
+                                v-model="experienceModelItem['teachingSubject']"
                                 v-validate="'required'"
                                 :name="'teachingSubject_' + index"
                                 data-vv-as="任教科目"
@@ -753,8 +733,8 @@
                             class="toggle-show-work-experience-btn"
                             @click="
                               experienceModelItem[
-                                'show_' + index
-                              ] = !experienceModelItem['show_' + index]
+                                'show'
+                              ] = !experienceModelItem['show']
                             "
                           >
                             <v-icon color="primary">remove</v-icon>
@@ -1154,31 +1134,31 @@ export default Vue.extend({
       // 工作履历
       experienceModelItemList: [
         {
-          startDateMenu_0: false,
-          endDateMenu_0: false,
-          startDate_0: null,
-          endDate_0: null,
-          school_0: '',
-          teachingSubject_0: '',
-          show_0: true
+          startDateMenu: false,
+          endDateMenu: false,
+          startDate: null,
+          endDate: null,
+          school: '',
+          teachingSubject: '',
+          show: true
         },
         {
-          startDateMenu_1: false,
-          endDateMenu_1: false,
-          startDate_1: null,
-          endDate_1: null,
-          school_1: '',
-          teachingSubject_1: '',
-          show_1: false
+          startDateMenu: false,
+          endDateMenu: false,
+          startDate: null,
+          endDate: null,
+          school: '',
+          teachingSubject: '',
+          show: false
         },
         {
-          startDateMenu_2: false,
-          endDateMenu_2: false,
-          startDate_2: null,
-          endDate_2: null,
-          school_2: '',
-          teachingSubject_2: '',
-          show_2: false
+          startDateMenu: false,
+          endDateMenu: false,
+          startDate: null,
+          endDate: null,
+          school: '',
+          teachingSubject: '',
+          show: false
         }
       ],
       theTitleList: [
