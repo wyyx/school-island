@@ -121,11 +121,12 @@ export default Vue.extend({
     // open when build
     this.saveCurrentState()
 
-    // setTimeout(() => {
-    //   this.$router.push({
-    //     name: 'create-archive-for-student'
-    //   })
-    // }, 2000)
+    // close when build
+    setTimeout(() => {
+      this.$router.push({
+        name: 'create-archive-for-teacher'
+      })
+    }, 2000)
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {
@@ -233,7 +234,7 @@ export default Vue.extend({
       window.addEventListener('beforeunload', () => {
         const currentRole = that.currentRole as RoleVo
 
-        const excludePathArr = ['/?s=', '/grade-input-edit']
+        const excludePathArr = ['/?s=', '/grade-input-edit', '/binding']
 
         let path = this.$route.fullPath
 

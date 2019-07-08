@@ -3,7 +3,7 @@
     <Header title="建立学生档案" @back="goBack"></Header>
 
     <!-- guide card -->
-    <div class="pa-2 my-3" v-if="showGuideCard">
+    <div class="pa-2 my-2" v-if="showGuideCard">
       <v-card class="pa-2">
         <img src="../assets/students.svg" width="100%" height="300px" />
         <v-card-text>
@@ -30,7 +30,7 @@
     </div>
 
     <!-- success card -->
-    <div class="pa-2 my-3" v-if="showSuccessCard">
+    <div class="pa-2 my-2" v-if="showSuccessCard">
       <v-card class="mb-4 pa-2">
         <img src="../assets/firework.svg" height="120px" width="100%" />
         <div class="app-flex app-h-center app-v-center app-fill-height">
@@ -87,7 +87,7 @@
         <!-- 1 stepper 基础信息 -->
         <v-stepper-content step="1">
           <v-card class="mb-4">
-            <v-card-title primary-title>
+            <v-card-title primary-title class="pt-0">
               <div>
                 <h3 class="title mb-0 font-weight-bold">基础信息</h3>
               </div>
@@ -116,7 +116,7 @@
                   <v-text-field
                     :disabled="true"
                     :readonly="true"
-                    label="学生身份证号码"
+                    label="学生身份证号"
                     persistent-hint
                     :error-messages="
                       validated ? errors.collect('studentIdCard') : []

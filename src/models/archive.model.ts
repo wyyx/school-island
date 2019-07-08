@@ -91,6 +91,13 @@ export interface AddStudentAndParentsInfoCollectionResponse {
   status: string
 }
 
+export interface AddTeacherInfoCollectionResponse {
+  content: number
+  errorCode: string
+  errorMsg: string
+  status: string
+}
+
 export enum InfoCollectionUserTypes {
   Student = 1,
   Teacher = 2

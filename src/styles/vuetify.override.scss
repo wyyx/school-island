@@ -47,7 +47,8 @@ table.v-table tbody td:first-child {
   line-height: 24px !important;
 }
 
-.create-archive-for-student-page {
+.create-archive-for-student-page,
+.create-archive-for-teacher-page {
   .v-stepper {
     padding-top: 56px;
   }
@@ -96,41 +97,26 @@ table.v-table tbody td:first-child {
     margin-top: 0px !important;
     line-height: 24px !important;
   }
-
-  // .app-chips {
-  //   .v-chip {
-  //     background-color: white;
-  //     box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-  //       0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12) !important;
-  //   }
-  // }
 }
 
-// .v-text-field > .v-input__control > .v-input__slot:before {
-//   border-color: rgba(0, 0, 0, 0.42);
-//   border-top-color: rgba(0, 0, 0, 0.42);
-//   border-right-color: rgba(0, 0, 0, 0.42);
-//   border-bottom-color: rgba(218, 16, 16, 0.42) !important;
-//   border-left-color: rgba(0, 0, 0, 0.42);
+// // override textarea border style
+// .theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
+//   border: 1px solid rgba(0, 0, 0, 0.54);
+//   border-top-color: rgba(0, 0, 0, 0.54);
+//   border-top-style: solid;
+//   border-top-width: 1px;
+//   border-right-color: rgba(0, 0, 0, 0.54);
+//   border-right-style: solid;
+//   border-right-width: 1px;
+//   border-bottom-color: rgba(0, 0, 0, 0.54);
+//   border-bottom-style: solid;
+//   border-bottom-width: 1px;
+//   border-left-color: rgba(0, 0, 0, 0.54);
+//   border-left-style: solid;
+//   border-left-width: 1px;
+//   border-image-source: initial;
+//   border-image-slice: initial;
+//   border-image-width: initial;
+//   border-image-outset: initial;
+//   border-image-repeat: initial;
 // }
-
-.theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
-  border: 1px solid rgba(0, 0, 0, 0.54);
-  border-top-color: rgba(0, 0, 0, 0.54);
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-right-color: rgba(0, 0, 0, 0.54);
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-bottom-color: rgba(0, 0, 0, 0.54);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-left-color: rgba(0, 0, 0, 0.54);
-  border-left-style: solid;
-  border-left-width: 1px;
-  border-image-source: initial;
-  border-image-slice: initial;
-  border-image-width: initial;
-  border-image-outset: initial;
-  border-image-repeat: initial;
-}

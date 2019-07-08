@@ -106,7 +106,12 @@
       </v-layout>
     </v-card>
 
-    <v-card class="pa-2" v-if="false">
+    <v-card
+      class="pa-2"
+      v-if="
+        hasUnfinishedStudentInfoCollection || hasUnfinishedTeacherInfoCollection
+      "
+    >
       <v-btn
         color="accent"
         @click="goToStudentInfoCollectionPage"
@@ -114,7 +119,11 @@
       >
         学生信息采集
       </v-btn>
-      <v-btn color="accent" @click="goToTeacherInfoCollectionPage" v-if="false">
+      <v-btn
+        color="accent"
+        @click="goToTeacherInfoCollectionPage"
+        v-if="hasUnfinishedTeacherInfoCollection"
+      >
         老师信息采集
       </v-btn>
     </v-card>
@@ -194,6 +203,11 @@ export default Vue.extend({
         teacherInfoCollection.entity[0]
 
       return teacherInfo || ({} as AddTeacherInfoCollectionParams)
+    },
+    hasUnfinishedTeacherInfoCollection() {
+      const that: any = this
+      const teacherInfo = that.teacherInfo as AddTeacherInfoCollectionParams
+      return teacherInfo.name ? true : false
     }
   },
   created() {
