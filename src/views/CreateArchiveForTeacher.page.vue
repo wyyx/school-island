@@ -2,9 +2,6 @@
   <div class="wrapper create-archive-for-teacher-page">
     <Header title="建立老师档案" @back="goBack"></Header>
 
-    <!-- <div>{{ teacherInfo }}</div> -->
-    <!-- <div>{{ teacherInfo.name }}</div> -->
-    <!-- guide card -->
     <div class="pa-2 my-2" v-if="showGuideCard">
       <v-card class="pa-2">
         <img src="../assets/teachers.svg" width="100%" height="300px" />
@@ -582,6 +579,200 @@
                   ></v-select>
                 </v-flex>
 
+                <!-- 工作履历 -->
+                <v-flex>
+                  <h3>工作履历</h3>
+                  <!-- 工作履历 list -->
+                  <div
+                    class="experience-card-wrapper"
+                    v-for="(experienceModelItem,
+                    index) in experienceModelItemList"
+                    :key="index"
+                  >
+                    <v-card
+                      v-if="experienceModelItem['show_' + index]"
+                      flat
+                      class="grey lighten-3 pa-2 work-experience"
+                    >
+                      <div class="app-flex">
+                        <div class="app-shrink app-both-center pr-3">
+                          <h3 class="subheading">{{ index + 1 }}.</h3>
+                        </div>
+                        <div>
+                          <v-layout row nowrap>
+                            <v-flex class="pr-3">
+                              <v-menu
+                                v-model="
+                                  experienceModelItem['startDateMenu_' + index]
+                                "
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                              >
+                                <template v-slot:activator="{ on }">
+                                  <v-text-field
+                                    v-model="
+                                      experienceModelItem['startDate_' + index]
+                                    "
+                                    label="开始时间"
+                                    append-icon="event"
+                                    readonly
+                                    v-on="on"
+                                    v-validate="'required'"
+                                    data-vv-as="开始时间"
+                                    :name="'startDate_' + index"
+                                    :error-messages="
+                                      validated &&
+                                      errors.collect('startDate_' + index)
+                                        .length > 0
+                                        ? ['开始时间未填写']
+                                        : []
+                                    "
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="
+                                    experienceModelItem['startDate_' + index]
+                                  "
+                                  no-title
+                                  scrollable
+                                  locale="zh-cn"
+                                  type="month"
+                                  @input="
+                                    experienceModelItem[
+                                      'startDateMenu_' + index
+                                    ] = false
+                                  "
+                                >
+                                </v-date-picker>
+                              </v-menu>
+                            </v-flex>
+
+                            <v-flex class="pr-3">
+                              <v-menu
+                                v-model="
+                                  experienceModelItem['endDateMenu_' + index]
+                                "
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                lazy
+                                transition="scale-transition"
+                                offset-y
+                                full-width
+                                min-width="290px"
+                              >
+                                <template v-slot:activator="{ on }">
+                                  <v-text-field
+                                    v-model="
+                                      experienceModelItem['endDate_' + index]
+                                    "
+                                    label="结束"
+                                    append-icon="event"
+                                    readonly
+                                    v-on="on"
+                                    v-validate="'required'"
+                                    data-vv-as="结束"
+                                    :name="'endDate_' + index"
+                                    :error-messages="
+                                      validated &&
+                                      errors.collect('endDate_' + index)
+                                        .length > 0
+                                        ? ['结束未填写']
+                                        : []
+                                    "
+                                  ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                  v-model="
+                                    experienceModelItem['endDate_' + index]
+                                  "
+                                  no-title
+                                  scrollable
+                                  locale="zh-cn"
+                                  type="month"
+                                  @input="
+                                    experienceModelItem[
+                                      'endDateMenu_' + index
+                                    ] = false
+                                  "
+                                >
+                                </v-date-picker>
+                              </v-menu>
+                            </v-flex>
+                          </v-layout>
+
+                          <v-layout row wrap>
+                            <v-flex xs12 md6 class="pr-3">
+                              <v-text-field
+                                label="学校"
+                                :error-messages="
+                                  validated &&
+                                  errors.collect('school_' + index).length > 0
+                                    ? ['学校未填写']
+                                    : []
+                                "
+                                v-model="experienceModelItem['school_' + index]"
+                                v-validate="'required'"
+                                :name="'school_' + index"
+                                data-vv-as="学校"
+                              ></v-text-field>
+                            </v-flex>
+
+                            <v-flex xs12 md6>
+                              <v-text-field
+                                label="任教科目"
+                                :error-messages="
+                                  validated &&
+                                  errors.collect('teachingSubject_' + index)
+                                    .length > 0
+                                    ? ['任教科目未填写']
+                                    : []
+                                "
+                                v-model="
+                                  experienceModelItem[
+                                    'teachingSubject_' + index
+                                  ]
+                                "
+                                v-validate="'required'"
+                                :name="'teachingSubject_' + index"
+                                data-vv-as="任教科目"
+                              ></v-text-field>
+                            </v-flex>
+                          </v-layout>
+                        </div>
+                        <!-- 切换工作履历btn-->
+                        <div class="app-flex pa-1 app-shrink app-both-center">
+                          <v-btn
+                            small
+                            fab
+                            :disabled="index === 0"
+                            class="toggle-show-work-experience-btn"
+                            @click="
+                              experienceModelItem[
+                                'show_' + index
+                              ] = !experienceModelItem['show_' + index]
+                            "
+                          >
+                            <v-icon color="primary">remove</v-icon>
+                          </v-btn>
+                        </div>
+                      </div>
+                    </v-card>
+                  </div>
+
+                  <!-- 添加工作履历btn-->
+                  <div class="app-flex pa-2">
+                    <v-spacer></v-spacer>
+                    <v-btn small fab style="margin: 0px" @click="addExperience">
+                      <v-icon color="primary">add</v-icon>
+                    </v-btn>
+                  </div>
+                </v-flex>
+
                 <v-flex>
                   <v-select
                     :items="theTitleList"
@@ -711,13 +902,6 @@
                     outline
                     rows="2"
                     auto-grow
-                    placeholder="例如：西式糕点、橄榄球、国籍象棋、魔方等等"
-                    v-validate="'required'"
-                    name="optionalCourse"
-                    data-vv-as="可提供的优势资源"
-                    :error-messages="
-                      validated && !optionalCourse ? ['此项未填写'] : []
-                    "
                   ></v-textarea>
                 </v-flex>
 
@@ -730,12 +914,6 @@
                     rows="2"
                     auto-grow
                     placeholder="提示：学校介绍老师用"
-                    v-validate="'required'"
-                    name="selfIntroduction"
-                    data-vv-as="可提供的优势资源"
-                    :error-messages="
-                      validated && !selfIntroduction ? ['此项未填写'] : []
-                    "
                   ></v-textarea>
                 </v-flex>
               </v-layout>
@@ -793,6 +971,20 @@ export default Vue.extend({
   components: { Header },
   data: function() {
     return {
+      objModel: {
+        a: 'houdini',
+        b: 888
+      },
+      arrModel: [
+        {
+          a: 'houdini',
+          b: 888
+        },
+        {
+          a: 'maya',
+          b: 666
+        }
+      ],
       showGuideCard: true,
       showSuccessCard: false,
       showStepper: false,
@@ -959,6 +1151,36 @@ export default Vue.extend({
         }
       ],
       teachingSubject: 0,
+      // 工作履历
+      experienceModelItemList: [
+        {
+          startDateMenu_0: false,
+          endDateMenu_0: false,
+          startDate_0: null,
+          endDate_0: null,
+          school_0: '',
+          teachingSubject_0: '',
+          show_0: true
+        },
+        {
+          startDateMenu_1: false,
+          endDateMenu_1: false,
+          startDate_1: null,
+          endDate_1: null,
+          school_1: '',
+          teachingSubject_1: '',
+          show_1: false
+        },
+        {
+          startDateMenu_2: false,
+          endDateMenu_2: false,
+          startDate_2: null,
+          endDate_2: null,
+          school_2: '',
+          teachingSubject_2: '',
+          show_2: false
+        }
+      ],
       theTitleList: [
         {
           value: 1,
@@ -1050,6 +1272,7 @@ export default Vue.extend({
         }
       })
     },
+    addExperience() {},
     fillForm() {
       const that: any = this
       const teacherInfo = that.teacherInfo as AddTeacherInfoCollectionParams
@@ -1115,5 +1338,9 @@ export default Vue.extend({
   font-size: 16px;
   color: rgba(0, 0, 0, 0.54);
   margin-bottom: 4px;
+}
+
+.toggle-show-work-experience-btn {
+  margin: 0px !important;
 }
 </style>
