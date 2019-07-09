@@ -7,9 +7,9 @@
       <v-card class="pa-2 app-fill-height">
         <v-card-text class="pa-1">
           <p class="app-flex">
-            <span class="app-both-center pl-1 grey--text">温馨提示！</span>
+            <span class="app-both-center pl-1 grey--text">温馨提示</span>
           </p>
-          <h3 class="title info-collection-guild text-xs-center">
+          <h3 class="title info-collection-guide text-xs-center">
             <span>为了便于学校的档案管理，请尽快完善您的学籍档案！</span>
           </h3>
         </v-card-text>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="subheading app-v-center">
-              档案已建立！感谢您的支持！
+              档案已建立，感谢您的支持！
             </div>
           </div>
         </div>
@@ -1768,10 +1768,11 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .info-collection-success-btn-wrapper {
   position: relative;
-  padding-bottom: 24px;
+  padding-bottom: 32px;
+  padding-top: 32px;
 }
 
-.info-collection-guild {
-  line-height: 3rem !important;
+.info-collection-guide {
+  line-height: 165% !important;
 }
 </style>

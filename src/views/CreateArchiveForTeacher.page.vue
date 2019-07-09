@@ -7,9 +7,9 @@
       <v-card class="pa-2 app-fill-height">
         <v-card-text class="pa-1">
           <p class="app-flex">
-            <span class="app-both-center pl-1 grey--text">温馨提示！</span>
+            <span class="app-both-center pl-1 grey--text">温馨提示</span>
           </p>
-          <h3 class="title info-collection-guild text-xs-center">
+          <h3 class="title info-collection-guide text-xs-center">
             <span>为了便于学校的档案管理，请尽快完善您的个人档案！</span>
           </h3>
         </v-card-text>
@@ -39,7 +39,8 @@
     <!-- success card -->
     <div class="pa-2" v-if="showSuccessCard">
       <v-card class="mb-4 pa-2">
-        <img src="../assets/firework.svg" height="120px" width="100%" />
+        <div class="firework-wrapper"></div>
+        <!-- <img src="../assets/firework.svg" height="120px" width="100%" /> -->
         <div class="app-flex app-h-center app-v-center app-fill-height">
           <div class="text-xs-center">
             <div class="info-collection-success-btn-wrapper">
@@ -49,7 +50,7 @@
             </div>
 
             <div class="subheading app-v-center">
-              档案已建立！感谢您的支持！
+              档案已建立，感谢您的支持！
             </div>
           </div>
         </div>
@@ -1410,11 +1411,12 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .info-collection-success-btn-wrapper {
   position: relative;
-  padding-bottom: 24px;
+  padding-bottom: 32px;
+  padding-top: 32px;
 }
 
-.info-collection-guild {
-  line-height: 3rem !important;
+.info-collection-guide {
+  line-height: 165% !important;
 }
 
 .optional-course-title,
@@ -1439,5 +1441,12 @@ export default Vue.extend({
 .field-title {
   font-size: 16px;
   color: rgba(0, 0, 0, 0.54);
+}
+
+.firework-wrapper {
+  background-image: url(../assets/firework.svg);
+  background-size: cover;
+  width: 100%;
+  height: 80px;
 }
 </style>
