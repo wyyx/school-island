@@ -1,23 +1,28 @@
 <template>
-  <div class="wrapper create-archive-for-teacher-page">
+  <div class="wrapper create-archive-for-teacher-page app-fill-height">
     <Header title="建立老师档案" @back="goBack"></Header>
 
-    <div class="pa-2 my-2" v-if="showGuideCard">
-      <v-card class="pa-2">
-        <div class="app-both-center">
-          <img src="../assets/archive_folder.svg" width="50%" height="250px" />
-        </div>
-        <v-card-text>
-          <h3 class="headline info-collection-guild">
-            <span> <v-icon color="red">error_outline</v-icon> </span>
+    <!-- guide card -->
+    <div class="pa-2" v-if="showGuideCard">
+      <v-card class="pa-2 app-fill-height">
+        <v-card-text class="pa-1">
+          <p class="app-flex">
+            <span class="app-both-center pl-1 grey--text">温馨提示！</span>
+          </p>
+          <h3 class="title info-collection-guild text-xs-center">
             <span>为了便于学校的档案管理，请尽快完善您的个人档案！</span>
           </h3>
         </v-card-text>
+
+        <div class="app-both-center">
+          <img src="../assets/archive_folder.svg" width="48px" height="150px" />
+        </div>
+
         <v-card-actions class="py-3">
           <v-layout row wrap justify-center>
             <v-flex xs6 class="text-xs-center">
               <v-btn flat large xs6 @click="goBack">
-                <span class="pr-1">下次再填</span>
+                <span class="pr-1 grey--text">下次再填</span>
               </v-btn>
             </v-flex>
             <v-flex>
@@ -32,7 +37,7 @@
     </div>
 
     <!-- success card -->
-    <div class="pa-2 my-2" v-if="showSuccessCard">
+    <div class="pa-2" v-if="showSuccessCard">
       <v-card class="mb-4 pa-2">
         <img src="../assets/firework.svg" height="120px" width="100%" />
         <div class="app-flex app-h-center app-v-center app-fill-height">
@@ -171,17 +176,17 @@
                     row
                   >
                     <v-layout row wrap>
-                      <v-flex>
+                      <v-flex class="py-1">
                         <v-radio label="党员" :value="1"></v-radio>
                       </v-flex>
-                      <v-flex>
+                      <v-flex class="py-1">
                         <v-radio label="团员" :value="2"></v-radio>
                       </v-flex>
-                      <v-flex>
-                        <v-radio label="群众" :value="3"></v-radio>
+                      <v-flex class="py-1">
+                        <v-radio label="民主党派" :value="3"></v-radio>
                       </v-flex>
-                      <v-flex>
-                        <v-radio label="民主党" :value="4"></v-radio>
+                      <v-flex class="py-1">
+                        <v-radio label="群众" :value="4"></v-radio>
                       </v-flex>
                     </v-layout>
                   </v-radio-group>
@@ -450,6 +455,7 @@
                       scrollable
                       locale="zh-cn"
                       @input="graduationDateMenu = false"
+                      :max="nowDate"
                     >
                     </v-date-picker>
                   </v-menu>
@@ -492,6 +498,7 @@
                       scrollable
                       locale="zh-cn"
                       @input="workDateMenu = false"
+                      :max="nowDate"
                     >
                     </v-date-picker>
                   </v-menu>
@@ -528,7 +535,7 @@
                 <v-flex>
                   <v-select
                     :items="computerLevelList"
-                    label="计算机等级"
+                    label="计算机使用水平"
                     :error-messages="
                       validated && !computerLevel ? ['计算机等级未选择'] : []
                     "
@@ -642,6 +649,7 @@
                                         'startDateMenu'
                                       ] = false
                                     "
+                                    :max="nowDate"
                                   >
                                   </v-date-picker>
                                 </v-menu>
@@ -661,17 +669,17 @@
                                   <template v-slot:activator="{ on }">
                                     <v-text-field
                                       v-model="experienceModelItem['endDate']"
-                                      label="结束"
+                                      label="结束时间"
                                       append-icon="event"
                                       readonly
                                       v-on="on"
                                       v-validate="'required'"
-                                      data-vv-as="结束"
+                                      data-vv-as="结束时间"
                                       :name="'endDate_' + index"
                                       :error-messages="
                                         validated &&
                                         !experienceModelItem['endDate']
-                                          ? ['结束未填写']
+                                          ? ['结束时间未填写']
                                           : []
                                       "
                                     ></v-text-field>
@@ -685,6 +693,7 @@
                                     @input="
                                       experienceModelItem['endDateMenu'] = false
                                     "
+                                    :max="nowDate"
                                   >
                                   </v-date-picker>
                                 </v-menu>
@@ -694,36 +703,35 @@
                             <v-layout row wrap>
                               <v-flex xs12 md6 class="pr-2">
                                 <v-text-field
-                                  label="学校"
+                                  label="工作单位"
                                   :error-messages="
                                     validated &&
-                                    errors.collect('school_' + index).length > 0
-                                      ? ['学校未填写']
+                                    errors.collect('company_' + index).length >
+                                      0
+                                      ? ['工作单位未填写']
                                       : []
                                   "
-                                  v-model="experienceModelItem['school']"
+                                  v-model="experienceModelItem['company']"
                                   v-validate="'required'"
-                                  :name="'school_' + index"
-                                  data-vv-as="学校"
+                                  :name="'company_' + index"
+                                  data-vv-as="工作单位"
                                 ></v-text-field>
                               </v-flex>
 
                               <v-flex xs12 md6 class="pr-2">
                                 <v-text-field
-                                  label="任教科目"
+                                  label="职位"
                                   :error-messages="
                                     validated &&
-                                    errors.collect('teachingSubject_' + index)
-                                      .length > 0
-                                      ? ['任教科目未填写']
+                                    errors.collect('position_' + index).length >
+                                      0
+                                      ? ['职位未填写']
                                       : []
                                   "
-                                  v-model="
-                                    experienceModelItem['teachingSubject']
-                                  "
+                                  v-model="experienceModelItem['position']"
                                   v-validate="'required'"
-                                  :name="'teachingSubject_' + index"
-                                  data-vv-as="任教科目"
+                                  :name="'position_' + index"
+                                  data-vv-as="职位"
                                 ></v-text-field>
                               </v-flex>
                             </v-layout>
@@ -817,6 +825,7 @@
                       scrollable
                       locale="zh-cn"
                       @input="evaluateAtTimeMenu = false"
+                      :max="nowDate"
                     >
                     </v-date-picker>
                   </v-menu>
@@ -857,6 +866,7 @@
                       scrollable
                       locale="zh-cn"
                       @input="hiringTimeMenu = false"
+                      :max="nowDate"
                     >
                     </v-date-picker>
                   </v-menu>
@@ -942,8 +952,8 @@ export interface ExperienceModelItem {
   endDateMenu: boolean
   startDate: string
   endDate: string
-  school: string
-  teachingSubject: string
+  company: string
+  position: string
   show: boolean
 }
 
@@ -952,6 +962,7 @@ export default Vue.extend({
   components: { Header },
   data: function() {
     return {
+      nowDate: new Date().toISOString(),
       showGuideCard: true,
       showSuccessCard: false,
       showStepper: false,
@@ -1046,23 +1057,23 @@ export default Vue.extend({
       englishLevelList: [
         {
           value: 1,
-          text: '三级'
+          text: '无'
         },
         {
           value: 2,
-          text: '四级'
+          text: '大学英语四级'
         },
         {
           value: 3,
-          text: '六级'
+          text: '大学英语六级'
         },
         {
           value: 4,
-          text: '七级'
+          text: '专业英语四级'
         },
         {
           value: 5,
-          text: '八级'
+          text: '专业英语八级'
         }
       ],
       englishLevel: 0,
@@ -1094,8 +1105,8 @@ export default Vue.extend({
           endDateMenu: false,
           startDate: null,
           endDate: null,
-          school: '',
-          teachingSubject: '',
+          company: '',
+          position: '',
           show: true
         },
         {
@@ -1103,8 +1114,26 @@ export default Vue.extend({
           endDateMenu: false,
           startDate: null,
           endDate: null,
-          school: '',
-          teachingSubject: '',
+          company: '',
+          position: '',
+          show: false
+        },
+        {
+          startDateMenu: false,
+          endDateMenu: false,
+          startDate: null,
+          endDate: null,
+          company: '',
+          position: '',
+          show: false
+        },
+        {
+          startDateMenu: false,
+          endDateMenu: false,
+          startDate: null,
+          endDate: null,
+          company: '',
+          position: '',
           show: false
         },
         {
@@ -1113,25 +1142,7 @@ export default Vue.extend({
           startDate: null,
           endDate: null,
           school: '',
-          teachingSubject: '',
-          show: false
-        },
-        {
-          startDateMenu: false,
-          endDateMenu: false,
-          startDate: null,
-          endDate: null,
-          school: '',
-          teachingSubject: '',
-          show: false
-        },
-        {
-          startDateMenu: false,
-          endDateMenu: false,
-          startDate: null,
-          endDate: null,
-          school: '',
-          teachingSubject: '',
+          position: '',
           show: false
         }
       ] as ExperienceModelItem[],
@@ -1296,8 +1307,8 @@ export default Vue.extend({
           workExperienceModelItemList.push({
             startDate: null,
             endDate: null,
-            school: '',
-            teachingSubject: '',
+            company: '',
+            position: '',
             startDateMenu: false,
             endDateMenu: false,
             show: index === 0 ? true : false
@@ -1354,8 +1365,8 @@ export default Vue.extend({
                 ({
                   startDate: item2.startDate,
                   endDate: item2.endDate,
-                  school: item2.school,
-                  teachingSubject: item2.teachingSubject
+                  company: item2.company,
+                  position: item2.position
                 } as WorkExperienceItem)
             )
           params.professionalTitle = this.theTitle

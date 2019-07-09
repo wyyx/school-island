@@ -58,7 +58,7 @@ table.v-table tbody td:first-child {
   }
 
   .v-stepper__header {
-    height: 56px !important;
+    height: unset !important;
     position: fixed;
     width: 100%;
     z-index: 20;
@@ -71,7 +71,16 @@ table.v-table tbody td:first-child {
   }
 
   .v-stepper__step {
-    height: 56px !important;
+    // height: 56px !important;
+    display: flex !important;
+    flex-direction: column;
+    padding: 8px 16px;
+  }
+
+  .v-stepper__label {
+    display: block !important;
+    font-size: 10px !important;
+    padding-top: 4px !important;
   }
 
   .v-stepper__wrapper {
@@ -103,25 +112,3 @@ table.v-table tbody td:first-child {
     line-height: 24px !important;
   }
 }
-
-// // override textarea border style
-// .theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
-//   border: 1px solid rgba(0, 0, 0, 0.54);
-//   border-top-color: rgba(0, 0, 0, 0.54);
-//   border-top-style: solid;
-//   border-top-width: 1px;
-//   border-right-color: rgba(0, 0, 0, 0.54);
-//   border-right-style: solid;
-//   border-right-width: 1px;
-//   border-bottom-color: rgba(0, 0, 0, 0.54);
-//   border-bottom-style: solid;
-//   border-bottom-width: 1px;
-//   border-left-color: rgba(0, 0, 0, 0.54);
-//   border-left-style: solid;
-//   border-left-width: 1px;
-//   border-image-source: initial;
-//   border-image-slice: initial;
-//   border-image-width: initial;
-//   border-image-outset: initial;
-//   border-image-repeat: initial;
-// }

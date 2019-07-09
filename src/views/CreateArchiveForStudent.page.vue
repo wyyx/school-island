@@ -1,24 +1,28 @@
 <template>
-  <div class="wrapper create-archive-for-student-page">
+  <div class="wrapper create-archive-for-student-page app-fill-height">
     <Header title="建立学生档案" @back="goBack"></Header>
 
     <!-- guide card -->
-    <div class="pa-2 my-2" v-if="showGuideCard">
-      <v-card class="pa-2">
-        <div class="app-both-center">
-          <img src="../assets/archive_folder.svg" width="50%" height="250px" />
-        </div>
-        <v-card-text>
-          <h3 class="headline info-collection-guild">
-            <span> <v-icon color="red">error_outline</v-icon> </span>
+    <div class="pa-2" v-if="showGuideCard">
+      <v-card class="pa-2 app-fill-height">
+        <v-card-text class="pa-1">
+          <p class="app-flex">
+            <span class="app-both-center pl-1 grey--text">温馨提示！</span>
+          </p>
+          <h3 class="title info-collection-guild text-xs-center">
             <span>为了便于学校的档案管理，请尽快完善您的学籍档案！</span>
           </h3>
         </v-card-text>
+
+        <div class="app-both-center">
+          <img src="../assets/archive_folder.svg" width="48px" height="150px" />
+        </div>
+
         <v-card-actions class="py-3">
           <v-layout row wrap justify-center>
             <v-flex xs6 class="text-xs-center">
               <v-btn flat large xs6 @click="goBack">
-                <span class="pr-1">下次再填</span>
+                <span class="pr-1 grey--text">下次再填</span>
               </v-btn>
             </v-flex>
             <v-flex>
@@ -33,7 +37,7 @@
     </div>
 
     <!-- success card -->
-    <div class="pa-2 my-2" v-if="showSuccessCard">
+    <div class="pa-2" v-if="showSuccessCard">
       <v-card class="mb-4 pa-2">
         <img src="../assets/firework.svg" height="120px" width="100%" />
         <div class="app-flex app-h-center app-v-center app-fill-height">

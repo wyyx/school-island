@@ -50,8 +50,8 @@ export interface AddStudentAndParentsInfoCollectionParams {
 export interface WorkExperienceItem {
   startDate: string
   endDate: string
-  school: string
-  teachingSubject: string
+  company: string
+  position: string
 }
 
 export interface AddTeacherInfoCollectionParams {

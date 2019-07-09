@@ -129,6 +129,7 @@ export default Vue.extend({
     // }, 2000)
   },
   destroyed() {
+    console.log('TCL: destroyed -> destroyed')
     this.saveCurrentState()
   },
   watch: {
