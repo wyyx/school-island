@@ -81,7 +81,7 @@
         <v-divider></v-divider>
 
         <v-stepper-step step="3" :complete="step > 3">
-          <span class="py-1">经历与荣誉</span>
+          <span class="py-1">履历与荣誉</span>
         </v-stepper-step>
       </v-stepper-header>
 
@@ -181,10 +181,10 @@
                         <v-radio label="党员" :value="1"></v-radio>
                       </v-flex>
                       <v-flex class="py-1">
-                        <v-radio label="团员" :value="2"></v-radio>
+                        <v-radio label="民主党派" :value="3"></v-radio>
                       </v-flex>
                       <v-flex class="py-1">
-                        <v-radio label="民主党派" :value="3"></v-radio>
+                        <v-radio label="团员" :value="2"></v-radio>
                       </v-flex>
                       <v-flex class="py-1">
                         <v-radio label="群众" :value="4"></v-radio>
@@ -215,7 +215,7 @@
                         <v-radio label="已婚" :value="2"></v-radio>
                       </v-flex>
                       <v-flex class="py-1">
-                        <v-radio label="已婚已育" :value="3"></v-radio>
+                        <v-radio label="已育" :value="3"></v-radio>
                       </v-flex>
                       <v-flex class="py-1">
                         <v-radio label="离异" :value="4"></v-radio>
@@ -1357,7 +1357,7 @@ export default Vue.extend({
           params.mandarinLevel = this.mandarinLevel
           params.englishLevel = this.englishLevel
           params.computerLevel = this.computerLevel
-          // 经历与荣誉
+          // 履历与荣誉
           params.teachingSubject = this.teachingSubject
           params.workRecords = this.experienceModelItemList
             .filter(item => item.show)

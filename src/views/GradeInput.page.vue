@@ -248,8 +248,6 @@ export default Vue.extend({
     addGradeSuject() {
       const that: any = this
 
-      this.dialog = false
-
       gradeService
         .addGradeSubject({
           classId: this.currentClass.classId,
@@ -264,6 +262,7 @@ export default Vue.extend({
           if (!res.data.content) {
             that.showFailMessage(res.data.errorMsg)
           } else {
+            this.dialog = false
             that.showSuccessMessage('添加成功!')
             const newGradeSubject: GradeSubject = {
               grade: this.currentClass.grade,

@@ -365,17 +365,20 @@ export default Vue.extend({
       const that: any = this
       const currentGradeSubject: GradeSubject = that.currentGradeSubject
 
-      gradeService.getStudentList(currentGradeSubject.id).then(res => {
-        this.studentListContent = res.data.content || ({} as StudentListContent)
-        this.studentList =
-          this.studentListContent.studentExamAchievementVoList || []
+      if (currentGradeSubject.id) {
+        gradeService.getStudentList(currentGradeSubject.id).then(res => {
+          this.studentListContent =
+            res.data.content || ({} as StudentListContent)
+          this.studentList =
+            this.studentListContent.studentExamAchievementVoList || []
 
-        this.studentList = this.studentList.sort((a, b) => {
-          return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+          this.studentList = this.studentList.sort((a, b) => {
+            return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+          })
+
+          this.setCurrentStudent(this.studentList[0] || ({} as Student))
         })
-
-        this.setCurrentStudent(this.studentList[0] || ({} as Student))
-      })
+      }
     },
     setCurrentStudent(student: Student) {
       this.validated = false

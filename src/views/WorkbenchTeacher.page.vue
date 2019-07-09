@@ -113,7 +113,7 @@
                 <!-- deduction week history graph -->
                 <div class="chart-wrapper app-fill-width pb-3">
                   <h3 class="mb-2 duty-check-title">
-                    {{ deductionWeekHistory.date }}，值周综合得分
+                    {{ deductionWeekHistory.date }}，综合得分
                     <span class="accent--text text--darken-2">
                       {{ deductionWeekHistory.weekScore }}分
                     </span>
@@ -446,7 +446,9 @@ export default Vue.extend({
       this.currentClass = aclass
       this.hasMore = true
 
-      this.loadDeducionWeekHistory(this.currentClass.classId)
+      if (this.currentClass.classId) {
+        this.loadDeducionWeekHistory(this.currentClass.classId)
+      }
     },
     scroll() {
       window.onscroll = () => {
@@ -532,14 +534,16 @@ export default Vue.extend({
       })
     },
     loadDeducionWeekHistory(classId: number) {
-      dutyService
-        .getDeductionHistoryByWeek(classId)
-        .then(res => {
-          console.log('TCL: loadDeducionWeekHistory -> res', res)
-          this.deductionWeekHistory =
-            res.data.content || ({} as DeductionHistoryByWeekItem)
-        })
-        .catch(error => {})
+      if (classId) {
+        dutyService
+          .getDeductionHistoryByWeek(classId)
+          .then(res => {
+            console.log('TCL: loadDeducionWeekHistory -> res', res)
+            this.deductionWeekHistory =
+              res.data.content || ({} as DeductionHistoryByWeekItem)
+          })
+          .catch(error => {})
+      }
     },
     toShowSwiper(imgUrls: string[]) {
       console.log('TCL: toShowSwiper -> imgUrls', imgUrls)

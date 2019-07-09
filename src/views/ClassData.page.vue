@@ -130,7 +130,7 @@ export default Vue.extend({
           value: 'studentNumber',
           sort: 'asc'
         },
-        { text: '姓名', align: 'right', sortable: false, value: 'name' },
+        { text: '姓名', align: 'right', sortable: false, value: 'studentName' },
         { text: '详情', align: 'right', sortable: true, value: '' }
       ],
       pagination: {
@@ -168,7 +168,7 @@ export default Vue.extend({
         classId: that.currentClass.classId,
         grade: that.currentGrade,
         type: that.currentSemister.value
-      } as any
+      }
 
       this.loadHistoryGradeStudentListByConditon(condition)
     },
@@ -179,7 +179,7 @@ export default Vue.extend({
         classId: that.currentClass.classId,
         grade: that.currentGrade,
         type: that.currentSemister.value
-      } as any
+      }
 
       this.loadHistoryGradeStudentListByConditon(condition)
     }
@@ -206,6 +206,10 @@ export default Vue.extend({
     loadHistoryGradeStudentList(classId: number) {
       gradeService.getHistoryGradeStudentList(classId).then(res => {
         this.briefGrade = res.data.content || ({} as BriefGrade)
+        console.log(
+          'TCL: loadHistoryGradeStudentList -> this.briefGrade',
+          this.briefGrade
+        )
 
         this.studentList = this.briefGrade.students
         // set current grade

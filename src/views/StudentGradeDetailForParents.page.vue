@@ -202,28 +202,24 @@ export default Vue.extend({
         type: this.currentSemister.value
       }
 
-      if (this.currentGrade && student.id && this.currentSemister.value) {
-        console.log('TCL: loadStudentGradeByCondition -> condition', condition)
+      gradeService
+        .getBriefStudentGradeDetailForParentsByCondition(condition)
+        .then(res => {
+          console.log('TCL: loadStudentGrade -> res', res)
+          this.studentGradeDetail =
+            res.data.content || ({} as BriefStudentGradeForParents)
 
-        gradeService
-          .getBriefStudentGradeDetailForParentsByCondition(condition)
-          .then(res => {
-            console.log('TCL: loadStudentGrade -> res', res)
-            this.studentGradeDetail =
-              res.data.content || ({} as BriefStudentGradeForParents)
+          this.studentGradeDetail = {
+            ...this.studentGradeDetail,
+            achievementVos: this.studentGradeDetail.achievementVos
+          }
 
-            this.studentGradeDetail = {
-              ...this.studentGradeDetail,
-              achievementVos: this.studentGradeDetail.achievementVos
-            }
+          // set init data
+          this.gradeList = this.studentGradeDetail.grades || []
+          this.currentGrade = this.studentGradeDetail.currentGrade
 
-            // set init data
-            this.gradeList = this.studentGradeDetail.grades || []
-            this.currentGrade = this.studentGradeDetail.currentGrade
-
-            this.updateChart()
-          })
-      }
+          this.updateChart()
+        })
     },
     updateChart() {
       const that: any = this
