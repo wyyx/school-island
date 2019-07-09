@@ -83,7 +83,7 @@ export interface AddTeacherInfoCollectionParams {
   teachingSubject: string
   workRecord: string
   workTime: string
-  workExperienceList: WorkExperienceItem[]
+  workRecords: WorkExperienceItem[]
 }
 
 export interface GetSubjectListForTeacherResponse {

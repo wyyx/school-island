@@ -222,7 +222,7 @@ export default new Router({
     {
       path: '/create-archive-for-student',
       name: 'create-archive-for-student',
-      // beforeEnter: authGuard,
+      beforeEnter: authGuard,
       component: () =>
         import(
           /* webpackChunkName: "create-archive-for-student" */ '../views/CreateArchiveForStudent.page.vue'
@@ -232,7 +232,7 @@ export default new Router({
     {
       path: '/create-archive-for-teacher',
       name: 'create-archive-for-teacher',
-      // beforeEnter: authGuard,
+      beforeEnter: authGuard,
       component: () =>
         import(
           /* webpackChunkName: "create-archive-for-teacher" */ '../views/CreateArchiveForTeacher.page.vue'

@@ -9,7 +9,8 @@
         </div>
         <v-card-text>
           <h3 class="headline info-collection-guild">
-            为了便于学校的档案管理，请尽快完善您的个人档案！
+            <span> <v-icon color="red">error_outline</v-icon> </span>
+            <span>为了便于学校的档案管理，请尽快完善您的个人档案！</span>
           </h3>
         </v-card-text>
         <v-card-actions class="py-3">
@@ -1277,14 +1278,9 @@ export default Vue.extend({
       // 履历与荣誉
       this.teachingSubject = teacherInfo.teachingSubject
 
-      console.log(
-        'TCL: fillForm -> teacherInfo.workExperienceList',
-        teacherInfo.workExperienceList
-      )
-
       // get experienceModelItemList
       const workExperienceModelItemList = [] as ExperienceModelItem[]
-      const workExperienceList = teacherInfo.workExperienceList || []
+      const workExperienceList = teacherInfo.workRecords || []
 
       for (let index = 0; index < WORK_EXPERIENCE_ITEM_NUM_LIMIT; index++) {
         const workExperienceItem = workExperienceList[index]
@@ -1294,7 +1290,7 @@ export default Vue.extend({
             ...workExperienceItem,
             startDateMenu: false,
             endDateMenu: false,
-            show: index === 0 ? true : false
+            show: true
           })
         } else {
           workExperienceModelItemList.push({
@@ -1351,7 +1347,7 @@ export default Vue.extend({
           params.computerLevel = this.computerLevel
           // 经历与荣誉
           params.teachingSubject = this.teachingSubject
-          params.workExperienceList = this.experienceModelItemList
+          params.workRecords = this.experienceModelItemList
             .filter(item => item.show)
             .map(
               item2 =>

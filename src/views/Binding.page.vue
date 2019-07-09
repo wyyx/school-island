@@ -59,7 +59,9 @@
             ></v-text-field>
             <v-text-field
               clearable
-              label="学生身份证号码"
+              label="学生身份证号"
+              :counter="18"
+              maxlength="18"
               persistent-hint
               :error-messages="validated ? errors.collect('idCard') : []"
               v-model="idCard"
@@ -111,6 +113,8 @@
               clearable
               label="身份证号码"
               persistent-hint
+              :counter="18"
+              maxlength="18"
               :error-messages="validated ? errors.collect('idCard2') : []"
               v-model="idCard2"
               v-validate="{

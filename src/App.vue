@@ -121,12 +121,15 @@ export default Vue.extend({
     // open when build
     this.saveCurrentState()
 
-    // close when build
-    setTimeout(() => {
-      this.$router.push({
-        name: 'create-archive-for-teacher'
-      })
-    }, 2000)
+    // // close when build
+    // setTimeout(() => {
+    //   this.$router.push({
+    //     name: 'create-archive-for-teacher'
+    //   })
+    // }, 2000)
+  },
+  destroyed() {
+    this.saveCurrentState()
   },
   watch: {
     firstRoleRoute(newVal, oldVal) {

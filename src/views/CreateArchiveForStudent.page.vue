@@ -10,7 +10,8 @@
         </div>
         <v-card-text>
           <h3 class="headline info-collection-guild">
-            为了便于学校的档案管理，请尽快完善您的学籍档案！
+            <span> <v-icon color="red">error_outline</v-icon> </span>
+            <span>为了便于学校的档案管理，请尽快完善您的学籍档案！</span>
           </h3>
         </v-card-text>
         <v-card-actions class="py-3">
@@ -119,6 +120,8 @@
                     :disabled="true"
                     :readonly="true"
                     label="学生身份证号"
+                    :counter="18"
+                    maxlength="18"
                     persistent-hint
                     :error-messages="
                       validated ? errors.collect('studentIdCard') : []
