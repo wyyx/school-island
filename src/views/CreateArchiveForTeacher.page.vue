@@ -934,6 +934,8 @@ import { snackbarMixin } from '../mixins/snackbar.mixin'
 import { get } from 'vuex-pathify'
 import { authModulePath, roleRoute } from '../store/auth/auth.paths'
 
+const WORK_EXPERIENCE_ITEM_NUM_LIMIT = 5
+
 export interface ExperienceModelItem {
   startDateMenu: boolean
   endDateMenu: boolean
@@ -1131,7 +1133,7 @@ export default Vue.extend({
           teachingSubject: '',
           show: false
         }
-      ],
+      ] as ExperienceModelItem[],
       theTitleList: [
         {
           value: 1,
@@ -1174,15 +1176,13 @@ export default Vue.extend({
       const teacherInfoCollection = unfinishedInfoCollectionList.filter(
         info => info.userType === InfoCollectionUserTypes.Teacher
       )[0]
-      console.log(
-        'TCL: teacherInfo -> teacherInfoCollection',
-        teacherInfoCollection
-      )
 
       const teacherInfo: AddTeacherInfoCollectionParams =
         teacherInfoCollection &&
         teacherInfoCollection.entity &&
         teacherInfoCollection.entity[0]
+
+      console.log('TCL: teacherInfo -> teacherInfo', teacherInfo)
 
       return teacherInfo || ({} as AddTeacherInfoCollectionParams)
     },
@@ -1251,8 +1251,70 @@ export default Vue.extend({
       const that: any = this
       const teacherInfo = that.teacherInfo as AddTeacherInfoCollectionParams
 
+      // 基础信息
       this.name = teacherInfo.name
       this.idCard = teacherInfo.idCard
+      this.birthplace = teacherInfo.nativePlace
+      this.nation = teacherInfo.nation
+      this.politicsStatus = teacherInfo.politics
+      this.maritalStatus = teacherInfo.maritalStatus
+      this.address = teacherInfo.homeAddress
+      this.phone = teacherInfo.phone
+      this.emergencyContact = teacherInfo.emergencyContact
+      this.emergencyContactPhone = teacherInfo.emergencyContactPhone
+      // 教育背景
+      this.firstDegree = teacherInfo.firstEducationDiploma
+      this.major = teacherInfo.firstEducationMajor
+      this.university = teacherInfo.firstEducationSchool
+      this.highistDegree = teacherInfo.highestEducationDiploma
+      this.highistDegreeMajor = teacherInfo.highestEducationMajor
+      this.highistDegreeUniversity = teacherInfo.highestEducationSchool
+      this.graduationDate = teacherInfo.graduateTime
+      this.hiringTime = teacherInfo.hireTime
+      this.mandarinLevel = teacherInfo.mandarinLevel
+      this.englishLevel = teacherInfo.englishLevel
+      this.computerLevel = teacherInfo.computerLevel
+      // 履历与荣誉
+      this.teachingSubject = teacherInfo.teachingSubject
+
+      console.log(
+        'TCL: fillForm -> teacherInfo.workExperienceList',
+        teacherInfo.workExperienceList
+      )
+
+      // get experienceModelItemList
+      const workExperienceModelItemList = [] as ExperienceModelItem[]
+      const workExperienceList = teacherInfo.workExperienceList || []
+
+      for (let index = 0; index < WORK_EXPERIENCE_ITEM_NUM_LIMIT; index++) {
+        const workExperienceItem = workExperienceList[index]
+
+        if (workExperienceItem) {
+          workExperienceModelItemList.push({
+            ...workExperienceItem,
+            startDateMenu: false,
+            endDateMenu: false,
+            show: index === 0 ? true : false
+          })
+        } else {
+          workExperienceModelItemList.push({
+            startDate: null,
+            endDate: null,
+            school: '',
+            teachingSubject: '',
+            startDateMenu: false,
+            endDateMenu: false,
+            show: index === 0 ? true : false
+          })
+        }
+      }
+
+      this.experienceModelItemList = workExperienceModelItemList
+      this.theTitle = teacherInfo.professionalTitle
+      this.evaluateAtTime = teacherInfo.evaluateTime
+      this.hiringTime = teacherInfo.hireTime
+      this.optionalCourse = teacherInfo.beGoodAt
+      this.selfIntroduction = teacherInfo.selfIntroduction
     },
     submit() {
       const that: any = this
@@ -1281,6 +1343,7 @@ export default Vue.extend({
           params.firstEducationSchool = this.university
           params.highestEducationDiploma = this.highistDegree
           params.highestEducationMajor = this.highistDegreeMajor
+          params.highestEducationSchool = this.highistDegreeUniversity
           params.graduateTime = this.graduationDate
           params.workTime = this.workDate
           params.mandarinLevel = this.mandarinLevel
