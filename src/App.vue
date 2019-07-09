@@ -61,7 +61,8 @@ import { RoleVo } from './models/user.model'
 import {
   UnfinishedInfoCollection,
   InfoCollectionUserTypes,
-  AddStudentAndParentsInfoCollectionParams
+  AddStudentAndParentsInfoCollectionParams,
+  AddTeacherInfoCollectionParams
 } from './models/archive.model'
 import { archiveService } from './services/archive.service'
 
@@ -99,12 +100,29 @@ export default Vue.extend({
       const studentInfoList: AddStudentAndParentsInfoCollectionParams[] =
         (studentInfoCollection && studentInfoCollection.entity) || []
 
-      console.log(
-        'TCL: hasUnfinishedStudentInfoCollection -> studentInfoList',
-        studentInfoList
-      )
-
       return studentInfoList.length > 0 ? true : false
+    },
+    teacherInfo() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const teacherInfoCollection = unfinishedInfoCollectionList.filter(
+        info => info.userType === InfoCollectionUserTypes.Teacher
+      )[0]
+
+      const teacherInfo: AddTeacherInfoCollectionParams =
+        teacherInfoCollection &&
+        teacherInfoCollection.entity &&
+        teacherInfoCollection.entity[0]
+
+      return teacherInfo || ({} as AddTeacherInfoCollectionParams)
+    },
+    hasUnfinishedTeacherInfoCollection() {
+      const that: any = this
+      const teacherInfo =
+        (that.teacherInfo as AddTeacherInfoCollectionParams) ||
+        ({} as AddTeacherInfoCollectionParams)
+      return teacherInfo.name ? true : false
     }
   },
   created() {
@@ -152,11 +170,20 @@ export default Vue.extend({
       }
     },
     hasUnfinishedStudentInfoCollection(newVal, oldVal) {
+      console.log('TCL: hasUnfinishedStudentInfoCollection -> newVal', newVal)
       const that: any = this
-
       if (newVal) {
         that.$router.push({
           name: 'create-archive-for-student'
+        })
+      }
+    },
+    hasUnfinishedTeacherInfoCollection(newVal, oldVal) {
+      console.log('TCL: hasUnfinishedTeacherInfoCollection -> newVal', newVal)
+      const that: any = this
+      if (newVal && !that.hasUnfinishedStudentInfoCollection) {
+        that.$router.push({
+          name: 'create-archive-for-teacher'
         })
       }
     }

@@ -18,7 +18,7 @@
           <img src="../assets/archive_folder.svg" width="48px" height="150px" />
         </div>
 
-        <v-card-actions class="py-3">
+        <v-card-actions class="pt-3">
           <v-layout row wrap justify-center>
             <v-flex xs6 class="text-xs-center">
               <v-btn flat large xs6 @click="goBack">
@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <v-card-actions class="py-3">
+        <v-card-actions class="pt-3">
           <v-layout row wrap justify-center>
             <v-flex xs6 class="text-xs-center">
               <v-btn large xs6 color="accent" @click="goToWorkbenchPage">
