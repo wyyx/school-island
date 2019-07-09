@@ -43,7 +43,7 @@
             </div>
 
             <div class="subheading app-v-center">
-              已完成！感谢您的支持！
+              档案已建立！感谢您的支持！
             </div>
           </div>
         </div>
@@ -317,29 +317,26 @@
                   <v-layout row nowrap>
                     <v-flex xs4>
                       <v-select
-                        :items="educationBackgroundList"
+                        :items="firstDegreeList"
                         label="第一学历"
                         :error-messages="
-                          validated && !educationBackground
-                            ? ['第一学历未选择']
-                            : []
+                          validated && !firstDegree ? ['第一学历未选择'] : []
                         "
-                        v-model="educationBackground"
+                        v-model="firstDegree"
                         v-validate="'required'"
-                        name="educationBackground"
+                        name="firstDegree"
                         data-vv-as="第一学历"
                       ></v-select>
                     </v-flex>
                     <v-flex xs8>
                       <v-text-field
-                        name="highistDegreeMajor"
+                        name="major"
                         placeholder="输入专业"
-                        v-model="highistDegreeMajor"
+                        v-model="major"
                         v-validate="'required'"
                         data-vv-as="专业"
                         :error-messages="
-                          validated &&
-                          errors.collect('highistDegreeMajor').length > 0
+                          validated && errors.collect('major').length > 0
                             ? ['专业未填写']
                             : []
                         "
@@ -402,24 +399,24 @@
                   <v-text-field
                     label="毕业院校"
                     :error-messages="
-                      validated && errors.collect('university').length > 0
+                      validated &&
+                      errors.collect('highistDegreeUniversity').length > 0
                         ? ['毕业院校未填写']
                         : []
                     "
-                    v-model="university"
+                    v-model="highistDegreeUniversity"
                     v-validate="'required'"
-                    name="university"
+                    name="highistDegreeUniversity"
                     data-vv-as="毕业院校"
                   ></v-text-field>
                 </v-flex>
 
                 <v-flex v-if="highistDegree !== 0 && highistDegree !== 1">
                   <v-menu
-                    ref="dateMenu"
-                    v-model="dateMenu"
+                    ref="graduationDateMenu"
+                    v-model="graduationDateMenu"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :return-value.sync="date"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -429,39 +426,30 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        v-model="date"
+                        v-model="graduationDate"
                         label="毕业时间"
                         append-icon="event"
                         readonly
                         v-on="on"
                         v-validate="'required'"
                         data-vv-as="毕业时间"
-                        name="date"
+                        name="graduationDate"
                         :error-messages="
-                          validated && errors.collect('date').length > 0
+                          validated &&
+                          errors.collect('graduationDate').length > 0
                             ? ['毕业时间未填写']
                             : []
                         "
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="date"
+                      v-model="graduationDate"
                       type="month"
                       no-title
                       scrollable
                       locale="zh-cn"
+                      @input="graduationDateMenu = false"
                     >
-                      <v-spacer></v-spacer>
-                      <v-btn flat color="primary" @click="dateMenu = false"
-                        >取消</v-btn
-                      >
-                      <v-btn
-                        flat
-                        color="primary"
-                        @click="$refs.dateMenu.save(date)"
-                      >
-                        确定
-                      </v-btn>
                     </v-date-picker>
                   </v-menu>
                 </v-flex>
@@ -472,7 +460,6 @@
                     v-model="workDateMenu"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :return-value.sync="date"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -503,18 +490,8 @@
                       no-title
                       scrollable
                       locale="zh-cn"
+                      @input="workDateMenu = false"
                     >
-                      <v-spacer></v-spacer>
-                      <v-btn flat color="primary" @click="workDateMenu = false"
-                        >取消</v-btn
-                      >
-                      <v-btn
-                        flat
-                        color="primary"
-                        @click="$refs.workDateMenu.save(workDate)"
-                      >
-                        确定
-                      </v-btn>
                     </v-date-picker>
                   </v-menu>
                 </v-flex>
@@ -950,7 +927,8 @@ import {
   InfoCollectionUserTypes,
   InfoCollectionStudentTypes,
   Parent,
-  AddTeacherInfoCollectionParams
+  AddTeacherInfoCollectionParams,
+  WorkExperienceItem
 } from '../models/archive.model'
 import { snackbarMixin } from '../mixins/snackbar.mixin'
 import { get } from 'vuex-pathify'
@@ -989,7 +967,7 @@ export default Vue.extend({
       phone: '',
       emergencyContact: '',
       emergencyContactPhone: '',
-      educationBackgroundList: [
+      firstDegreeList: [
         {
           value: 1,
           text: '大专'
@@ -1007,8 +985,8 @@ export default Vue.extend({
           text: '博士'
         }
       ],
-      educationBackground: 0,
-      highistDegreeMajor: '',
+      firstDegree: 0,
+      major: '',
       university: '',
       highistDegreeList: [
         {
@@ -1029,8 +1007,10 @@ export default Vue.extend({
         }
       ],
       highistDegree: 0,
-      dateMenu: false,
-      date: null,
+      highistDegreeMajor: '',
+      highistDegreeUniversity: '',
+      graduationDateMenu: false,
+      graduationDate: null,
       workDateMenu: false,
       workDate: null,
       mandarinLevelList: [
@@ -1102,41 +1082,8 @@ export default Vue.extend({
         }
       ],
       computerLevel: 0,
-      teachingSubjectList: [
-        {
-          value: 1,
-          text: '语文'
-        },
-        {
-          value: 2,
-          text: '数学'
-        },
-        {
-          value: 3,
-          text: '英语'
-        },
-        {
-          value: 4,
-          text: '体育'
-        },
-        {
-          value: 5,
-          text: '音乐'
-        },
-        {
-          value: 6,
-          text: '美术'
-        },
-        {
-          value: 7,
-          text: '科学'
-        },
-        {
-          value: 8,
-          text: '政治'
-        }
-      ],
-      teachingSubject: 0,
+      teachingSubjectList: [],
+      teachingSubject: '',
       // 工作履历
       experienceModelItemList: [
         {
@@ -1250,6 +1197,7 @@ export default Vue.extend({
   },
   created() {
     this.getUnfinishedInfoCollection()
+    this.loadSubjectListForTeacher()
   },
   methods: {
     goBack() {
@@ -1284,6 +1232,12 @@ export default Vue.extend({
         }
       })
     },
+    loadSubjectListForTeacher() {
+      archiveService.getSubjectListForTeacher().then(res => {
+        const subjectList = res.data.content || []
+        this.teachingSubjectList = subjectList
+      })
+    },
     addExperience() {
       const cardToAdd = this.experienceModelItemList.find(
         item => item.show === false
@@ -1310,6 +1264,46 @@ export default Vue.extend({
           console.log('post backend api')
 
           const params = {} as AddTeacherInfoCollectionParams
+          // 基础信息
+          params.name = this.name
+          params.idCard = this.idCard
+          params.nativePlace = this.birthplace
+          params.nation = this.nation
+          params.politics = this.politicsStatus
+          params.maritalStatus = this.maritalStatus
+          params.homeAddress = this.address
+          params.phone = this.phone
+          params.emergencyContact = this.emergencyContact
+          params.emergencyContactPhone = this.emergencyContactPhone
+          // 教育背景
+          params.firstEducationDiploma = this.firstDegree
+          params.firstEducationMajor = this.major
+          params.firstEducationSchool = this.university
+          params.highestEducationDiploma = this.highistDegree
+          params.highestEducationMajor = this.highistDegreeMajor
+          params.graduateTime = this.graduationDate
+          params.workTime = this.workDate
+          params.mandarinLevel = this.mandarinLevel
+          params.englishLevel = this.englishLevel
+          params.computerLevel = this.computerLevel
+          // 经历与荣誉
+          params.teachingSubject = this.teachingSubject
+          params.workExperienceList = this.experienceModelItemList
+            .filter(item => item.show)
+            .map(
+              item2 =>
+                ({
+                  startDate: item2.startDate,
+                  endDate: item2.endDate,
+                  school: item2.school,
+                  teachingSubject: item2.teachingSubject
+                } as WorkExperienceItem)
+            )
+          params.professionalTitle = this.theTitle
+          params.evaluateTime = this.evaluateAtTime
+          params.hireTime = this.hiringTime
+          params.beGoodAt = this.optionalCourse
+          params.selfIntroduction = this.selfIntroduction
 
           console.log('TCL: submit -> params', params)
 

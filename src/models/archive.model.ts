@@ -47,17 +47,28 @@ export interface AddStudentAndParentsInfoCollectionParams {
   studentType?: number
 }
 
+export interface WorkExperienceItem {
+  startDate: string
+  endDate: string
+  school: string
+  teachingSubject: string
+}
+
 export interface AddTeacherInfoCollectionParams {
   beGoodAt: string
   computerLevel: number
   emergencyContact: string
   emergencyContactPhone: string
   englishLevel: number
+  evaluateTime: string
   firstEducationDiploma: number
   firstEducationMajor: string
   firstEducationSchool: string
   graduateTime: string
   highestEducationDiploma: number
+  highestEducationMajor: string
+  highestEducationSchool: string
+  hireTime: string
   homeAddress: string
   idCard: string
   mandarinLevel: number
@@ -72,6 +83,14 @@ export interface AddTeacherInfoCollectionParams {
   teachingSubject: string
   workRecord: string
   workTime: string
+  workExperienceList: WorkExperienceItem[]
+}
+
+export interface GetSubjectListForTeacherResponse {
+  content: string[]
+  errorCode: string
+  errorMsg: string
+  status: string
 }
 
 export interface Parent {

@@ -44,7 +44,7 @@
             </div>
 
             <div class="subheading app-v-center">
-              已完成！感谢您的支持！
+              档案已建立！感谢您的支持！
             </div>
           </div>
         </div>

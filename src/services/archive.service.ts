@@ -3,7 +3,8 @@ import {
   AddStudentAndParentsInfoCollectionResponse,
   GetUnfinishedInfoCollectionResponse,
   AddTeacherInfoCollectionParams,
-  AddTeacherInfoCollectionResponse
+  AddTeacherInfoCollectionResponse,
+  GetSubjectListForTeacherResponse
 } from '@/models/archive.model'
 import { HttpConfigService, httpConfigService } from './http-config.service'
 
@@ -29,6 +30,12 @@ export class ArchiveService {
     return this.httpConfigService.httpSercvice.post<
       AddTeacherInfoCollectionResponse
     >(this.baseUrl + '/w/collect/teacher', params)
+  }
+
+  getSubjectListForTeacher() {
+    return this.httpConfigService.httpSercvice.post<
+      GetSubjectListForTeacherResponse
+    >(this.baseUrl + '/w/collect/teacher-course')
   }
 }
 
