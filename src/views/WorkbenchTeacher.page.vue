@@ -31,7 +31,6 @@
                   class="elevation-1"
                   fab
                   small
-                  color="accent darken-1"
                   @click="goToCreateArticlePage"
                 >
                   <v-icon>edit</v-icon>
@@ -49,7 +48,6 @@
                   class="elevation-1"
                   fab
                   small
-                  color="accent darken-1"
                   @click="goToConvertArticleGuidePage"
                 >
                   <v-icon>launch</v-icon>
@@ -67,7 +65,6 @@
                   class="elevation-1"
                   fab
                   small
-                  color="accent darken-1"
                   @click="goToGradeInputPage"
                 >
                   <v-icon>note_add</v-icon>

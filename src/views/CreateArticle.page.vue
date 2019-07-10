@@ -1,6 +1,14 @@
 <template>
   <div class="app-relative app-fill-height app-scroll-y white">
     <Header title="创建文章" @back="goBack"></Header>
+
+    <v-dialog v-model="uploadingDialog" persistent min-width="290">
+      <v-card class="pa-3">
+        <v-progress-linear v-model="uploadingProgress"> </v-progress-linear>
+        <div class="text-xs-center">图片正在上传...</div>
+      </v-card>
+    </v-dialog>
+
     <!-- tabs -->
     <v-layout row wrap class="pa-3">
       <v-flex>
@@ -185,14 +193,12 @@ import COS from 'cos-js-sdk-v5'
 import { httpConfigService } from '../services/http-config.service'
 import { cosService } from '../services/cos.service'
 
-// var COS = require('cos-js-sdk-v5')
-
-console.log('TCL: COS', COS)
-
-// httpConfigService.httpSercvice.post('/cos/auth').then(res => {
-//   res.data.content
-//   console.log('TCL: res.data.content', res.data.content)
-// })
+export interface UploadingProgress {
+  loaded: number
+  total: number
+  speed: number
+  percent: number
+}
 
 // 初始化实例
 const cos = new COS({
@@ -216,8 +222,6 @@ const cos = new COS({
   }
 })
 
-console.log('TCL: cos', cos)
-
 const ARTICLE_TEXT_HOLDER = '这里添加文章的内容...'
 
 export default Vue.extend({
@@ -232,7 +236,10 @@ export default Vue.extend({
       previewMode: false,
       currentSelection: null as RangeStatic,
       insertingImageMenu: false,
-      selectedFile: null as any
+      selectedFile: null as any,
+      uploadingProgress: 80,
+      uploadingDialog: false,
+      imageUrl: ''
     }
   },
   components: {
@@ -258,11 +265,16 @@ export default Vue.extend({
       const that: any = this
       this.currentSelection = this.editor.getSelection()
     },
-    insertImage() {
+    startInsertImage() {
       const that: any = this
       this.saveCurrentSelection()
 
-      that.$refs.imageInput.click()
+      // that.$refs.imageInput.click()
+
+      that.insertImage(
+        'http://img3.imgtn.bdimg.com/it/u=1275571763,4024000970&fm=26&gp=0.jpg',
+        this.currentSelection
+      )
     },
     onFileChanged(event) {
       this.selectedFile = event.target.files[0]
@@ -272,26 +284,36 @@ export default Vue.extend({
         return
       }
 
+      this.uploadingDialog = true
+
       cos.putObject(
         {
           Bucket: 'img-1259347239' /* 必须 */,
           Region: 'ap-chengdu' /* 必须 */,
-          Key: this.selectedFile.name /* 必须 */,
+          Key: '/demo/' + this.selectedFile.name /* 必须 */,
           StorageClass: 'STANDARD',
           Body: this.selectedFile, // 上传文件对象
-          onProgress: function(progressData) {
+          onProgress: (progressData: UploadingProgress) => {
             console.log(JSON.stringify(progressData))
+
+            this.uploadingProgress = progressData.percent * 100
           }
         },
-        function(err, data) {
+        (err, data) => {
           console.log('TCL: onFileChanged -> data', data)
           console.log('TCL: onFileChanged -> err', err)
+
+          this.uploadingDialog = false
+
+          this.imageUrl =
+            'https://img-1259347239.cos.ap-chengdu.myqcloud.com/' +
+            this.selectedFile.name
+
+          // if (data) {
+
+          // }
         }
       )
-    },
-    startInsertImage(imageUrl: string) {
-      const that: any = this
-      that.insertImage(imageUrl, this.currentSelection)
     },
     _removeFormat() {
       const that: any = this

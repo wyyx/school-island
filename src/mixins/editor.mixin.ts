@@ -33,7 +33,7 @@ export const editorMixin = {
     insertImage(imageUrl: string, currentSelection: RangeStatic) {
       console.log('TCL: insertImage -> currentSelection', currentSelection)
       const that: any = this
-      formatUtil.insertEmbed(that.editor, imageUrl)
+      formatUtil.insertEmbed(that.editor, 'image', imageUrl, currentSelection)
     },
     removeFormat(currentSelection: RangeStatic) {
       const that: any = this

@@ -25,8 +25,17 @@ export function formatClearTextColor(quill: Quill, type: string) {
   quill.format(type, '')
 }
 
-export function insertEmbed(quill: Quill, type: string) {
-  quill.insertEmbed(2, 'image', 'https://picsum.photos/id/884/200/300')
+export function insertEmbed(
+  quill: Quill,
+  type: string,
+  url: string,
+  currentSelection: RangeStatic
+) {
+  quill.insertEmbed(
+    currentSelection.index,
+    type,
+    'https://picsum.photos/id/884/200/300'
+  )
 }
 
 export function removeFormat(quill: Quill, currentSelection: RangeStatic) {
