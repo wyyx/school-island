@@ -1,5 +1,5 @@
 <template>
-  <div class="app-relative app-fill-height app-scroll-y">
+  <div class="app-relative app-fill-height app-scroll-y white">
     <Header title="创建文章" @back="goBack"></Header>
     <!-- tabs -->
     <v-layout row wrap class="pa-3">
@@ -120,52 +120,35 @@
           <!-- insert photo -->
           <div>
             <div class="text-xs-center">
-              <v-menu
-                v-model="insertingImageMenu"
-                :close-on-content-click="false"
-                :nudge-width="200"
-                offset-x
+              <v-btn
+                fab
+                depressed
+                small
+                color="transparent"
+                @click="insertImage"
               >
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    fab
-                    depressed
-                    small
-                    color="transparent"
-                    @click="insertImagePopover"
-                    v-on="on"
-                  >
-                    <v-icon medium color="grey darken-1"
-                      >add_photo_alternate
-                    </v-icon>
-                  </v-btn>
-                </template>
-
-                <v-card>
-                  <v-list>
-                    <v-list-tile avatar>
-                      <v-list-tile-content>
-                        <v-text-field
-                          class="insert-image-url"
-                          placeholder="图片的Url地址"
-                        ></v-text-field>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn flat @click="insertingImageMenu = false">取消</v-btn>
-                    <v-btn color="primary" flat @click="startInsertImage">
-                      确定
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-menu>
+                <v-icon medium color="grey darken-1"
+                  >add_photo_alternate
+                </v-icon>
+              </v-btn>
+              <input
+                ref="imageInput"
+                style="display: none"
+                type="file"
+                accept="image/*"
+                @change="onFileChanged"
+              />
             </div>
           </div>
           <!-- clear all format -->
           <div>
-            <v-btn fab depressed small color="transparent">
+            <v-btn
+              fab
+              depressed
+              small
+              color="transparent"
+              @click="_removeFormat()"
+            >
               <v-icon medium color="grey darken-1">format_clear </v-icon>
             </v-btn>
           </div>
@@ -195,9 +178,45 @@
 <script lang="ts">
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
-import Quill from 'quill'
+import Quill, { RangeStatic } from 'quill'
 import { format } from '../utils/format.util'
 import { editorMixin } from '../mixins/editor.mixin'
+import COS from 'cos-js-sdk-v5'
+import { httpConfigService } from '../services/http-config.service'
+import { cosService } from '../services/cos.service'
+
+// var COS = require('cos-js-sdk-v5')
+
+console.log('TCL: COS', COS)
+
+// httpConfigService.httpSercvice.post('/cos/auth').then(res => {
+//   res.data.content
+//   console.log('TCL: res.data.content', res.data.content)
+// })
+
+// 初始化实例
+const cos = new COS({
+  getAuthorization: function(options, callback) {
+    // 异步获取临时密钥
+    cosService.getCredentials().then(res => {
+      const credentials = res.data.content
+      console.log('TCL: credentials', credentials)
+
+      if (credentials) {
+        callback({
+          TmpSecretId: credentials.tmpSecretId,
+          TmpSecretKey: credentials.tmpSecretKey,
+          XCosSecurityToken: credentials.sessionToken,
+          ExpiredTime: 36000000000
+        })
+      } else {
+        console.log('无法获取 cos credentials')
+      }
+    })
+  }
+})
+
+console.log('TCL: cos', cos)
 
 const ARTICLE_TEXT_HOLDER = '这里添加文章的内容...'
 
@@ -205,15 +224,15 @@ export default Vue.extend({
   mixins: [editorMixin],
   data: function() {
     return {
-      // https://picsum.photos/id/68/536/354
       title: '',
       cover: 'https://picsum.photos/id/68/536/354',
       editor: {} as Quill,
       articleHtml: ARTICLE_TEXT_HOLDER,
       // articleHtml: '',
       previewMode: false,
-      currentSelection: null as any,
-      insertingImageMenu: false
+      currentSelection: null as RangeStatic,
+      insertingImageMenu: false,
+      selectedFile: null as any
     }
   },
   components: {
@@ -239,15 +258,45 @@ export default Vue.extend({
       const that: any = this
       this.currentSelection = this.editor.getSelection()
     },
-    insertImagePopover() {
+    insertImage() {
       const that: any = this
       this.saveCurrentSelection()
+
+      that.$refs.imageInput.click()
+    },
+    onFileChanged(event) {
+      this.selectedFile = event.target.files[0]
+      console.log('TCL: onFileChanged -> this.selectedFile', this.selectedFile)
+
+      if (!this.selectedFile) {
+        return
+      }
+
+      cos.putObject(
+        {
+          Bucket: 'img-1259347239' /* 必须 */,
+          Region: 'ap-chengdu' /* 必须 */,
+          Key: this.selectedFile.name /* 必须 */,
+          StorageClass: 'STANDARD',
+          Body: this.selectedFile, // 上传文件对象
+          onProgress: function(progressData) {
+            console.log(JSON.stringify(progressData))
+          }
+        },
+        function(err, data) {
+          console.log('TCL: onFileChanged -> data', data)
+          console.log('TCL: onFileChanged -> err', err)
+        }
+      )
     },
     startInsertImage(imageUrl: string) {
       const that: any = this
       that.insertImage(imageUrl, this.currentSelection)
-
-      this.insertingImageMenu = false
+    },
+    _removeFormat() {
+      const that: any = this
+      this.saveCurrentSelection()
+      that.removeFormat(this.currentSelection)
     }
   },
   mounted() {
@@ -268,7 +317,7 @@ export default Vue.extend({
 }
 
 #editor {
-  min-height: 300px;
+  min-height: 150px;
 }
 
 .toolbar-container {
@@ -328,11 +377,6 @@ export default Vue.extend({
 }
 .no-color-sample {
   background-color: white;
-}
-
-.v-menu__content {
-  width: 100%;
-  left: unset;
 }
 
 .insert-image-url {

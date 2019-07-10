@@ -1,34 +1,12 @@
 {
-  "name": "黄蓉",
-  "idCard": "510107197911203426",
-  "nativePlace": "成都",
-  "nation": "南磨磨唧唧",
-  "politics": 1,
-  "maritalStatus": 1,
-  "homeAddress": "哈哈哈哈哈",
-  "phone": "13333333333",
-  "emergencyContact": "不会后悔",
-  "emergencyContactPhone": "13333333333",
-  "firstEducationDiploma": 1,
-  "firstEducationMajor": "哈哈哈哈",
-  "firstEducationSchool": "沟沟壑壑",
-  "highestEducationDiploma": 1,
-  "workTime": "2019-05",
-  "mandarinLevel": 3,
-  "englishLevel": 2,
-  "computerLevel": 3,
-  "teachingSubject": "体育",
-  "workRecords": [
-    {
-      "startDate": "2019-05",
-      "endDate": "2019-05",
-      "company": "v不不不",
-      "position": "哈哈哈"
-    }
-  ],
-  "professionalTitle": 3,
-  "evaluateTime": "2019-07-03",
-  "hireTime": "2019-07-09",
-  "beGoodAt": "哈哈哈哈想",
-  "selfIntroduction": "吃好喝好"
+  "content": {
+    "sessionToken": "string",
+    "tmpSecretId": "string",
+    "tmpSecretKey": "string",
+    "token": "string",
+    "uploadUrl": "string"
+  },
+  "errorCode": "string",
+  "errorMsg": "string",
+  "status": "string"
 }

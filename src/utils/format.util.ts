@@ -1,7 +1,12 @@
-import Quill from 'quill'
+import Quill, { RangeStatic } from 'quill'
 
 export function format(quill: Quill, type: string) {
   const selection = quill.getSelection()
+
+  if (!selection) {
+    return
+  }
+
   const currentFormat = quill.getFormat(selection)
   const isFormatted = currentFormat[type]
 
@@ -22,4 +27,12 @@ export function formatClearTextColor(quill: Quill, type: string) {
 
 export function insertEmbed(quill: Quill, type: string) {
   quill.insertEmbed(2, 'image', 'https://picsum.photos/id/884/200/300')
+}
+
+export function removeFormat(quill: Quill, currentSelection: RangeStatic) {
+  if (!currentSelection) {
+    return
+  }
+
+  quill.removeFormat(currentSelection.index, currentSelection.length)
 }
