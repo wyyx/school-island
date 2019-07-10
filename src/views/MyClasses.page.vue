@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
     <Header title="班级成绩" @back="goBack"></Header>
     <v-card class="primary lighten-3 mb-2">
       <div class="class_box">

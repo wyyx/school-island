@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header title="班级数据" @back="goBack"></Header>
     <div>
       <v-card class="pa-3">

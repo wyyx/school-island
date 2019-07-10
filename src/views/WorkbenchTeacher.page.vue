@@ -1,24 +1,88 @@
 <template>
-  <div class="wrapper">
-    <v-speed-dial
-      class="teacher-helper"
-      fixed
-      bottom
-      right
-      direction="left"
-      transition="slide-x-reverse-transition"
-      origin="bottom"
-    >
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
+    <v-bottom-sheet v-model="sheet">
       <template v-slot:activator>
-        <v-btn color="accent" dark fab @click="showAdd = !showAdd">
-          <v-icon>add</v-icon>
-          <!-- <v-icon v-else>close</v-icon> -->
-        </v-btn>
+        <v-speed-dial
+          class="teacher-helper"
+          fixed
+          bottom
+          right
+          direction="top"
+          transition="slide-x-reverse-transition"
+          origin="bottom"
+        >
+          <template v-slot:activator>
+            <v-btn color="accent" dark fab>
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+        </v-speed-dial>
       </template>
-      <v-btn @click="goToGradeInputPage" color="accent"> 录入成绩 </v-btn>
-    </v-speed-dial>
 
-    <v-card class="mb-2">
+      <v-container fluid class="white">
+        <h3 class="subheading text-xs-center pb-3">
+          老师助手
+        </h3>
+        <v-layout row class="text-xs-center">
+          <v-flex xs4>
+            <v-layout column wrap>
+              <v-flex>
+                <v-btn
+                  class="elevation-1"
+                  fab
+                  small
+                  color="accent darken-1"
+                  @click="goToCreateArticlePage"
+                >
+                  <v-icon>edit</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex class="grey--text ">
+                写文章
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex xs4>
+            <v-layout column wrap>
+              <v-flex>
+                <v-btn
+                  class="elevation-1"
+                  fab
+                  small
+                  color="accent darken-1"
+                  @click="goToConvertArticleGuidePage"
+                >
+                  <v-icon>launch</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex class="grey--text ">
+                转载
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex xs4>
+            <v-layout column wrap>
+              <v-flex>
+                <v-btn
+                  class="elevation-1"
+                  fab
+                  small
+                  color="accent darken-1"
+                  @click="goToGradeInputPage"
+                >
+                  <v-icon>note_add</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex class="grey--text ">
+                录入成绩
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-bottom-sheet>
+
+    <v-card class="app-z-index-10">
       <transition name="scale">
         <swiper
           @click="toCloseSwiper"
@@ -301,17 +365,18 @@ export default Vue.extend({
   components: {
     swiper,
     swiperSlide
-    // Chart
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     console.log('yyyyyyyyyyy')
-  //     const store: any = vm.$store
-  //     store.set(authModulePath + showTabs, true)
-  //   })
-  // },
+
   data: function() {
     return {
+      sheet: false,
+      tiles: [
+        { img: 'keep.png', title: 'Keep' },
+        { img: 'inbox.png', title: 'Inbox' },
+        { img: 'hangouts.png', title: 'Hangouts' },
+        { img: 'messenger.png', title: 'Messenger' },
+        { img: 'google.png', title: 'Google+' }
+      ],
       showAdd: true,
       currentClass: {} as ClassModel,
       classList: [] as ClassModel[],
@@ -431,7 +496,6 @@ export default Vue.extend({
         name: 'grade-input'
       })
     },
-
     goToMyClassesPage() {
       console.log('TCL: goToMyClassesPage -> goToMyClassesPage')
       this.$router.push({
@@ -439,6 +503,16 @@ export default Vue.extend({
         query: {
           classId: this.currentClass.classId.toString()
         }
+      })
+    },
+    goToCreateArticlePage() {
+      this.$router.push({
+        name: 'create-article'
+      })
+    },
+    goToConvertArticleGuidePage() {
+      this.$router.push({
+        name: 'convert-article-guide'
       })
     },
     setClass(aclass: ClassModel) {
@@ -625,9 +699,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  padding-bottom: 48px;
-}
 .duty-check-title {
   position: relative;
   left: 10px;
@@ -644,13 +715,6 @@ export default Vue.extend({
   background-image: url(../assets/images/duty_check_bg.jpg);
   background-size: contain;
   height: 0px;
-}
-
-.teacher-helper {
-  position: fixed !important;
-  right: 1rem !important;
-  bottom: 5rem !important;
-  z-index: 5000 !important;
 }
 
 .class-selection-box {

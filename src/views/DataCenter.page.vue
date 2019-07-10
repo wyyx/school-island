@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header title="数据中心" @back="goBack"></Header>
     <div>
       <!-- categoryTab -->

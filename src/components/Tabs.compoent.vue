@@ -1,6 +1,6 @@
 <template>
   <div app>
-    <div style="z-index: 2000">{{ bottomNav }}</div>
+    <div>{{ bottomNav }}</div>
     <v-bottom-nav
       app
       :active.sync="bottomNav"

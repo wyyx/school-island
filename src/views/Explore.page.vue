@@ -1,5 +1,5 @@
 <template>
-  <div class="app-fill-height">
+  <div class="app-relative app-fill-height app-scroll-y">
     <Developing v-if="false"></Developing>
     <div v-if="false" class="container pa-0">
       <!-- <Header :showBack="false" title="发现"></Header> -->

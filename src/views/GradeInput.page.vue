@@ -1,5 +1,5 @@
 <template>
-  <div class="content-wrapper">
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header title="成绩单" @back="goBack"></Header>
     <v-card class="pa-3">
       <v-layout row nowrap class="main-content-wrapper">

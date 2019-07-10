@@ -35,13 +35,6 @@ table.v-table tbody td:first-child {
   margin-bottom: 6px !important;
 }
 
-.teacher-helper .v-btn--floating .v-btn__content {
-  flex: 1 1 auto !important;
-  margin: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-
 .grade-input-edit-page .comment-input textarea {
   margin-top: 0px !important;
   line-height: 24px !important;
@@ -111,4 +104,8 @@ table.v-table tbody td:first-child {
     margin-top: 0px !important;
     line-height: 24px !important;
   }
+}
+
+.v-dialog__container {
+  display: unset !important;
 }

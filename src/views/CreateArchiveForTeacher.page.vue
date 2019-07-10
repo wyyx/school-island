@@ -1,5 +1,7 @@
 <template>
-  <div class="wrapper create-archive-for-teacher-page app-fill-height">
+  <div
+    class="wrapper create-archive-for-teacher-page app-fill-height app-scroll-y"
+  >
     <Header title="建立老师档案" @back="goBack"></Header>
 
     <!-- guide card -->
@@ -402,7 +404,7 @@
                   </v-layout>
                 </v-flex>
 
-                <v-flex v-if="highistDegree !== 0 && highistDegree !== 1">
+                <v-flex v-if="highistDegree && highistDegree !== 1">
                   <v-text-field
                     label="毕业院校"
                     :error-messages="
@@ -418,7 +420,7 @@
                   ></v-text-field>
                 </v-flex>
 
-                <v-flex v-if="highistDegree !== 0 && highistDegree !== 1">
+                <v-flex v-if="highistDegree && highistDegree !== 1">
                   <v-menu
                     ref="graduationDateMenu"
                     v-model="graduationDateMenu"
@@ -985,7 +987,7 @@ export default Vue.extend({
       firstDegreeList: [
         {
           value: 1,
-          text: '大专'
+          text: '大专及以下'
         },
         {
           value: 2,
@@ -1279,7 +1281,7 @@ export default Vue.extend({
       this.firstDegree = teacherInfo.firstEducationDiploma
       this.major = teacherInfo.firstEducationMajor
       this.university = teacherInfo.firstEducationSchool
-      this.highistDegree = teacherInfo.highestEducationDiploma
+      this.highistDegree = teacherInfo.highestEducationDiploma || 0
       this.highistDegreeMajor = teacherInfo.highestEducationMajor
       this.highistDegreeUniversity = teacherInfo.highestEducationSchool
       this.graduationDate = teacherInfo.graduateTime

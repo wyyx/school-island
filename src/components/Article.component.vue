@@ -1,9 +1,9 @@
 <template>
-  <div class="article">
+  <div class="article-component">
     <v-layout>
       <v-flex>
         <v-card>
-          <v-card-actions class="header py-2 pl-3 pr-1">
+          <v-card-actions class="header py-2 pl-3 pr-0">
             <v-card-title primary-title class="pa-0">
               <h3 class="subheading mb-0">2017级8班 李小龙的妈妈</h3>
             </v-card-title>
@@ -54,20 +54,15 @@
                   <v-icon color="grey">sms</v-icon>
                 </v-btn>
               </template>
-              <v-list class="pa-0 comment-menu">
-                <v-list-tile>
-                  <v-list-tile-title>
-                    <v-btn depressed color="transparent">
-                      <v-icon class="pr-1">favorite_border</v-icon> 赞
-                    </v-btn>
-                  </v-list-tile-title>
-                  <v-list-tile-title>
-                    <v-btn depressed color="transparent">
-                      <v-icon class="pr-1">add_comment</v-icon> 评论
-                    </v-btn>
-                  </v-list-tile-title>
-                </v-list-tile>
-              </v-list>
+              <div class="comment-btns-wrapper white">
+                <v-btn depressed color="transparent">
+                  <v-icon>favorite_border</v-icon> 赞
+                </v-btn>
+
+                <v-btn depressed color="transparent">
+                  <v-icon>add_comment</v-icon> 评论
+                </v-btn>
+              </div>
             </v-menu>
           </v-card-actions>
         </v-card>
@@ -123,15 +118,5 @@ export default Vue.extend({
 .header,
 .footer {
   height: 56px;
-}
-
-.comment-menu .v-btn {
-  height: unset;
-  min-width: unset;
-  margin: 0px;
-}
-
-.v-list__tile {
-  height: unset !important;
 }
 </style>

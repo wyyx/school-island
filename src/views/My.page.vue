@@ -1,9 +1,9 @@
 <template>
-  <div class="container pa-0">
-    <v-card color="primary" class="mb-2">
+  <div class="app-relative app-fill-height app-scroll-y">
+    <v-card color="primary app-z-index-10">
       <v-layout class="teachers py-4" row wrap>
         <v-flex xs3>
-          <v-layout row wrap app-fill-height justify-center align-center>
+          <v-layout row wrap justify-center align-center>
             <v-flex app-shrink>
               <v-avatar :tile="false" :size="64" color="grey lighten-4">
                 <img :src="user.headImgUrl" alt="avatar" />

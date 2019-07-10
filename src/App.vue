@@ -11,11 +11,6 @@
     </div>
 
     <v-content v-else>
-      <ul v-if="false">
-        <li>isBinded:{{ isBinded }}</li>
-        <li>isTourist:{{ isTourist }}</li>
-        <li>roleRoute:{{ roleRoute }}</li>
-      </ul>
       <router-view></router-view>
       <AppTabs app v-if="showTabs" :role="roleRoute" class="tabs"></AppTabs>
     </v-content>
@@ -142,7 +137,7 @@ export default Vue.extend({
     // // close when build
     // setTimeout(() => {
     //   this.$router.push({
-    //     name: 'create-archive-for-teacher'
+    //     name: 'create-archive-for-student'
     //   })
     // }, 2000)
   },
@@ -386,7 +381,6 @@ export default Vue.extend({
   width: 100%;
   position: fixed;
   bottom: 0px;
-  z-index: 999;
 }
 
 .loading-wrapper {

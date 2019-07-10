@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
     <Header :title="title" @back="goBack"></Header>
     <v-card class="mb-3">
       <v-layout class="pa-3">

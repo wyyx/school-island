@@ -1,6 +1,6 @@
 <template>
-  <div class="container white pa-0">
-    <Header :showBack="true" title="创建文章" @back="onBack"></Header>
+  <div class="app-relative app-fill-height app-scroll-y">
+    <Header title="创建文章" @back="goBack"></Header>
     <!-- tabs -->
     <v-layout row wrap class="pa-3">
       <v-flex>
@@ -220,10 +220,8 @@ export default Vue.extend({
     Header
   },
   methods: {
-    onBack() {
-      this.$router.push({
-        name: 'home'
-      })
+    goBack() {
+      this.$router.back()
     },
     saveAsDraft() {
       console.log('saveAdDraft')

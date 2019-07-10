@@ -1,5 +1,7 @@
 <template>
-  <div class="wrapper create-archive-for-student-page app-fill-height">
+  <div
+    class="wrapper create-archive-for-student-page app-fill-height app-scroll-y"
+  >
     <Header title="建立学生档案" @back="goBack"></Header>
 
     <!-- guide card -->

@@ -18,6 +18,7 @@ body {
   width: 100%;
   margin: 0px;
   box-sizing: border-box;
+  overflow-y: unset;
 }
 
 * {
@@ -34,7 +35,7 @@ body {
 }
 
 .student-list-wrapper .v-list {
-  background: #f5f5f5 !important;
+  background: #f1f1f1 !important;
 }
 
 .grade-input-edit-rating.v-rating i {
@@ -50,7 +51,6 @@ th {
   position: fixed !important;
   right: 1rem !important;
   bottom: 5rem !important;
-  z-index: 5000 !important;
 }
 
 .grade-level-select .v-input__control {
@@ -64,7 +64,6 @@ th {
 main {
   height: 100%;
   width: 100%;
-  overflow-y: scroll;
 }
 
 .v-toolbar .v-toolbar__content {

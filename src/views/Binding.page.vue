@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header v-if="isBinded" title="添加绑定" @back="goBack"></Header>
     <v-card color="primary" class="mb-2">
       <v-layout column wrap class="pa-3">

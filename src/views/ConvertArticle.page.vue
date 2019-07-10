@@ -1,6 +1,6 @@
 <template>
-  <div class="container pa-0">
-    <Header :showBack="true" title="编辑文章" @back="onBack"></Header>
+  <div class="app-relative app-fill-height app-scroll-y">
+    <Header title="编辑文章" @back="goBack"></Header>
     <v-layout row wrap class="pa-2">
       <v-flex>
         <v-layout row v-for="(tag, index) in tags" :key="index">
@@ -56,10 +56,8 @@ export default Vue.extend({
   },
   computed: {},
   methods: {
-    onBack() {
-      this.$router.push({
-        name: 'home'
-      })
+    goBack() {
+      this.$router.back()
     },
     toggleAddOrRemove(tag) {
       if (this.hasTag(tag)) {
