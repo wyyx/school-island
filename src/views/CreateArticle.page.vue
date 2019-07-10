@@ -9,6 +9,26 @@
       </v-card>
     </v-dialog>
 
+    <video
+      v-if="false"
+      poster="/path/to/poster.jpg"
+      id="player"
+      playsinline
+      controls
+    >
+      <source src="/demo.mp4" type="video/mp4" />
+      <source src="/path/to/video.webm" type="video/webm" />
+
+      <!-- Captions are optional -->
+      <track
+        kind="captions"
+        label="English captions"
+        src="/path/to/captions.vtt"
+        srclang="en"
+        default
+      />
+    </video>
+
     <!-- tabs -->
     <v-layout row wrap class="pa-3">
       <v-flex>
@@ -191,6 +211,10 @@ import { editorMixin } from '../mixins/editor.mixin'
 import COS from 'cos-js-sdk-v5'
 import { httpConfigService } from '../services/http-config.service'
 import { cosService } from '../services/cos.service'
+import Plyr from 'plyr'
+
+const player = new Plyr('#player')
+// player.
 
 export interface UploadingProgress {
   loaded: number
