@@ -32,6 +32,7 @@
                   fab
                   small
                   @click="goToCreateArticlePage"
+                  color="accent darken-1"
                 >
                   <v-icon>edit</v-icon>
                 </v-btn>
@@ -49,6 +50,7 @@
                   fab
                   small
                   @click="goToConvertArticleGuidePage"
+                  color="accent darken-1"
                 >
                   <v-icon>launch</v-icon>
                 </v-btn>
@@ -66,6 +68,7 @@
                   fab
                   small
                   @click="goToGradeInputPage"
+                  color="accent darken-1"
                 >
                   <v-icon>note_add</v-icon>
                 </v-btn>

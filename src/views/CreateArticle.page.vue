@@ -133,7 +133,7 @@
                 depressed
                 small
                 color="transparent"
-                @click="insertImage"
+                @click="startInsertImage"
               >
                 <v-icon medium color="grey darken-1"
                   >add_photo_alternate
@@ -187,7 +187,6 @@
 import Vue from 'vue'
 import Header from '../components/Header.component.vue'
 import Quill, { RangeStatic } from 'quill'
-import { format } from '../utils/format.util'
 import { editorMixin } from '../mixins/editor.mixin'
 import COS from 'cos-js-sdk-v5'
 import { httpConfigService } from '../services/http-config.service'
@@ -237,7 +236,7 @@ export default Vue.extend({
       currentSelection: null as RangeStatic,
       insertingImageMenu: false,
       selectedFile: null as any,
-      uploadingProgress: 80,
+      uploadingProgress: 0,
       uploadingDialog: false,
       imageUrl: ''
     }
@@ -269,14 +268,19 @@ export default Vue.extend({
       const that: any = this
       this.saveCurrentSelection()
 
-      // that.$refs.imageInput.click()
+      if (!this.currentSelection) {
+        return
+      }
 
-      that.insertImage(
-        'http://img3.imgtn.bdimg.com/it/u=1275571763,4024000970&fm=26&gp=0.jpg',
-        this.currentSelection
-      )
+      that.$refs.imageInput.click()
+
+      // that.insertImage(
+      //   'http://img0.imgtn.bdimg.com/it/u=2577464539,3482866209&fm=26&gp=0.jpg',
+      //   this.currentSelection
+      // )
     },
     onFileChanged(event) {
+      const that: any = this
       this.selectedFile = event.target.files[0]
       console.log('TCL: onFileChanged -> this.selectedFile', this.selectedFile)
 
@@ -306,12 +310,13 @@ export default Vue.extend({
           this.uploadingDialog = false
 
           this.imageUrl =
-            'https://img-1259347239.cos.ap-chengdu.myqcloud.com/' +
+            'https://img-1259347239.cos.ap-chengdu.myqcloud.com' +
+            '/demo/' +
             this.selectedFile.name
 
-          // if (data) {
-
-          // }
+          if (data) {
+            that.insertImage(this.imageUrl, this.currentSelection)
+          }
         }
       )
     },
@@ -403,5 +408,9 @@ export default Vue.extend({
 
 .insert-image-url {
   width: 100%;
+}
+
+.v-progress-linear {
+  border-radius: 0px !important;
 }
 </style>

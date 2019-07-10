@@ -7,6 +7,7 @@ import { authModulePath, showTabs, isBinded } from '@/store/auth/auth.paths'
 
   const outerPathList = [
     '/',
+    '/home',
     '/workbench/teacher',
     '/workbench/parents',
     '/workbench/school-run',

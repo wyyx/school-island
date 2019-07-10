@@ -264,7 +264,14 @@ export default Vue.extend({
 
         let path = this.$route.fullPath
 
-        if (excludePathArr.includes(path)) {
+        let isExcludedPath = false
+        excludePathArr.forEach(p => {
+          if (path.includes(p)) {
+            isExcludedPath = true
+          }
+        })
+
+        if (isExcludedPath) {
           // to home page
           path = '/'
         }

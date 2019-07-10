@@ -1,43 +1,51 @@
 import * as formatUtil from '@/utils/format.util'
-import { RangeStatic } from 'quill'
+import Quill, { RangeStatic } from 'quill'
 
 export const editorMixin = {
   methods: {
     formatBold() {
       const that: any = this
-      formatUtil.format(that.editor, 'bold')
+      formatUtil.toggleFormat(that.editor, 'bold')
     },
     formatItalic() {
       const that: any = this
-
-      formatUtil.format(that.editor, 'italic')
+      formatUtil.toggleFormat(that.editor, 'italic')
     },
     formatColor(color: string, currentSelection: RangeStatic) {
       const that: any = this
+      const quill: Quill = that.editor
 
-      that.editor.setSelection(currentSelection)
-      formatUtil.formatTextColor(that.editor, 'color', color)
-      that.editor.setSelection()
+      quill.format('color', color)
     },
     formatClearColor(currentSelection: RangeStatic) {
       const that: any = this
+      const quill: Quill = that.editor
 
-      that.editor.setSelection(currentSelection)
-      formatUtil.formatClearTextColor(that.editor, 'color')
-      that.editor.setSelection()
+      quill.format('color', '')
     },
     formatUnderline() {
       const that: any = this
-      formatUtil.format(that.editor, 'underline')
+      formatUtil.toggleFormat(that.editor, 'underline')
     },
     insertImage(imageUrl: string, currentSelection: RangeStatic) {
-      console.log('TCL: insertImage -> currentSelection', currentSelection)
+      if (!currentSelection) {
+        return
+      }
+
       const that: any = this
-      formatUtil.insertEmbed(that.editor, 'image', imageUrl, currentSelection)
+      const quill: Quill = that.editor
+
+      quill.insertEmbed(currentSelection.index, 'image', imageUrl)
     },
     removeFormat(currentSelection: RangeStatic) {
+      if (!currentSelection) {
+        return
+      }
+
       const that: any = this
-      formatUtil.removeFormat(that.editor, currentSelection)
+      const quill: Quill = that.editor
+
+      quill.removeFormat(currentSelection.index, currentSelection.length)
     }
   }
 }
