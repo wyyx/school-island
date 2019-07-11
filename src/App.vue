@@ -260,7 +260,13 @@ export default Vue.extend({
       window.addEventListener('beforeunload', () => {
         const currentRole = that.currentRole as RoleVo
 
-        const excludePathArr = ['/?s=', '/grade-input-edit', '/binding']
+        const excludePathArr = [
+          '/?s=',
+          '/grade-input-edit',
+          '/binding',
+          '/create-archive-for-student',
+          '/create-archive-for-teacher'
+        ]
 
         let path = this.$route.fullPath
 
