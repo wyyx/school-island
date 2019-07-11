@@ -1,5 +1,5 @@
 import * as formatUtil from '@/utils/format.util'
-import Quill, { RangeStatic } from 'quill'
+import Quill, { RangeStatic, Delta } from 'quill'
 
 export const editorMixin = {
   methods: {

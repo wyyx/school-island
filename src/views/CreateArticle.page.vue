@@ -214,7 +214,6 @@ import { cosService } from '../services/cos.service'
 import Plyr from 'plyr'
 
 const player = new Plyr('#player')
-// player.
 
 export interface UploadingProgress {
   loaded: number
@@ -358,6 +357,23 @@ export default Vue.extend({
       },
       theme: 'snow'
     })
+
+    setTimeout(() => {
+      this.editor.clipboard.dangerouslyPasteHTML(
+        null,
+        `<video
+      
+      id="player"
+      playsinline
+      controls
+    >
+      <source src="/demo.mp4" type="video/mp4" />
+    
+
+    
+    </video>`
+      )
+    }, 2000)
   }
 })
 </script>

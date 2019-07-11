@@ -24,7 +24,7 @@
           老师助手
         </h3>
         <v-layout row class="text-xs-center">
-          <v-flex xs4 v-if="false">
+          <v-flex xs4>
             <v-layout column wrap>
               <v-flex>
                 <v-btn
@@ -42,7 +42,7 @@
               </v-flex>
             </v-layout>
           </v-flex>
-          <v-flex xs4 v-if="false">
+          <v-flex xs4>
             <v-layout column wrap>
               <v-flex>
                 <v-btn
