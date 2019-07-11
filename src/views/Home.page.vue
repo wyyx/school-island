@@ -1,70 +1,72 @@
 <template>
   <div class="wrapper app-scroll-y app-fill-height app-relative">
-    <div class="nav-wrapper white pa-0">
-      <v-layout>
-        <v-flex>
-          <v-tabs fixed-tabs slider-color="primary">
-            <v-tab> 推荐 </v-tab>
-            <v-tab> 学校 </v-tab>
-            <v-tab> 班级 </v-tab>
-            <v-tab> 关注 </v-tab>
-          </v-tabs>
-        </v-flex>
-        <v-spacer></v-spacer>
-        <v-flex app-shrink class="pr-2">
-          <v-layout :align-center="true" app-fill-height>
-            <v-flex class="px-2">
-              <v-icon>notifications_none</v-icon>
-            </v-flex>
-            <v-flex class="px-2">
-              <v-icon>add_circle_outline</v-icon>
-            </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </div>
-    <v-carousel class="banners" height="160" hide-controls interval="5000">
-      <v-carousel-item
-        v-for="(item, i) in images"
-        :key="i"
-        :src="item.src"
-      ></v-carousel-item>
-    </v-carousel>
+    <div v-if="false" class="content-wrapper">
+      <div class="nav-wrapper white pa-0">
+        <v-layout>
+          <v-flex>
+            <v-tabs fixed-tabs slider-color="primary">
+              <v-tab> 推荐 </v-tab>
+              <v-tab> 学校 </v-tab>
+              <v-tab> 班级 </v-tab>
+              <v-tab> 关注 </v-tab>
+            </v-tabs>
+          </v-flex>
+          <v-spacer></v-spacer>
+          <v-flex app-shrink class="pr-2">
+            <v-layout :align-center="true" app-fill-height>
+              <v-flex class="px-2">
+                <v-icon>notifications_none</v-icon>
+              </v-flex>
+              <v-flex class="px-2">
+                <v-icon>add_circle_outline</v-icon>
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </div>
+      <v-carousel class="banners" height="160" hide-controls interval="5000">
+        <v-carousel-item
+          v-for="(item, i) in images"
+          :key="i"
+          :src="item.src"
+        ></v-carousel-item>
+      </v-carousel>
 
-    <div class="sub-nav py-2">
-      <v-layout row wrap justify-center>
-        <v-flex xs9>
-          <v-tabs fixed-tabs slider-color="primary">
-            <v-tab>
-              校园头条
-            </v-tab>
-            <v-tab>
-              学校概况
-            </v-tab>
-            <v-tab>
-              校园之星
-            </v-tab>
-          </v-tabs>
-        </v-flex>
-      </v-layout>
+      <div class="sub-nav py-2">
+        <v-layout row wrap justify-center>
+          <v-flex xs9>
+            <v-tabs fixed-tabs slider-color="primary">
+              <v-tab>
+                校园头条
+              </v-tab>
+              <v-tab>
+                学校概况
+              </v-tab>
+              <v-tab>
+                校园之星
+              </v-tab>
+            </v-tabs>
+          </v-flex>
+        </v-layout>
+      </div>
+
+      <div class="article-list pa-2">
+        <v-layout row wrap>
+          <v-flex
+            v-for="article in articles"
+            :key="article.id"
+            xs12
+            sm6
+            md4
+            class=""
+          >
+            <Article class="article py-2" :article="article"></Article>
+          </v-flex>
+        </v-layout>
+      </div>
     </div>
 
-    <div class="article-list pa-2">
-      <v-layout row wrap>
-        <v-flex
-          v-for="article in articles"
-          :key="article.id"
-          xs12
-          sm6
-          md4
-          class=""
-        >
-          <Article class="article py-2" :article="article"></Article>
-        </v-flex>
-      </v-layout>
-    </div>
-
-    <!-- <div class="text-xs-center" v-if="false">
+    <div class="text-xs-center">
       <v-dialog v-model="showDevelopingDialog" width="500" persistent>
         <v-card>
           <v-card-title class="subheading">
@@ -86,7 +88,7 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div> -->
+    </div>
   </div>
 </template>
 
