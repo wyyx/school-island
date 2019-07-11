@@ -1,5 +1,5 @@
 <template>
-  <div class="app-fill-height">
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header title="用户设置" @back="goBack"></Header>
     <v-list>
       <!-- nickname -->
@@ -65,7 +65,9 @@ export default Vue.extend({
   },
   methods: {
     goBack() {
-      this.$router.back()
+      this.$router.push({
+        name: 'my'
+      })
     },
     changeTitle() {
       document.title = '个人中心'

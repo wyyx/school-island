@@ -1,5 +1,5 @@
 <template>
-  <div class="container pa-0">
+  <div class="app-relative app-fill-height app-scroll-y">
     <v-card color="primary pa-2" class="">
       <v-layout class="" row wrap>
         <v-flex xs6 class="pr-1">

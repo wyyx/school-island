@@ -7,7 +7,9 @@ export const GUO_BASE_URL = process.env.VUE_APP_GUO_BASE_URL
 
 export const LOCAL_STORAGE_KEYS = {
   schoolId: 'schoolId',
-  xyd: 'xyd'
+  xyd: 'xyd',
+  targetUrl: 'targetUrl',
+  targetRoleCode: 'targetRoleCode'
 }
 
 export const COLORS = [
@@ -117,3 +119,6 @@ export const mockStudentGradeListForStudent = [
     ]
   }
 ]
+
+export const ID_CARD_REG = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+export const PHONE_NUMBER_REG = /^1[3456789]\d{9}$/

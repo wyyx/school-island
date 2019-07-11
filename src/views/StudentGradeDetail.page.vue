@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
     <Header :title="title" @back="goBack"></Header>
     <v-card class="mb-3">
       <Chart
@@ -48,7 +48,32 @@ import Header from '@/components/Header.component.vue'
 export default Vue.extend({
   name: 'StudentGradeDetail',
   components: { Chart, Header },
-  props: {},
+  props: {
+    grade: {
+      type: String,
+      required: true
+    },
+    studentId: {
+      type: String,
+      required: true
+    },
+    type: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    },
+    semister: {
+      type: String,
+      required: true
+    },
+    classId: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       chartOption: null as EChartOption,
@@ -56,13 +81,9 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...get(classesModulePath, {
-      currentStudentForTeacher
-    }),
     title() {
       const that: any = this
-      const student = that.currentStudentForTeacher as StudentInfoForDetail
-      return student.name + student.grade + student.semister
+      return that.name + that.grade + that.semister
     },
     achievementList() {
       const that: any = this
@@ -73,24 +94,22 @@ export default Vue.extend({
   methods: {
     goBack() {
       const that: any = this
-      const student = that.currentStudentForTeacher as StudentInfoForDetail
 
       this.$router.push({
         name: 'class-data',
-        params: {
-          classId: student.classId.toString()
+        query: {
+          classId: this.classId.toString()
         }
       })
     },
     loadStudentGrade() {
       const that: any = this
-      const student = that.currentStudentForTeacher as StudentInfoForDetail
 
       gradeService
         .getStudentGradeDetail({
-          grade: student.grade,
-          studentId: student.studentId,
-          type: student.type
+          grade: this.grade,
+          studentId: parseInt(this.studentId),
+          type: parseInt(this.type)
         })
         .then(res => {
           console.log('TCL: loadStudentGrade -> res', res)
@@ -108,6 +127,7 @@ export default Vue.extend({
       const that: any = this
       const subjectList = this.studentGradeDetail.achievementVos || []
       const xAxisData = subjectList.map(subject => subject.subject)
+
       // reverse grade level to code map
       const seriesData1 = subjectList.map(subject => 6 - subject.achievement)
 
@@ -226,7 +246,6 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-
 ._img {
   width: 20px;
   height: 20px;

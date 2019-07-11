@@ -1,7 +1,7 @@
 <template>
-  <div class="grade-input-edit-page content-wrapper">
+  <div class="grade-input-edit-page app-relative app-fill-height app-scroll-y">
     <Header title="成绩录入" @back="goBack"></Header>
-    <div class="main-content-wrapper">
+    <div class="app-fill-height">
       <div class="primary lighten-3 pa-3 grade-title">
         <h3 class="subheading text-xs-center">
           {{ title }}
@@ -365,17 +365,20 @@ export default Vue.extend({
       const that: any = this
       const currentGradeSubject: GradeSubject = that.currentGradeSubject
 
-      gradeService.getStudentList(currentGradeSubject.id).then(res => {
-        this.studentListContent = res.data.content || ({} as StudentListContent)
-        this.studentList =
-          this.studentListContent.studentExamAchievementVoList || []
+      if (currentGradeSubject.id) {
+        gradeService.getStudentList(currentGradeSubject.id).then(res => {
+          this.studentListContent =
+            res.data.content || ({} as StudentListContent)
+          this.studentList =
+            this.studentListContent.studentExamAchievementVoList || []
 
-        this.studentList = this.studentList.sort((a, b) => {
-          return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+          this.studentList = this.studentList.sort((a, b) => {
+            return parseInt(a.studentNumber) - parseInt(b.studentNumber)
+          })
+
+          this.setCurrentStudent(this.studentList[0] || ({} as Student))
         })
-
-        this.setCurrentStudent(this.studentList[0] || ({} as Student))
-      })
+      }
     },
     setCurrentStudent(student: Student) {
       this.validated = false
@@ -519,14 +522,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.content-wrapper {
-  height: 100%;
-}
-
-.main-content-wrapper {
-  height: 100%;
-}
-
 .grade-title {
   top: 0px;
   width: 100%;

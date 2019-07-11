@@ -1,5 +1,5 @@
 <template>
-  <div class="container pa-0">
+  <div class="app-relative app-fill-height app-scroll-y">
     <!-- <h1 class="grey--text">游客!</h1> -->
     <v-card color="primary" class="mb-2">
       <v-layout class="teachers py-3" row wrap>

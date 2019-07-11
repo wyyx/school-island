@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header title="班级数据" @back="goBack"></Header>
     <div>
       <v-card class="pa-3">
@@ -130,7 +130,7 @@ export default Vue.extend({
           value: 'studentNumber',
           sort: 'asc'
         },
-        { text: '姓名', align: 'right', sortable: false, value: 'name' },
+        { text: '姓名', align: 'right', sortable: false, value: 'studentName' },
         { text: '详情', align: 'right', sortable: true, value: '' }
       ],
       pagination: {
@@ -164,18 +164,12 @@ export default Vue.extend({
     currentGrade(newVal, oldVal) {
       const that: any = this
 
-      console.log(
-        'TCL: currentGrade -> that.currentSemister.value',
-        that.currentSemister.value
-      )
-
       const condition = {
         classId: that.currentClass.classId,
         grade: that.currentGrade,
         type: that.currentSemister.value
-      } as any
+      }
 
-      console.log('TCL: currentGrade -> condition', condition)
       this.loadHistoryGradeStudentListByConditon(condition)
     },
     currentSemister(newVal, oldVal) {
@@ -185,9 +179,8 @@ export default Vue.extend({
         classId: that.currentClass.classId,
         grade: that.currentGrade,
         type: that.currentSemister.value
-      } as any
+      }
 
-      console.log('TCL: condition', condition)
       this.loadHistoryGradeStudentListByConditon(condition)
     }
   },
@@ -198,27 +191,25 @@ export default Vue.extend({
       })
     },
     goToStudentGradeDetailPage(student: StudentVo) {
-      console.log('TCL: goToStudentGradeDetailPage -> student', student)
-      storeService.store.set(classesModulePath + currentStudentForTeacher, {
-        name: student.studentName,
-        grade: this.currentGrade,
-        classId: parseInt(this.classId),
-        semister: this.currentSemister.name,
-        studentId: student.studentId,
-        type: this.currentSemister.value
-      } as StudentInfoForDetail)
       this.$router.push({
-        name: 'student-grade-detail'
+        name: 'student-grade-detail',
+        query: {
+          grade: this.currentGrade,
+          studentId: student.studentId.toString(),
+          type: this.currentSemister.value.toString(),
+          name: student.studentName,
+          semister: this.currentSemister.name,
+          classId: this.classId
+        }
       })
     },
     loadHistoryGradeStudentList(classId: number) {
       gradeService.getHistoryGradeStudentList(classId).then(res => {
-        console.log(
-          'TCL: loadHistoryGradeStudentList -> res xxxxxxxxxxxxx',
-          res
-        )
-
         this.briefGrade = res.data.content || ({} as BriefGrade)
+        console.log(
+          'TCL: loadHistoryGradeStudentList -> this.briefGrade',
+          this.briefGrade
+        )
 
         this.studentList = this.briefGrade.students
         // set current grade
@@ -230,39 +221,48 @@ export default Vue.extend({
         }
       })
     },
-    loadHistoryGradeStudentListByConditon(classId: number) {
-      console.log(
-        'TCL: loadHistoryGradeStudentListByConditon -> classId',
-        classId
-      )
-      gradeService
-        .getHistoryGradeStudentListByCondition({
-          classId: this.currentClass.classId,
-          grade: this.currentGrade,
-          type: this.currentSemister.value
-        })
-        .then(res => {
-          this.briefGrade = res.data.content || ({} as BriefGrade)
-          this.studentList = this.briefGrade.students
-        })
+    loadHistoryGradeStudentListByConditon(condition: {
+      classId: number
+      grade: string
+      type: number
+    }) {
+      const { classId, grade, type } = condition
+
+      if (condition && classId && grade && type) {
+        gradeService
+          .getHistoryGradeStudentListByCondition({
+            classId: this.currentClass.classId,
+            grade: this.currentGrade,
+            type: this.currentSemister.value
+          })
+          .then(res => {
+            this.briefGrade = res.data.content || ({} as BriefGrade)
+            this.studentList = this.briefGrade.students
+          })
+      }
     },
     setInitClass() {
       const that: any = this
 
+      console.log('TCL: setInitClass -> that.classList', that.classList)
+
       if (!this.classId) {
-        this.currentClass = that.classList[0]
+        this.currentClass = that.classList[0] || {}
       } else {
-        this.currentClass = (that.classList as ClassModel[]).filter(
-          aclass => aclass.classId === parseInt(this.classId)
-        )[0]
+        this.currentClass =
+          (that.classList as ClassModel[]).filter(
+            aclass => aclass.classId === parseInt(this.classId)
+          )[0] || ({} as ClassModel)
       }
     }
   },
   mounted() {},
   created() {
-    this.setInitClass()
-    this.loadHistoryGradeStudentList(parseInt(this.classId))
-    console.log('TCL: created -> this.classId', this.classId)
+    setTimeout(() => {
+      this.setInitClass()
+      this.loadHistoryGradeStudentList(parseInt(this.classId))
+      console.log('TCL: created -> this.classId', this.classId)
+    }, 10)
   }
 })
 </script>

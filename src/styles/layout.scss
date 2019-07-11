@@ -49,3 +49,39 @@
   display: flex;
   align-items: center;
 }
+
+.app-absolute {
+  position: absolute !important;
+}
+
+.app-relative {
+  position: relative !important;
+}
+
+.app-scroll-y {
+  overflow-y: scroll !important;
+}
+
+.app-scroll-x {
+  overflow-x: scroll !important;
+}
+
+.app-z-index-10 {
+  z-index: 10 !important;
+}
+
+.app-z-index-20 {
+  z-index: 20 !important;
+}
+
+.app-z-index-30 {
+  z-index: 30 !important;
+}
+
+.app-z-index-40 {
+  z-index: 40 !important;
+}
+
+.app-z-index-50 {
+  z-index: 50 !important;
+}

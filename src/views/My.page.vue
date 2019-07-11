@@ -1,9 +1,9 @@
 <template>
-  <div class="container pa-0">
-    <v-card color="primary" class="mb-2">
+  <div class="app-relative app-fill-height app-scroll-y">
+    <v-card color="primary app-z-index-10">
       <v-layout class="teachers py-4" row wrap>
         <v-flex xs3>
-          <v-layout row wrap app-fill-height justify-center align-center>
+          <v-layout row wrap justify-center align-center>
             <v-flex app-shrink>
               <v-avatar :tile="false" :size="64" color="grey lighten-4">
                 <img :src="user.headImgUrl" alt="avatar" />
@@ -105,6 +105,28 @@
         </v-flex>
       </v-layout>
     </v-card>
+
+    <v-card
+      class="pa-2"
+      v-if="
+        hasUnfinishedStudentInfoCollection || hasUnfinishedTeacherInfoCollection
+      "
+    >
+      <v-btn
+        color="accent"
+        @click="goToStudentInfoCollectionPage"
+        v-if="hasUnfinishedStudentInfoCollection"
+      >
+        建立学生档案
+      </v-btn>
+      <v-btn
+        color="accent"
+        @click="goToTeacherInfoCollectionPage"
+        v-if="hasUnfinishedTeacherInfoCollection"
+      >
+        建立老师档案
+      </v-btn>
+    </v-card>
   </div>
 </template>
 
@@ -121,12 +143,20 @@ import {
 } from '../store/auth/auth.paths'
 import { RoleVo, Student, RoleType, parentsTypes } from '../models/user.model'
 import { storeService } from '../services/store.service'
+import { archiveService } from '../services/archive.service'
+import {
+  UnfinishedInfoCollection,
+  InfoCollectionUserTypes,
+  AddStudentAndParentsInfoCollectionParams,
+  AddTeacherInfoCollectionParams
+} from '../models/archive.model'
 
 export default Vue.extend({
   name: 'my',
   data: function() {
     return {
-      roleType: RoleType
+      roleType: RoleType,
+      unfinishedInfoCollectionList: [] as UnfinishedInfoCollection[]
     }
   },
   components: {},
@@ -140,10 +170,49 @@ export default Vue.extend({
     studentList() {
       const that: any = this
       return that.user.studentVoList || []
+    },
+    hasUnfinishedStudentInfoCollection() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const studentInfoCollection = unfinishedInfoCollectionList.filter(
+        studentInfo => studentInfo.userType === InfoCollectionUserTypes.Student
+      )[0]
+
+      const studentInfoList: AddStudentAndParentsInfoCollectionParams[] =
+        (studentInfoCollection && studentInfoCollection.entity) || []
+
+      console.log(
+        'TCL: hasUnfinishedStudentInfoCollection -> studentInfoList',
+        studentInfoList
+      )
+
+      return studentInfoList.length > 0 ? true : false
+    },
+    teacherInfo() {
+      const that: any = this
+      const unfinishedInfoCollectionList = that.unfinishedInfoCollectionList as UnfinishedInfoCollection[]
+
+      const teacherInfoCollection = unfinishedInfoCollectionList.filter(
+        info => info.userType === InfoCollectionUserTypes.Teacher
+      )[0]
+
+      const teacherInfo: AddTeacherInfoCollectionParams =
+        teacherInfoCollection &&
+        teacherInfoCollection.entity &&
+        teacherInfoCollection.entity[0]
+
+      return teacherInfo || ({} as AddTeacherInfoCollectionParams)
+    },
+    hasUnfinishedTeacherInfoCollection() {
+      const that: any = this
+      const teacherInfo = that.teacherInfo as AddTeacherInfoCollectionParams
+      return teacherInfo.name ? true : false
     }
   },
   created() {
     this.changeTitle()
+    this.getUnfinishedInfoCollection()
   },
   methods: {
     changeTitle() {
@@ -152,6 +221,16 @@ export default Vue.extend({
     goToUserSettingsPage() {
       this.$router.push({
         name: 'user-settings'
+      })
+    },
+    goToStudentInfoCollectionPage() {
+      this.$router.push({
+        name: 'create-archive-for-student'
+      })
+    },
+    goToTeacherInfoCollectionPage() {
+      this.$router.push({
+        name: 'create-archive-for-teacher'
       })
     },
     goToBindingPage() {
@@ -168,6 +247,23 @@ export default Vue.extend({
       )[0]
 
       return parentsType ? parentsType.text : ''
+    },
+    getUnfinishedInfoCollection() {
+      archiveService.getUnfinishedInfoCollection().then(res => {
+        this.unfinishedInfoCollectionList = res.data.content || []
+
+        const that: any = this
+        that.firstStudentInfo
+        console.log(
+          'TCL: getUnfinishedInfoCollection -> that.firstStudentInfo',
+          that.firstStudentInfo
+        )
+        that.teacherInfo
+        console.log(
+          'TCL: getUnfinishedInfoCollection -> that.teacherInfo',
+          that.teacherInfo
+        )
+      })
     }
   }
 })

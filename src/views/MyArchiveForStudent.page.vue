@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header title="成长档案" @back="goBack"></Header>
     <v-card class="pa-3 mb-2">
       <v-layout row wrap>

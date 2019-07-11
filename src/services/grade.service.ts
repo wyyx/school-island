@@ -84,6 +84,10 @@ export class GradeService {
   }
 
   getBriefStudentGradeDetailForParents(studentId: number) {
+    if (!studentId) {
+      return
+    }
+
     return this.httpConfigService.httpSercvice.post<
       BriefStudentGradeForParentsResponse
     >(this.baseUrl + '/w/achievement/parent-achievement-detail', {
@@ -96,6 +100,14 @@ export class GradeService {
     studentId: number
     type: number
   }) {
+    if (
+      !condition.grade ||
+      !condition.studentId ||
+      condition.type === (null || undefined)
+    ) {
+      return
+    }
+
     return this.httpConfigService.httpSercvice.post<
       BriefStudentGradeForParentsResponse
     >(this.baseUrl + '/w/achievement/parent-condition-achievement', condition)
@@ -116,6 +128,7 @@ export class GradeService {
     classId: number
     grade: string
     subject: string
+    subjectCode: number
     type: number
   }) {
     return this.httpConfigService.httpSercvice.post<AddGradeSubjectResponse>(

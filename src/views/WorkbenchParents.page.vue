@@ -1,7 +1,7 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
     <!-- header -->
-    <v-card class="mb-2">
+    <v-card class="app-z-index-10">
       <v-layout column wrap>
         <v-flex class="class-selector">
           <v-layout row wrap class="primary lighten-3">
@@ -307,10 +307,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  padding-bottom: 48px;
-}
-
 .class-selection-box {
   border-radius: 2px;
 }

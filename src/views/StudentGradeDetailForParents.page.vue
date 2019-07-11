@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
     <Header :title="title" @back="goBack"></Header>
     <v-card class="mb-3">
       <v-layout class="pa-3">
@@ -155,6 +155,7 @@ export default Vue.extend({
         .getBriefStudentGradeDetailForParents(student.id)
         .then(res => {
           console.log('TCL: loadStudentGrade -> res', res)
+
           this.studentGradeDetail =
             res.data.content || ({} as BriefStudentGradeForParents)
 
@@ -200,7 +201,6 @@ export default Vue.extend({
         studentId: student.id,
         type: this.currentSemister.value
       }
-      console.log('TCL: loadStudentGradeByCondition -> condition', condition)
 
       gradeService
         .getBriefStudentGradeDetailForParentsByCondition(condition)
@@ -215,7 +215,7 @@ export default Vue.extend({
           }
 
           // set init data
-          this.gradeList = this.studentGradeDetail.grades
+          this.gradeList = this.studentGradeDetail.grades || []
           this.currentGrade = this.studentGradeDetail.currentGrade
 
           this.updateChart()

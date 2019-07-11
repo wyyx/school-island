@@ -1,24 +1,88 @@
 <template>
-  <div class="wrapper">
-    <v-speed-dial
-      class="teacher-helper"
-      fixed
-      bottom
-      right
-      direction="left"
-      transition="slide-x-reverse-transition"
-      origin="bottom"
-    >
+  <div class="wrapper app-relative app-fill-height app-scroll-y">
+    <v-bottom-sheet v-model="sheet">
       <template v-slot:activator>
-        <v-btn color="accent" dark fab @click="showAdd = !showAdd">
-          <v-icon>add</v-icon>
-          <!-- <v-icon v-else>close</v-icon> -->
-        </v-btn>
+        <v-speed-dial
+          class="teacher-helper"
+          fixed
+          bottom
+          right
+          direction="top"
+          transition="slide-x-reverse-transition"
+          origin="bottom"
+        >
+          <template v-slot:activator>
+            <v-btn color="accent" dark fab>
+              <v-icon>add</v-icon>
+            </v-btn>
+          </template>
+        </v-speed-dial>
       </template>
-      <v-btn @click="goToGradeInputPage" color="accent"> 录入成绩 </v-btn>
-    </v-speed-dial>
 
-    <v-card class="mb-2">
+      <v-container fluid class="white">
+        <h3 class="subheading text-xs-center pb-3">
+          老师助手
+        </h3>
+        <v-layout row class="text-xs-center">
+          <v-flex xs4 v-if="false">
+            <v-layout column wrap>
+              <v-flex>
+                <v-btn
+                  class="elevation-1"
+                  fab
+                  small
+                  @click="goToCreateArticlePage"
+                  color="accent darken-1"
+                >
+                  <v-icon>edit</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex class="grey--text ">
+                写文章
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex xs4 v-if="false">
+            <v-layout column wrap>
+              <v-flex>
+                <v-btn
+                  class="elevation-1"
+                  fab
+                  small
+                  @click="goToConvertArticleGuidePage"
+                  color="accent darken-1"
+                >
+                  <v-icon>launch</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex class="grey--text ">
+                转载
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex xs4>
+            <v-layout column wrap>
+              <v-flex>
+                <v-btn
+                  class="elevation-1"
+                  fab
+                  small
+                  @click="goToGradeInputPage"
+                  color="accent darken-1"
+                >
+                  <v-icon>note_add</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex class="grey--text ">
+                录入成绩
+              </v-flex>
+            </v-layout>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-bottom-sheet>
+
+    <v-card class="app-z-index-10">
       <transition name="scale">
         <swiper
           @click="toCloseSwiper"
@@ -113,7 +177,7 @@
                 <!-- deduction week history graph -->
                 <div class="chart-wrapper app-fill-width pb-3">
                   <h3 class="mb-2 duty-check-title">
-                    {{ deductionWeekHistory.date }}，值周综合得分
+                    {{ deductionWeekHistory.date }}，综合得分
                     <span class="accent--text text--darken-2">
                       {{ deductionWeekHistory.weekScore }}分
                     </span>
@@ -301,17 +365,18 @@ export default Vue.extend({
   components: {
     swiper,
     swiperSlide
-    // Chart
   },
-  // beforeRouteEnter(to, from, next) {
-  //   next(vm => {
-  //     console.log('yyyyyyyyyyy')
-  //     const store: any = vm.$store
-  //     store.set(authModulePath + showTabs, true)
-  //   })
-  // },
+
   data: function() {
     return {
+      sheet: false,
+      tiles: [
+        { img: 'keep.png', title: 'Keep' },
+        { img: 'inbox.png', title: 'Inbox' },
+        { img: 'hangouts.png', title: 'Hangouts' },
+        { img: 'messenger.png', title: 'Messenger' },
+        { img: 'google.png', title: 'Google+' }
+      ],
       showAdd: true,
       currentClass: {} as ClassModel,
       classList: [] as ClassModel[],
@@ -358,8 +423,11 @@ export default Vue.extend({
     currentClass(newVal, oldVal) {
       console.log('TCL: currentClass -> newVal', newVal)
       const aclass = newVal as ClassModel
-      this.loadDeducionList(aclass.classId)
-      this.loadDeducionWeekHistory(aclass.classId)
+
+      if (aclass.classId) {
+        this.loadDeducionList(aclass.classId)
+        this.loadDeducionWeekHistory(aclass.classId)
+      }
     },
     showSwiper(newVal, oldVal) {}
   },
@@ -392,7 +460,6 @@ export default Vue.extend({
     }
   },
   created() {
-    this.loadDeducionList(this.currentClass.classId)
     const that: any = this
     this.loadClassList((that.user as UserInfo).teacherId)
   },
@@ -429,14 +496,23 @@ export default Vue.extend({
         name: 'grade-input'
       })
     },
-
     goToMyClassesPage() {
       console.log('TCL: goToMyClassesPage -> goToMyClassesPage')
       this.$router.push({
         name: 'my-classes',
-        params: {
-          initClassId: this.currentClass.classId.toString()
+        query: {
+          classId: this.currentClass.classId.toString()
         }
+      })
+    },
+    goToCreateArticlePage() {
+      this.$router.push({
+        name: 'create-article'
+      })
+    },
+    goToConvertArticleGuidePage() {
+      this.$router.push({
+        name: 'convert-article-guide'
       })
     },
     setClass(aclass: ClassModel) {
@@ -444,7 +520,9 @@ export default Vue.extend({
       this.currentClass = aclass
       this.hasMore = true
 
-      this.loadDeducionWeekHistory(this.currentClass.classId)
+      if (this.currentClass.classId) {
+        this.loadDeducionWeekHistory(this.currentClass.classId)
+      }
     },
     scroll() {
       window.onscroll = () => {
@@ -530,14 +608,16 @@ export default Vue.extend({
       })
     },
     loadDeducionWeekHistory(classId: number) {
-      dutyService
-        .getDeductionHistoryByWeek(classId)
-        .then(res => {
-          console.log('TCL: loadDeducionWeekHistory -> res', res)
-          this.deductionWeekHistory =
-            res.data.content || ({} as DeductionHistoryByWeekItem)
-        })
-        .catch(error => {})
+      if (classId) {
+        dutyService
+          .getDeductionHistoryByWeek(classId)
+          .then(res => {
+            console.log('TCL: loadDeducionWeekHistory -> res', res)
+            this.deductionWeekHistory =
+              res.data.content || ({} as DeductionHistoryByWeekItem)
+          })
+          .catch(error => {})
+      }
     },
     toShowSwiper(imgUrls: string[]) {
       console.log('TCL: toShowSwiper -> imgUrls', imgUrls)
@@ -619,9 +699,6 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
-  padding-bottom: 48px;
-}
 .duty-check-title {
   position: relative;
   left: 10px;
@@ -638,13 +715,6 @@ export default Vue.extend({
   background-image: url(../assets/images/duty_check_bg.jpg);
   background-size: contain;
   height: 0px;
-}
-
-.teacher-helper {
-  position: fixed !important;
-  right: 1rem !important;
-  bottom: 5rem !important;
-  z-index: 5000 !important;
 }
 
 .class-selection-box {

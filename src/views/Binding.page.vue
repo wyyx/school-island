@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-relative app-fill-height app-scroll-y">
     <Header v-if="isBinded" title="添加绑定" @back="goBack"></Header>
     <v-card color="primary" class="mb-2">
       <v-layout column wrap class="pa-3">
@@ -59,7 +59,9 @@
             ></v-text-field>
             <v-text-field
               clearable
-              label="学生身份证号码"
+              label="学生身份证号"
+              :counter="18"
+              maxlength="18"
               persistent-hint
               :error-messages="validated ? errors.collect('idCard') : []"
               v-model="idCard"
@@ -111,6 +113,8 @@
               clearable
               label="身份证号码"
               persistent-hint
+              :counter="18"
+              maxlength="18"
               :error-messages="validated ? errors.collect('idCard2') : []"
               v-model="idCard2"
               v-validate="{
@@ -360,7 +364,7 @@ export default Vue.extend({
           const that: any = this
           setTimeout(() => {
             this.$router.push({ path: `/workbench/${that.roleRoute}` })
-          }, 1000)
+          }, 50)
         })
         .catch(error => {})
     },

@@ -35,17 +35,77 @@ table.v-table tbody td:first-child {
   margin-bottom: 6px !important;
 }
 
-.teacher-helper .v-btn--floating .v-btn__content {
-  flex: 1 1 auto !important;
-  margin: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-
 .grade-input-edit-page .comment-input textarea {
   margin-top: 0px !important;
+  line-height: 24px !important;
 }
 
-// .grade-input-edit-page .comment-input .v-input__slot {
-//   border: 2px solid #e0e0e0;
-// }
+.create-archive-for-student-page,
+.create-archive-for-teacher-page {
+  .v-stepper {
+    padding-top: 56px;
+  }
+
+  .v-card__title {
+    padding-top: 16px !important;
+  }
+
+  .v-stepper__header {
+    height: unset !important;
+    position: fixed;
+    width: 100%;
+    z-index: 20;
+    top: 48px;
+    background-color: white;
+  }
+
+  .v-stepper__content {
+    padding: 0px !important;
+  }
+
+  .v-stepper__step {
+    // height: 56px !important;
+    display: flex !important;
+    flex-direction: column;
+    padding: 8px 16px;
+  }
+
+  .v-stepper__label {
+    display: block !important;
+    font-size: 10px !important;
+    padding-top: 4px !important;
+  }
+
+  .v-stepper__wrapper {
+    .v-card {
+      margin: 8px !important;
+      margin-top: 16px !important;
+      box-sizing: border-box !important;
+      margin-bottom: 32px !important;
+    }
+
+    .v-card.work-experience {
+      margin: 0px !important;
+      box-sizing: border-box !important;
+    }
+  }
+
+  .guardian-resource textarea {
+    margin-top: 0px !important;
+    line-height: 24px !important;
+  }
+
+  .kindergarten-name textarea {
+    margin-top: 0px !important;
+    line-height: 24px !important;
+  }
+
+  .app-textarea textarea {
+    margin-top: 0px !important;
+    line-height: 24px !important;
+  }
+}
+
+.v-dialog__container {
+  display: unset !important;
+}
